@@ -1,0 +1,13 @@
+{
+  "name": "@network/shared",
+  "version": "1.0.0",
+  "description": "Ortak TypeScript tip tanımları",
+  "main": "types/index.ts",
+  "types": "types/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

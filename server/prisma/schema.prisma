@@ -1,0 +1,61 @@
+// NetWork veri şeması
+// Migrasyon: npx prisma migrate dev
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Harita {
+  id          String   @id @default(cuid())
+  baslik      String
+  aciklama    String?
+  olusturulmaTarihi DateTime @default(now()) @map("olusturulma_tarihi")
+  guncellenmeTarihi DateTime @updatedAt @map("guncellenme_tarihi")
+
+  dugumler Dugum[]
+  kenarlar Kenar[]
+
+  @@map("haritalar")
+}
+
+model Dugum {
+  id        String   @id @default(cuid())
+  haritaId  String   @map("harita_id")
+  etiket    String
+  tur       String   @default("diger")
+  pozisyonX Float    @map("pozisyon_x")
+  pozisyonY Float    @map("pozisyon_y")
+  ozellikler String  @default("{}") // JSON string olarak saklanır
+
+  olusturulmaTarihi DateTime @default(now()) @map("olusturulma_tarihi")
+  guncellenmeTarihi DateTime @updatedAt @map("guncellenme_tarihi")
+
+  harita     Harita @relation(fields: [haritaId], references: [id], onDelete: Cascade)
+  gidentKenarlar  Kenar[] @relation("KaynakDugum")
+  gelenKenarlar   Kenar[] @relation("HedefDugum")
+
+  @@map("dugumler")
+}
+
+model Kenar {
+  id       String  @id @default(cuid())
+  haritaId String  @map("harita_id")
+  kaynakId String  @map("kaynak_id")
+  hedefId  String  @map("hedef_id")
+  etiket   String?
+  yon      String  @default("yonsuz")
+
+  olusturulmaTarihi DateTime @default(now()) @map("olusturulma_tarihi")
+  guncellenmeTarihi DateTime @updatedAt @map("guncellenme_tarihi")
+
+  harita Harita @relation(fields: [haritaId], references: [id], onDelete: Cascade)
+  kaynak Dugum  @relation("KaynakDugum", fields: [kaynakId], references: [id], onDelete: Cascade)
+  hedef  Dugum  @relation("HedefDugum", fields: [hedefId], references: [id], onDelete: Cascade)
+
+  @@map("kenarlar")
+}

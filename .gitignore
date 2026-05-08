@@ -1,0 +1,44 @@
+# Bağımlılıklar
+node_modules/
+**/node_modules/
+
+# Derleme çıktıları
+dist/
+**/dist/
+build/
+
+# Ortam değişkenleri
+.env
+.env.local
+.env.*.local
+**/.env
+
+# Veritabanı
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Prisma
+server/prisma/migrations/*.sql
+!server/prisma/migrations/
+
+# Log dosyaları
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test çıktıları
+coverage/
