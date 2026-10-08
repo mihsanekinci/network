@@ -50,6 +50,12 @@ network/
 │   │   ├── middleware/
 │   │   └── types/
 │   └── prisma/
+├── docs/
+│   ├── 00 - Ana Harita.md
+│   ├── Mimariler/
+│   ├── Veritabani/
+│   ├── API/
+│   └── Ilerleme/
 ├── shared/
 │   └── types/
 └── CLAUDE.md
@@ -119,3 +125,8 @@ cd server && npm run dev    # Backend:  http://localhost:3000
 ### Veritabanı işlemleri
 cd server && npx prisma migrate dev    # Şema değişikliği uygula
 cd server && npx prisma studio         # Veritabanını görsel arayüzle aç
+
+## Obsidian / Dokümantasyon Otomasyon Kuralı
+- Projede yeni bir katman, API ucu veya veritabanı modeli eklendiğinde/güncellendiğinde `docs/` altındaki ilgili `.md` dosyasını otomatik güncelle.
+- Yapılan her önemli özelliğin (feature) veya kod geliştirmesinin ardından `docs/Ilerleme/Gunluk.md` dosyasına günün tarihini atarak kısa bir özet ve tamamlanan adımları ekle.
+- Yeni oluşturulan kavramlar veya modüller için Obsidian WikiLink (`[[Konu Basligi]]`) formatını koru.
