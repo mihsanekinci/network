@@ -1,18 +1,20 @@
 import type { KenarDTO, KenarOlusturDTO, ApiYaniti } from "../types";
+import { API_TABANURL, istekGonder } from "./istemci";
 
-const API_TABANURL = "http://localhost:3000";
 
-export async function kenarilariGetir(
+export async function kenarlariGetir(
   haritaId: string
 ): Promise<ApiYaniti<KenarDTO[]>> {
-  const yanit = await fetch(`${API_TABANURL}/haritalar/${haritaId}/kenarlar`);
-  return yanit.json();
+  return istekGonder(`${API_TABANURL}/haritalar/${haritaId}/kenarlar`);
 }
+
+// Geriye dönük uyumluluk için alias
+export const kenarilariGetir = kenarlariGetir;
 
 export async function kenarOlustur(
   veri: KenarOlusturDTO
 ): Promise<ApiYaniti<KenarDTO>> {
-  const yanit = await fetch(
+  return istekGonder(
     `${API_TABANURL}/haritalar/${veri.haritaId}/kenarlar`,
     {
       method: "POST",
@@ -20,16 +22,14 @@ export async function kenarOlustur(
       body: JSON.stringify(veri),
     }
   );
-  return yanit.json();
 }
 
 export async function kenarSil(
   haritaId: string,
   kenarId: string
 ): Promise<ApiYaniti<void>> {
-  const yanit = await fetch(
+  return istekGonder(
     `${API_TABANURL}/haritalar/${haritaId}/kenarlar/${kenarId}`,
     { method: "DELETE" }
   );
-  return yanit.json();
 }
