@@ -41,8 +41,8 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
 
   return (
     <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md p-6 animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between mb-5">
+      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md p-6 flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-sm">
               ✨
@@ -58,8 +58,8 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
           </button>
         </div>
 
-        <form onSubmit={formuGonder} className="space-y-4">
-          <div className="space-y-1.5">
+        <form onSubmit={formuGonder} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
             <label className="block text-xs font-bold text-slate-700">
               Düğüm Adı / Etiketi <span className="text-red-500">*</span>
             </label>
@@ -69,15 +69,15 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
               value={etiket}
               onChange={(e) => setEtiket(e.target.value)}
               placeholder="Örn: Ahmet Yılmaz veya Frontend Mimarisi"
-              className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+              className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
             />
           </div>
 
-          <div className="space-y-1.5">
+          <div className="flex flex-col gap-1.5">
             <label className="block text-xs font-bold text-slate-700">
               Düğüm Türü
             </label>
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-2 gap-3">
               {[
                 { deger: "kisi", etiket: "👤 Kişi", aciklama: "Bağlantı veya stajyer" },
                 { deger: "kurum", etiket: "🏢 Kurum", aciklama: "Şirket veya topluluk" },
@@ -90,7 +90,7 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
                     type="button"
                     key={secenek.deger}
                     onClick={() => setTur(secenek.deger as DugumTuru)}
-                    className={`p-3 rounded-xl border text-left cursor-pointer transition-all flex flex-col justify-between ${
+                    className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all flex flex-col justify-between gap-1 ${
                       secili
                         ? "border-indigo-600 bg-indigo-50 text-indigo-950 ring-2 ring-indigo-500/20 shadow-xs"
                         : "border-slate-200 hover:bg-slate-50 text-slate-700 hover:border-slate-300"
@@ -100,7 +100,7 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
                       <span>{secenek.etiket}</span>
                       {secili && <span className="text-indigo-600 text-xs font-bold">✓</span>}
                     </div>
-                    <div className="text-[11px] text-slate-500 mt-1 font-normal">
+                    <div className="text-[11px] text-slate-500 font-normal">
                       {secenek.aciklama}
                     </div>
                   </button>
@@ -109,7 +109,7 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={kapat}

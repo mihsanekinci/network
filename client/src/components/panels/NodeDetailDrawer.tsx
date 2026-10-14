@@ -193,12 +193,12 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
         <form
           id="dugum-detay-form"
           onSubmit={handleKaydet}
-          className="flex-1 overflow-y-auto p-6 space-y-4"
+          className="flex-1 overflow-y-auto p-6 flex flex-col gap-5"
         >
           {/* 1. Bağlantı Özeti Kartı */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-3 shadow-xs">
+          <div className="p-5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-xs">
             <div className="text-xs font-bold text-slate-700 flex items-center justify-between">
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-2">
                 <span className="text-sm">🔗</span>
                 <span>Bağlantı Özeti</span>
               </div>
@@ -208,7 +208,7 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-slate-500 font-medium">Gelen (Hedef)</span>
                   <span className="font-bold text-slate-800 text-xs bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs">
@@ -217,17 +217,17 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                 </div>
                 {gelenBaglantilar.length > 0 ? (
                   <div
-                    className="text-[11px] text-slate-600 mt-2 truncate font-medium"
+                    className="text-[11px] text-slate-600 truncate font-medium mt-1"
                     title={gelenBaglantilar.map((b) => b.bagliDugumAdi).join(", ")}
                   >
                     {gelenBaglantilar.map((b) => b.bagliDugumAdi).join(", ")}
                   </div>
                 ) : (
-                  <div className="text-[11px] text-slate-400 mt-2 italic">Bağlantı yok</div>
+                  <div className="text-[11px] text-slate-400 italic mt-1">Bağlantı yok</div>
                 )}
               </div>
 
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-slate-500 font-medium">Giden (Kaynak)</span>
                   <span className="font-bold text-slate-800 text-xs bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs">
@@ -236,26 +236,26 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                 </div>
                 {gidenBaglantilar.length > 0 ? (
                   <div
-                    className="text-[11px] text-slate-600 mt-2 truncate font-medium"
+                    className="text-[11px] text-slate-600 truncate font-medium mt-1"
                     title={gidenBaglantilar.map((b) => b.bagliDugumAdi).join(", ")}
                   >
                     {gidenBaglantilar.map((b) => b.bagliDugumAdi).join(", ")}
                   </div>
                 ) : (
-                  <div className="text-[11px] text-slate-400 mt-2 italic">Bağlantı yok</div>
+                  <div className="text-[11px] text-slate-400 italic mt-1">Bağlantı yok</div>
                 )}
               </div>
             </div>
           </div>
 
           {/* 2. Temel Bilgiler Kartı */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-4 shadow-xs">
-            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+          <div className="p-5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-xs">
+            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2 mb-0.5">
               <span>📌</span> Temel Bilgiler
             </h4>
 
             {/* Düğüm Adı / Etiketi */}
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-1.5">
               <label className="block text-xs font-bold text-slate-700">
                 Düğüm Adı / Etiketi <span className="text-red-500">*</span>
               </label>
@@ -265,16 +265,16 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                 value={etiket}
                 onChange={(e) => setEtiket(e.target.value)}
                 placeholder="Örn: Ahmet Yılmaz"
-                className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
               />
             </div>
 
             {/* Düğüm Türü Seçimi: 2 Sütunlu Kartlar */}
-            <div className="space-y-1.5">
+            <div className="flex flex-col gap-1.5">
               <label className="block text-xs font-bold text-slate-700">
                 Düğüm Türü
               </label>
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-2 gap-3">
                 {TUR_SECENEKLERI.map((secenek) => {
                   const secili = tur === secenek.deger;
                   return (
@@ -282,7 +282,7 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                       type="button"
                       key={secenek.deger}
                       onClick={() => setTur(secenek.deger)}
-                      className={`p-3 rounded-xl border text-xs font-semibold transition-all text-left cursor-pointer flex flex-col justify-between ${
+                      className={`p-3.5 rounded-xl border text-xs font-semibold transition-all text-left cursor-pointer flex flex-col justify-between gap-1 ${
                         secili
                           ? "bg-indigo-50 border-indigo-600 text-indigo-900 ring-2 ring-indigo-500/20 shadow-xs"
                           : "bg-white border-slate-200 hover:bg-slate-50/80 text-slate-700 hover:border-slate-300"
@@ -295,7 +295,7 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                         </span>
                         {secili && <span className="text-indigo-600 text-xs font-bold">✓</span>}
                       </div>
-                      <span className="text-[11px] font-normal text-slate-500 mt-1 block">
+                      <span className="text-[11px] font-normal text-slate-500 block">
                         {secenek.aciklama}
                       </span>
                     </button>
@@ -307,15 +307,15 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
 
           {/* 3. Detay & İletişim Kartı (Türe Göre Dinamik) */}
           {tur === "kisi" && (
-            <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-4 shadow-xs">
-              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+            <div className="p-5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-xs">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2 mb-0.5">
                 <span>👤</span> Kişi Detay & İletişim Bilgileri
               </h4>
 
               {/* Unvan ve Şirket (2 sütun) */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-600">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
                     Unvan / Rol
                   </label>
                   <input
@@ -323,12 +323,12 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.unvan as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("unvan", e.target.value)}
                     placeholder="Örn: Kıdemli Yazılım Mühendisi"
-                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                    className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-600">
+                <div className="flex flex-col gap-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
                     Şirket / Organizasyon
                   </label>
                   <input
@@ -336,15 +336,15 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.sirket as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("sirket", e.target.value)}
                     placeholder="Örn: NetWork Labs Inc."
-                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                    className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
                   />
                 </div>
               </div>
 
               {/* E-posta ve Telefon (2 sütun) */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-600">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
                     E-posta
                   </label>
                   <input
@@ -352,12 +352,12 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.eposta as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("eposta", e.target.value)}
                     placeholder="ornek@sirket.com"
-                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                    className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-600">
+                <div className="flex flex-col gap-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
                     Telefon
                   </label>
                   <input
@@ -365,14 +365,14 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.telefon as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("telefon", e.target.value)}
                     placeholder="+90 555 123 4567"
-                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                    className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
                   />
                 </div>
               </div>
 
               {/* LinkedIn tam genişlik */}
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-600">
+              <div className="flex flex-col gap-1.5">
+                <label className="block text-xs font-bold text-slate-700">
                   LinkedIn URL
                 </label>
                 <input
@@ -380,22 +380,22 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                   value={(ozellikler.linkedin as string) ?? ""}
                   onChange={(e) => handleOzellikDegistir("linkedin", e.target.value)}
                   placeholder="https://linkedin.com/in/kullanici"
-                  className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                  className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
                 />
               </div>
             </div>
           )}
 
           {tur === "kurum" && (
-            <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-4 shadow-xs">
-              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+            <div className="p-5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-xs">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2 mb-0.5">
                 <span>🏢</span> Kurumsal Bilgiler
               </h4>
 
               {/* Sektör ve Web Sitesi (2 sütun) */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-600">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
                     Sektör / Faaliyet Alanı
                   </label>
                   <input
@@ -403,12 +403,12 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.sektor as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("sektor", e.target.value)}
                     placeholder="Örn: Finans & Teknoloji"
-                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                    className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-semibold text-slate-600">
+                <div className="flex flex-col gap-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
                     Web Sitesi
                   </label>
                   <input
@@ -416,14 +416,14 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.webSitesi as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("webSitesi", e.target.value)}
                     placeholder="https://sirket.com"
-                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                    className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
                   />
                 </div>
               </div>
 
               {/* Lokasyon tam genişlik */}
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-600">
+              <div className="flex flex-col gap-1.5">
+                <label className="block text-xs font-bold text-slate-700">
                   Lokasyon (Şehir / Ülke)
                 </label>
                 <input
@@ -431,21 +431,21 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                   value={(ozellikler.lokasyon as string) ?? ""}
                   onChange={(e) => handleOzellikDegistir("lokasyon", e.target.value)}
                   placeholder="Örn: İstanbul, Türkiye"
-                  className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                  className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
                 />
               </div>
             </div>
           )}
 
           {(tur === "kavram" || tur === "diger") && (
-            <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-4 shadow-xs">
-              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+            <div className="p-5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-xs">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2 mb-0.5">
                 <span>{tur === "kavram" ? "💡" : "📌"}</span>{" "}
                 {tur === "kavram" ? "Kavram Detayları" : "Detaylar"}
               </h4>
 
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-slate-600">
+              <div className="flex flex-col gap-1.5">
+                <label className="block text-xs font-bold text-slate-700">
                   {tur === "kavram" ? "Kavram Açıklaması / Tanımı" : "Açıklama"}
                 </label>
                 <textarea
@@ -453,15 +453,15 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                   value={(ozellikler.aciklama as string) ?? ""}
                   onChange={(e) => handleOzellikDegistir("aciklama", e.target.value)}
                   placeholder="Bu kavram veya varlığın haritadaki anlamı ve önemi..."
-                  className="w-full rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm p-3 focus:outline-none transition-all placeholder:text-slate-400 resize-y shadow-xs"
+                  className="w-full p-3.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 min-h-[95px] leading-relaxed shadow-xs text-slate-800 placeholder:text-slate-400 resize-y"
                 />
               </div>
             </div>
           )}
 
           {/* 4. Notlar Alanı Kartı */}
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-3 shadow-xs">
-            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+          <div className="p-5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-xs">
+            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2 mb-0.5">
               <span>📝</span>{" "}
               {tur === "kisi"
                 ? "Görüşme & İletişim Notları"
@@ -469,24 +469,26 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                 ? "Kurum Notları"
                 : "Ek Notlar"}
             </h4>
-            <textarea
-              rows={3}
-              value={(ozellikler.notlar as string) ?? ""}
-              onChange={(e) => handleOzellikDegistir("notlar", e.target.value)}
-              placeholder={
-                tur === "kisi"
-                  ? "Tanışma vesilesi, ortak projeler, son görüşme..."
-                  : tur === "kurum"
-                  ? "Şirket kültürü, iş birliği fırsatları, önemli detaylar..."
-                  : "Referans kaynaklar, bağlantılı fikirler..."
-              }
-              className="w-full rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm p-3 focus:outline-none transition-all placeholder:text-slate-400 resize-y min-h-[90px] shadow-xs"
-            />
+            <div className="flex flex-col gap-1.5">
+              <textarea
+                rows={3}
+                value={(ozellikler.notlar as string) ?? ""}
+                onChange={(e) => handleOzellikDegistir("notlar", e.target.value)}
+                placeholder={
+                  tur === "kisi"
+                    ? "Tanışma vesilesi, ortak projeler, son görüşme..."
+                    : tur === "kurum"
+                    ? "Şirket kültürü, iş birliği fırsatları, önemli detaylar..."
+                    : "Referans kaynaklar, bağlantılı fikirler..."
+                }
+                className="w-full p-3.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 min-h-[95px] leading-relaxed shadow-xs text-slate-800 placeholder:text-slate-400 resize-y"
+              />
+            </div>
           </div>
         </form>
 
         {/* 5. Alt Butonlar Barı (Drawer Footer) */}
-        <div className="p-5 bg-slate-50/90 backdrop-blur border-t border-slate-200 flex items-center justify-between pb-6 pt-4 shrink-0">
+        <div className="p-5 pb-6 bg-slate-50/95 backdrop-blur border-t border-slate-200 flex items-center justify-between shrink-0">
           <button
             type="button"
             onClick={handleSil}
@@ -496,11 +498,11 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
             <span>🗑️</span> Düğümü Sil
           </button>
 
-          <div className="flex items-center">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => secilenDugumuAyarla(null)}
-              className="text-xs font-medium text-slate-600 hover:bg-slate-200/60 rounded-xl px-4 py-2.5 mr-2 cursor-pointer transition-all active:scale-98"
+              className="text-xs font-medium text-slate-600 hover:bg-slate-200/60 rounded-xl px-4 py-2.5 cursor-pointer transition-all active:scale-98"
             >
               Vazgeç
             </button>

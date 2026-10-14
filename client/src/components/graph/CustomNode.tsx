@@ -81,11 +81,11 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
   const filtreEslesiyor = Boolean(data.filtreAktif && data.eslesiyor);
 
   // Durum tabanlı sınıf belirleme
-  let durumSinifi = `${turBilgisi.kenarlik} shadow-sm hover:shadow-md`;
+  let durumSinifi = turBilgisi.kenarlik;
 
   if (filtreDisi) {
     durumSinifi =
-      "border-slate-200 opacity-30 grayscale-[60%] [filter:grayscale(60%)] scale-95 pointer-events-none shadow-none";
+      "border-slate-200 opacity-30 grayscale-[60%] [filter:grayscale(60%)] scale-95 pointer-events-none !shadow-none";
   } else if (secili) {
     durumSinifi = "border-indigo-600 ring-4 ring-indigo-500/20 shadow-lg scale-[1.02] z-10";
   } else if (filtreEslesiyor) {
@@ -99,7 +99,7 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
 
   return (
     <div
-      className={`group relative min-w-56 max-w-72 px-5 py-4 rounded-2xl border-2 bg-white transition-all duration-200 cursor-pointer ${durumSinifi}`}
+      className={`min-w-56 max-w-72 p-4 rounded-2xl border-2 bg-white shadow-sm hover:shadow-md transition-all duration-200 relative group flex flex-col gap-2 cursor-pointer ${durumSinifi}`}
     >
       <Handle
         type="target"
@@ -113,37 +113,37 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
         className={handleSinifi}
       />
 
-      {/* Üst Bar: Tür Rozeti ve Silme Butonu */}
-      <div className="flex items-center justify-between gap-2 mb-1.5">
-        <span
-          className={`px-2.5 py-1 text-xs font-semibold rounded-full flex items-center gap-1.5 ${turBilgisi.rozet}`}
+      {/* Silme Butonu (Sağ üst köşe) */}
+      {data.onSil && (
+        <button
+          type="button"
+          onClick={dugumuSil}
+          title="Düğümü Sil"
+          className="absolute top-3 right-3 nodrag nopan opacity-0 group-hover:opacity-100 w-6 h-6 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-all cursor-pointer"
         >
-          <span>{turBilgisi.simge}</span>
-          <span>{turBilgisi.etiket}</span>
-        </span>
-        {data.onSil && (
-          <button
-            type="button"
-            onClick={dugumuSil}
-            title="Düğümü Sil"
-            className="nodrag nopan opacity-0 group-hover:opacity-100 w-6 h-6 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-all cursor-pointer"
+          <svg
+            className="w-3.5 h-3.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
           >
-            <svg
-              className="w-3.5 h-3.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        )}
-      </div>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      )}
+
+      {/* Tür Rozeti */}
+      <span
+        className={`px-2.5 py-1 text-xs font-semibold rounded-full self-start flex items-center gap-1.5 ${turBilgisi.rozet}`}
+      >
+        <span>{turBilgisi.simge}</span>
+        <span>{turBilgisi.etiket}</span>
+      </span>
 
       {/* Düğüm Adı (Etiket) */}
       <div
-        className="text-sm font-bold text-slate-800 leading-snug line-clamp-2 mt-1 break-words"
+        className="text-sm font-bold text-slate-800 leading-snug break-words line-clamp-2"
         title={data.etiket}
       >
         {data.etiket}
@@ -152,7 +152,7 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
       {/* Unvan / Rol / Ek Bilgi */}
       {altBilgi && (
         <div
-          className="text-xs text-slate-500 font-medium truncate mt-1 flex items-center gap-1"
+          className="text-xs text-slate-500 font-medium truncate flex items-center gap-1.5"
           title={altBilgi}
         >
           <svg

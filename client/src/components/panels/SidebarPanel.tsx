@@ -35,7 +35,7 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({ yeniHaritaAc }) =>
       <button
         type="button"
         onClick={yeniHaritaAc}
-        className="m-4 h-11 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-sm shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98 shrink-0"
+        className="mx-4 my-3 h-11 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-sm shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98 shrink-0"
       >
         <span className="text-base leading-none">＋</span>
         <span>Yeni Harita Oluştur</span>
@@ -59,18 +59,18 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({ yeniHaritaAc }) =>
             <div
               key={harita.id}
               onClick={() => haritaSec(harita.id)}
-              className={`group relative flex items-start justify-between p-3.5 rounded-xl border transition-all cursor-pointer ${
+              className={`group relative flex items-start justify-between p-4 rounded-xl border transition-all cursor-pointer ${
                 aktif
                   ? "bg-indigo-50/70 border-indigo-200 text-indigo-950 font-bold shadow-xs"
                   : "bg-white hover:bg-slate-50/90 border-slate-200/80 text-slate-700 shadow-2xs"
               }`}
             >
-              {/* Aktif Harita Sol Renkli Belirteç Çubuğu (3px) */}
+              {/* Aktif Harita Sol Renkli Belirteç Çubuğu */}
               {aktif && (
-                <div className="absolute left-0 top-2.5 bottom-2.5 w-[3px] bg-indigo-600 rounded-r-full" />
+                <div className="absolute left-0 top-3.5 bottom-3.5 w-1 bg-indigo-600 rounded-r-full" />
               )}
 
-              <div className="flex-1 min-w-0 pr-2 pl-1.5 space-y-1">
+              <div className="flex-1 min-w-0 pr-2 pl-3 flex flex-col gap-1">
                 <div className={`text-sm leading-snug truncate ${aktif ? "font-bold text-indigo-950" : "font-semibold text-slate-800"}`}>
                   {harita.baslik}
                 </div>

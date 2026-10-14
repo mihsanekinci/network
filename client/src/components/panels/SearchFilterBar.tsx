@@ -50,7 +50,7 @@ export const SearchFilterBar: React.FC = () => {
     <div className="flex items-center gap-3">
       {/* Arama Input Alanı */}
       <div className="relative">
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 pointer-events-none text-sm">
+        <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 pointer-events-none text-sm">
           🔍
         </span>
         <input
@@ -58,14 +58,14 @@ export const SearchFilterBar: React.FC = () => {
           value={aramaMetni}
           onChange={(e) => aramaMetniniAyarla(e.target.value)}
           placeholder="Düğümlerde ara..."
-          className="w-64 h-10 px-3.5 pl-9 pr-8 text-sm rounded-xl bg-slate-100/80 border border-slate-200/80 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 text-slate-800"
+          className="w-64 h-10 pl-11 pr-9 text-sm rounded-xl bg-slate-100/80 border border-slate-200/80 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 text-slate-800"
         />
         {aramaMetni && (
           <button
             type="button"
             onClick={() => aramaMetniniAyarla("")}
             title="Aramayı Temizle"
-            className="absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer text-xs"
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer text-xs"
           >
             ✕
           </button>

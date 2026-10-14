@@ -126,6 +126,20 @@
     - `App.tsx` Header: `h-16 px-6 bg-white/80 backdrop-blur-md` ile cam efekti, ferah rozet sayaçlar ve kenara yapışmayan `+ Düğüm Ekle` butonu tamamlandı.
   - **Doğrulama:** Backend 26/26 Vitest testleri, Client TypeScript derlemesi (`tsc -b`), Vite build ve ESLint sıfır hata ve sıfır uyarı ile doğrulandı.
 
+### Faz 15: Padding & Margin Düzeltmeleri, Çakışma ve Üst Üste Binmelerin Giderilmesi (14 Ekim 2026)
+- **Sorun:** Kullanıcı ekran görüntülerinde:
+  1. Arama çubuğunda 🔍 büyüteç ikonu "Düğümlerde ara..." metninin üzerine biniyordu (`px-3.5`'in `pl-9`'u ezmesi).
+  2. Sol panelde aktif harita kartındaki sol mavi belirteç çubuğu, metne sadece 6px (`pl-1.5`) verildiği için kart başlığının üzerine biniyordu.
+  3. Düğüm detay çekmecesinde ve modallarda `* { margin: 0; padding: 0; }` sıfırlaması Tailwind v4'ün `:where()` dikey aralıklarını (`space-y-*`) ezdiğinden tüm form elemanları, etiketler ve inputlar birbirine yapışmıştı; ayrıca input içindeki metinler kenarlıkla sıfırlanmıştı.
+- **Çözüm:**
+  - `client/src/index.css`: Tailwind v4 preflight'ını bozan ve `:where()` kurallarını ezen `* { box-sizing: border-box; margin: 0; padding: 0; }` sıfırlaması kaldırıldı.
+  - `SearchFilterBar.tsx`: Çelişkili `px-3.5` kaldırıldı, `pl-11` (44px) sol iç boşluk ile 🔍 ikonu (14px) ve arama metni arasında en az 16px net nefes alma alanı sağlandı.
+  - `SidebarPanel.tsx`: Harita kartına ferah `p-4` iç boşluk, metin kapsayıcısına `pl-3` verildi; mavi belirteç çizgisi ile metin arasında en az 28px mesafe garanti altına alındı.
+  - `NodeDetailDrawer.tsx`: Geçersiz `p-4.5` sınıfları kaldırılıp standart `p-5` kart dolgusu uygulandı. Kırılgan `space-y-*` sınıfları modern flex-gap (`flex flex-col gap-5` ve `gap-4`) düzenine geçirildi. Tüm inputlara `px-4 py-2.5 h-11 text-sm rounded-xl` verilerek metinlerin kenarlığa yapışması tamamen önlendi. Etiketler `gap-1.5` ile ayrıştırıldı.
+  - `CustomNode.tsx`: Kart `min-w-56 p-4 rounded-2xl flex flex-col gap-2` yapısına kavuşturuldu; silme butonu sağ üstte `top-3 right-3` ile rozetten ayrıştırıldı.
+  - `NodeModal.tsx` & `MapModal.tsx`: `p-6 flex flex-col gap-5` ve `h-11 px-4 py-2.5` input boyutlarıyla ferahlatıldı.
+- **Doğrulama:** Backend 26/26 birim testi geçti; Client `tsc -b`, `vite build` ve `eslint .` sıfır hata ve sıfır uyarı ile doğrulandı.
+
 ---
 
 ## 🎯 Sıradaki Görevler (Roadmap & Backlog)
