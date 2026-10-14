@@ -28,24 +28,24 @@ export function App() {
       {/* Ana Çalışma Alanı */}
       <main className="flex-1 flex flex-col h-full overflow-hidden">
         {/* Üst Bilgi ve Kontrol Çubuğu */}
-        <header className="h-16 bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between gap-4 shrink-0 shadow-2xs">
+        <header className="h-16 px-6 border-b border-slate-200/80 bg-white/80 backdrop-blur-md flex items-center justify-between gap-4 shrink-0">
           {/* Sol: Harita Başlığı ve Sayaçlar */}
           <div className="flex items-center gap-3.5 min-w-0">
             {secilenHarita ? (
               <>
-                <h2 className="text-base font-bold text-slate-800 truncate" title={secilenHarita.baslik}>
+                <h2 className="text-base font-bold text-slate-900 truncate" title={secilenHarita.baslik}>
                   {secilenHarita.baslik}
                 </h2>
                 {secilenHarita.aciklama && (
-                  <span className="hidden xl:inline text-xs text-slate-400 border-l border-slate-200 pl-3 truncate max-w-xs" title={secilenHarita.aciklama}>
+                  <span className="hidden xl:inline text-xs text-slate-500 border-l border-slate-200 pl-3 truncate max-w-xs" title={secilenHarita.aciklama}>
                     {secilenHarita.aciklama}
                   </span>
                 )}
                 <div className="hidden sm:flex items-center gap-2 ml-1">
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200/60">
+                  <span className="bg-slate-100/80 text-slate-700 border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold">
                     {dugumler.length} Düğüm
                   </span>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200/60">
+                  <span className="bg-slate-100/80 text-slate-700 border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold">
                     {kenarlar.length} Bağlantı
                   </span>
                 </div>

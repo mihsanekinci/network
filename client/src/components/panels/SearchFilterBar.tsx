@@ -49,16 +49,16 @@ export const SearchFilterBar: React.FC = () => {
   return (
     <div className="flex items-center gap-3">
       {/* Arama Input Alanı */}
-      <div className="relative w-64 md:w-72">
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 pointer-events-none text-xs">
+      <div className="relative">
+        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 pointer-events-none text-sm">
           🔍
         </span>
         <input
           type="text"
           value={aramaMetni}
           onChange={(e) => aramaMetniniAyarla(e.target.value)}
-          placeholder="Düğümlerde ara... (etiket, unvan, şirket...)"
-          className="w-full h-10 pl-8 pr-8 text-xs bg-slate-50 hover:bg-slate-100/70 focus:bg-white text-slate-800 placeholder:text-slate-400 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs"
+          placeholder="Düğümlerde ara..."
+          className="w-64 h-10 px-3.5 pl-9 pr-8 text-sm rounded-xl bg-slate-100/80 border border-slate-200/80 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 text-slate-800"
         />
         {aramaMetni && (
           <button
@@ -81,10 +81,10 @@ export const SearchFilterBar: React.FC = () => {
               key={secenek.tur}
               type="button"
               onClick={() => turFiltresiniAyarla(secenek.tur)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 aktif
-                  ? "bg-white text-indigo-700 shadow-xs ring-1 ring-slate-200/70"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
+                  ? "bg-white text-indigo-700 shadow-xs ring-1 ring-slate-200/80"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
               }`}
             >
               {secenek.etiket}
@@ -93,12 +93,10 @@ export const SearchFilterBar: React.FC = () => {
         })}
       </div>
 
-      {/* Eşleşen Düğüm Rozeti */}
+      {/* Sayaç Çipi */}
       <div
-        className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
-          filtreAktif
-            ? "bg-indigo-50 text-indigo-700 border-indigo-200 ring-2 ring-indigo-500/10 shadow-2xs"
-            : "bg-slate-100 text-slate-600 border-slate-200"
+        className={`px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200/70 whitespace-nowrap transition-all ${
+          filtreAktif ? "ring-2 ring-indigo-500/15 shadow-xs" : ""
         }`}
         title={`${dugumler.length} düğüm arasından ${eslesenDugumSayisi} tanesi eşleşti`}
       >

@@ -172,14 +172,17 @@ export const GraphCanvas: React.FC = () => {
 
   if (!secilenHaritaId) {
     return (
-      <div className="flex-1 h-full flex flex-col items-center justify-center bg-slate-50 text-slate-500 p-8 text-center select-none">
-        <div className="w-16 h-16 mb-4 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-3xl shadow-sm">
-          🗺️
+      <div className="flex-1 h-full flex flex-col items-center justify-center bg-slate-50 text-slate-500 p-8 text-center select-none relative overflow-hidden">
+        <div className="absolute w-96 h-96 rounded-full bg-indigo-50/50 blur-3xl pointer-events-none" />
+        <div className="relative bg-white/90 backdrop-blur-md px-10 py-9 rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/40 max-w-md mx-auto">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-3xl shadow-sm">
+            🗺️
+          </div>
+          <h2 className="text-xl font-bold text-slate-800 mb-2">Harita Seçilmedi</h2>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Sol panelden mevcut bir haritayı seçin veya <strong className="font-semibold text-indigo-600">+ Yeni Harita</strong> butonuna tıklayarak ilk haritanızı oluşturun.
+          </p>
         </div>
-        <h2 className="text-xl font-bold text-slate-800 mb-2">Harita Seçilmedi</h2>
-        <p className="max-w-md text-sm text-slate-600">
-          Sol panelden mevcut bir haritayı seçin veya <strong>"+ Yeni Harita"</strong> butonuna tıklayarak ilk haritanızı oluşturun.
-        </p>
       </div>
     );
   }
@@ -194,13 +197,22 @@ export const GraphCanvas: React.FC = () => {
       )}
 
       {yerelDugumler.length === 0 && !yukleniyor && (
-        <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center z-10 text-center p-6">
-          <div className="bg-white/80 backdrop-blur-sm px-6 py-4 rounded-2xl border border-slate-200 shadow-sm max-w-sm">
-            <span className="text-2xl mb-2 block">✨</span>
-            <p className="text-sm font-semibold text-slate-700">Bu haritada henüz düğüm yok</p>
-            <p className="text-xs text-slate-500 mt-1">
-              Yukarıdaki <strong>"+ Düğüm Ekle"</strong> butonunu kullanarak kişi, şirket veya kavram ekleyin.
+        <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center z-10 text-center p-6 select-none">
+          <div className="bg-white/90 backdrop-blur-md px-8 py-7 rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/50 max-w-sm mx-auto">
+            <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-tr from-indigo-50 to-indigo-100 border border-indigo-200/60 flex items-center justify-center text-indigo-600 text-2xl shadow-sm">
+              ✨
+            </div>
+            <h3 className="text-base font-bold text-slate-800 mb-1.5">Bu Haritada Henüz Düğüm Yok</h3>
+            <p className="text-xs text-slate-500 leading-relaxed mb-4">
+              Ağınızı oluşturmaya başlamak için yukarıdaki <strong className="font-semibold text-indigo-600">+ Düğüm Ekle</strong> butonunu kullanarak kişi, şirket veya kavram ekleyin.
             </p>
+            <div className="pt-3 border-t border-slate-100 flex items-center justify-center gap-3 text-xs text-slate-400 font-medium">
+              <span className="flex items-center gap-1">👤 Kişi</span>
+              <span>•</span>
+              <span className="flex items-center gap-1">🏢 Kurum</span>
+              <span>•</span>
+              <span className="flex items-center gap-1">💡 Kavram</span>
+            </div>
           </div>
         </div>
       )}
@@ -218,16 +230,20 @@ export const GraphCanvas: React.FC = () => {
         fitView
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1.2} color="#cbd5e1" />
-        <Controls className="!bg-white !border-slate-200 !shadow-sm !rounded-xl overflow-hidden" />
+        <Controls className="!bg-white !rounded-2xl !shadow-md !border !border-slate-200 !overflow-hidden !m-4" />
         <MiniMap
           nodeColor={(node) => {
             const tur = (node.data as { tur?: string })?.tur;
-            if (tur === "kisi") return "#60a5fa";
-            if (tur === "kurum") return "#34d399";
-            if (tur === "kavram") return "#fbbf24";
-            return "#c084fc";
+            if (tur === "kisi") return "#3b82f6";
+            if (tur === "kurum") return "#10b981";
+            if (tur === "kavram") return "#f59e0b";
+            return "#8b5cf6";
           }}
-          className="!bg-white !border-slate-200 !shadow-sm !rounded-xl overflow-hidden"
+          nodeStrokeColor="#ffffff"
+          nodeStrokeWidth={2}
+          nodeBorderRadius={8}
+          maskColor="rgba(241, 245, 249, 0.75)"
+          className="!bg-white !rounded-2xl !shadow-md !border !border-slate-200 !overflow-hidden !m-4"
         />
       </ReactFlow>
     </div>

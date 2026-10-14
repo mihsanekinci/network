@@ -17,33 +17,32 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({ yeniHaritaAc }) =>
   };
 
   return (
-    <aside className="w-80 h-full bg-white border-r border-slate-200 flex flex-col shrink-0">
+    <aside className="w-80 h-full bg-white border-r border-slate-200/80 flex flex-col shrink-0">
       {/* Üst Başlık & Logo */}
-      <div className="p-5 border-b border-slate-200 flex items-center justify-between">
+      <div className="p-5 border-b border-slate-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
             N
           </div>
           <div>
-            <h1 className="font-bold text-slate-800 text-base leading-tight">NetWork</h1>
+            <h1 className="font-bold text-slate-900 text-base leading-tight">NetWork</h1>
             <p className="text-xs text-slate-500 font-medium">Node-Edge Harita</p>
           </div>
         </div>
       </div>
 
       {/* Yeni Harita Butonu */}
-      <div className="p-4 border-b border-slate-100">
-        <button
-          onClick={yeniHaritaAc}
-          className="w-full h-10 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white text-sm font-semibold rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
-        >
-          <span className="text-base leading-none">＋</span>
-          <span>Yeni Harita Oluştur</span>
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={yeniHaritaAc}
+        className="m-4 h-11 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-sm shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98 shrink-0"
+      >
+        <span className="text-base leading-none">＋</span>
+        <span>Yeni Harita Oluştur</span>
+      </button>
 
       {/* Harita Listesi */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
+      <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2.5">
         <div className="px-1 pb-1 text-xs font-semibold text-slate-400 uppercase tracking-wider">
           Haritalar ({haritalar.length})
         </div>
@@ -62,13 +61,13 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({ yeniHaritaAc }) =>
               onClick={() => haritaSec(harita.id)}
               className={`group relative flex items-start justify-between p-3.5 rounded-xl border transition-all cursor-pointer ${
                 aktif
-                  ? "bg-indigo-50/80 border-indigo-300 text-indigo-950 shadow-xs ring-1 ring-indigo-200"
-                  : "bg-white hover:bg-slate-50/80 border-slate-200 text-slate-700 hover:border-slate-300 shadow-2xs"
+                  ? "bg-indigo-50/70 border-indigo-200 text-indigo-950 font-bold shadow-xs"
+                  : "bg-white hover:bg-slate-50/90 border-slate-200/80 text-slate-700 shadow-2xs"
               }`}
             >
-              {/* Aktif Harita Sol Renkli Belirteç Çubuğu */}
+              {/* Aktif Harita Sol Renkli Belirteç Çubuğu (3px) */}
               {aktif && (
-                <div className="absolute left-0 top-2.5 bottom-2.5 w-1 bg-indigo-600 rounded-r-full" />
+                <div className="absolute left-0 top-2.5 bottom-2.5 w-[3px] bg-indigo-600 rounded-r-full" />
               )}
 
               <div className="flex-1 min-w-0 pr-2 pl-1.5 space-y-1">
@@ -76,7 +75,7 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({ yeniHaritaAc }) =>
                   {harita.baslik}
                 </div>
                 {harita.aciklama && (
-                  <div className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
+                  <div className="text-xs text-slate-500 line-clamp-2 leading-relaxed font-normal">
                     {harita.aciklama}
                   </div>
                 )}
@@ -86,7 +85,7 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({ yeniHaritaAc }) =>
                 type="button"
                 onClick={(e) => haritayiSilOnayli(e, harita.id, harita.baslik)}
                 title="Haritayı Sil"
-                className="opacity-0 group-hover:opacity-100 w-7 h-7 flex items-center justify-center rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-all text-xs shrink-0 cursor-pointer"
+                className="opacity-0 group-hover:opacity-100 w-7 h-7 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-all text-xs shrink-0 cursor-pointer"
               >
                 ✕
               </button>
@@ -95,13 +94,13 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({ yeniHaritaAc }) =>
         })}
       </div>
 
-      {/* Alt Bilgi */}
-      <div className="p-4 border-t border-slate-100 text-xs text-slate-400 flex items-center justify-between">
+      {/* Alt Kısım (Footer) */}
+      <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
         <span className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-500" />
           Backend Bağlı
         </span>
-        <span className="text-slate-300">v1.0.0</span>
+        <span className="text-slate-300 font-medium">v1.0.0</span>
       </div>
     </aside>
   );

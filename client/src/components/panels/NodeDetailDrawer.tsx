@@ -32,6 +32,18 @@ const TUR_METADATA: Record<
   },
 };
 
+const TUR_SECENEKLERI: {
+  deger: DugumTuru;
+  etiket: string;
+  simge: string;
+  aciklama: string;
+}[] = [
+  { deger: "kisi", etiket: "Kişi", simge: "👤", aciklama: "Bağlantı veya stajyer" },
+  { deger: "kurum", etiket: "Kurum", simge: "🏢", aciklama: "Şirket veya topluluk" },
+  { deger: "kavram", etiket: "Kavram", simge: "💡", aciklama: "Zihin haritası / fikir" },
+  { deger: "diger", etiket: "Diğer", simge: "📌", aciklama: "Genel not veya varlık" },
+];
+
 interface NodeDetailDrawerContentProps {
   dugum: DugumDTO;
 }
@@ -95,9 +107,9 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
     }));
   };
 
-  const handleKaydet = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!etiket.trim()) return;
+  const handleKaydet = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!etiket.trim() || yukleniyor || kaydediliyor) return;
 
     setKaydediliyor(true);
     setBildirim(null);
@@ -141,21 +153,30 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
       />
 
       {/* Sağdan Kayarak Açılan Drawer Paneli */}
-      <div className="relative z-50 w-full max-w-lg bg-white shadow-2xl h-full flex flex-col border-l border-slate-200 animate-in slide-in-from-right duration-250">
+      <div className="relative z-50 w-full max-w-lg bg-slate-50/60 shadow-2xl h-full flex flex-col border-l border-slate-200 animate-in slide-in-from-right duration-250">
         {/* Üst Başlık & Kapatma Butonu */}
-        <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/80">
+        <div className="p-5 border-b border-slate-200/90 flex items-center justify-between bg-white/90 backdrop-blur shrink-0">
           <div className="flex items-center gap-3">
-            <span className="text-2xl">{aktifTurMeta.simge}</span>
+            <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-200 shadow-2xs flex items-center justify-center text-xl">
+              {aktifTurMeta.simge}
+            </div>
             <div>
-              <h3 className="font-bold text-slate-800 text-base leading-tight">Düğüm Detayı & Düzenleme</h3>
-              <p className="text-xs text-slate-500 mt-0.5">ID: {dugum.id.slice(0, 8)}...</p>
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-slate-800 text-base leading-tight">
+                  {etiket.trim() || dugum.etiket || "Düğüm Detayı"}
+                </h3>
+                <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${aktifTurMeta.rozetSinifi}`}>
+                  {aktifTurMeta.etiket}
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">ID: {dugum.id.slice(0, 8)}...</p>
             </div>
           </div>
           <button
             type="button"
             onClick={() => secilenDugumuAyarla(null)}
             title="Kapat (Esc)"
-            className="w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer text-sm font-bold"
+            className="w-9 h-9 flex items-center justify-center rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer text-sm font-bold"
           >
             ✕
           </button>
@@ -163,101 +184,137 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
 
         {/* Başarı Bildirimi */}
         {bildirim && (
-          <div className="bg-emerald-50 border-b border-emerald-200 px-5 py-2.5 text-xs text-emerald-800 flex items-center gap-2 animate-in fade-in">
+          <div className="bg-emerald-50 border-b border-emerald-200 px-5 py-2.5 text-xs text-emerald-800 flex items-center gap-2 animate-in fade-in shrink-0">
             <span>✓</span> {bildirim}
           </div>
         )}
 
-        {/* Kaydırılabilir İçerik & Form */}
-        <form onSubmit={handleKaydet} className="flex-1 overflow-y-auto p-6 space-y-5">
-          {/* Bağlantı İstatistikleri Kartı */}
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-3">
-            <div className="text-xs font-semibold text-slate-600 flex items-center justify-between">
-              <span>Bağlantı Özeti</span>
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-700">
+        {/* Kaydırılabilir İçerik & Form Alanları */}
+        <form
+          id="dugum-detay-form"
+          onSubmit={handleKaydet}
+          className="flex-1 overflow-y-auto p-6 space-y-4"
+        >
+          {/* 1. Bağlantı Özeti Kartı */}
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-3 shadow-xs">
+            <div className="text-xs font-bold text-slate-700 flex items-center justify-between">
+              <div className="flex items-center gap-1.5">
+                <span className="text-sm">🔗</span>
+                <span>Bağlantı Özeti</span>
+              </div>
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
                 {toplamBaglantiSayisi} Bağlantı
               </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2.5 text-xs">
-              <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
-                <div className="text-xs text-slate-400 font-medium">Gelen (Hedef)</div>
-                <div className="font-bold text-slate-800 text-lg mt-0.5">{gelenBaglantilar.length}</div>
-                {gelenBaglantilar.length > 0 && (
-                  <div className="text-xs text-slate-500 mt-1 truncate" title={gelenBaglantilar.map((b) => b.bagliDugumAdi).join(", ")}>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-500 font-medium">Gelen (Hedef)</span>
+                  <span className="font-bold text-slate-800 text-xs bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs">
+                    {gelenBaglantilar.length}
+                  </span>
+                </div>
+                {gelenBaglantilar.length > 0 ? (
+                  <div
+                    className="text-[11px] text-slate-600 mt-2 truncate font-medium"
+                    title={gelenBaglantilar.map((b) => b.bagliDugumAdi).join(", ")}
+                  >
                     {gelenBaglantilar.map((b) => b.bagliDugumAdi).join(", ")}
                   </div>
+                ) : (
+                  <div className="text-[11px] text-slate-400 mt-2 italic">Bağlantı yok</div>
                 )}
               </div>
-              <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-2xs">
-                <div className="text-xs text-slate-400 font-medium">Giden (Kaynak)</div>
-                <div className="font-bold text-slate-800 text-lg mt-0.5">{gidenBaglantilar.length}</div>
-                {gidenBaglantilar.length > 0 && (
-                  <div className="text-xs text-slate-500 mt-1 truncate" title={gidenBaglantilar.map((b) => b.bagliDugumAdi).join(", ")}>
+
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-500 font-medium">Giden (Kaynak)</span>
+                  <span className="font-bold text-slate-800 text-xs bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-2xs">
+                    {gidenBaglantilar.length}
+                  </span>
+                </div>
+                {gidenBaglantilar.length > 0 ? (
+                  <div
+                    className="text-[11px] text-slate-600 mt-2 truncate font-medium"
+                    title={gidenBaglantilar.map((b) => b.bagliDugumAdi).join(", ")}
+                  >
                     {gidenBaglantilar.map((b) => b.bagliDugumAdi).join(", ")}
                   </div>
+                ) : (
+                  <div className="text-[11px] text-slate-400 mt-2 italic">Bağlantı yok</div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* Temel Bilgiler: Etiket */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-700">
-              Düğüm Adı / Etiketi <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              required
-              value={etiket}
-              onChange={(e) => setEtiket(e.target.value)}
-              placeholder="Örn: Ahmet Yılmaz"
-              className="w-full h-10 px-3.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs"
-            />
-          </div>
+          {/* 2. Temel Bilgiler Kartı */}
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-4 shadow-xs">
+            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+              <span>📌</span> Temel Bilgiler
+            </h4>
 
-          {/* Düğüm Türü Seçimi */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-bold text-slate-700">
-              Düğüm Türü
-            </label>
-            <div className="grid grid-cols-2 gap-2.5">
-              {(
-                [
-                  { deger: "kisi", etiket: "👤 Kişi" },
-                  { deger: "kurum", etiket: "🏢 Kurum" },
-                  { deger: "kavram", etiket: "💡 Kavram" },
-                  { deger: "diger", etiket: "📌 Diğer" },
-                ] as const
-              ).map((secenek) => (
-                <button
-                  type="button"
-                  key={secenek.deger}
-                  onClick={() => setTur(secenek.deger)}
-                  className={`h-10 px-3.5 rounded-xl border text-left cursor-pointer transition-all text-xs font-semibold flex items-center justify-between ${
-                    tur === secenek.deger
-                      ? "border-indigo-600 bg-indigo-50 text-indigo-900 ring-2 ring-indigo-500/20 shadow-2xs"
-                      : "border-slate-200 hover:bg-slate-50 text-slate-700"
-                  }`}
-                >
-                  <span>{secenek.etiket}</span>
-                  {tur === secenek.deger && <span className="text-indigo-600 text-xs">✓</span>}
-                </button>
-              ))}
+            {/* Düğüm Adı / Etiketi */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-slate-700">
+                Düğüm Adı / Etiketi <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                required
+                value={etiket}
+                onChange={(e) => setEtiket(e.target.value)}
+                placeholder="Örn: Ahmet Yılmaz"
+                className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+              />
+            </div>
+
+            {/* Düğüm Türü Seçimi: 2 Sütunlu Kartlar */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-slate-700">
+                Düğüm Türü
+              </label>
+              <div className="grid grid-cols-2 gap-2.5">
+                {TUR_SECENEKLERI.map((secenek) => {
+                  const secili = tur === secenek.deger;
+                  return (
+                    <button
+                      type="button"
+                      key={secenek.deger}
+                      onClick={() => setTur(secenek.deger)}
+                      className={`p-3 rounded-xl border text-xs font-semibold transition-all text-left cursor-pointer flex flex-col justify-between ${
+                        secili
+                          ? "bg-indigo-50 border-indigo-600 text-indigo-900 ring-2 ring-indigo-500/20 shadow-xs"
+                          : "bg-white border-slate-200 hover:bg-slate-50/80 text-slate-700 hover:border-slate-300"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <span className="flex items-center gap-1.5">
+                          <span>{secenek.simge}</span>
+                          <span>{secenek.etiket}</span>
+                        </span>
+                        {secili && <span className="text-indigo-600 text-xs font-bold">✓</span>}
+                      </div>
+                      <span className="text-[11px] font-normal text-slate-500 mt-1 block">
+                        {secenek.aciklama}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
-          {/* Türe Özel Dinamik Alanlar */}
-          <div className="border-t border-slate-200 pt-5 space-y-4">
-            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
-              <span>{aktifTurMeta.simge}</span>
-              <span>{aktifTurMeta.etiket} Özel Bilgileri</span>
-            </h4>
+          {/* 3. Detay & İletişim Kartı (Türe Göre Dinamik) */}
+          {tur === "kisi" && (
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-4 shadow-xs">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <span>👤</span> Kişi Detay & İletişim Bilgileri
+              </h4>
 
-            {/* KİŞİ ALANLARI */}
-            {tur === "kisi" && (
-              <div className="space-y-3.5">
-                <div className="space-y-1">
+              {/* Unvan ve Şirket (2 sütun) */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
                   <label className="block text-xs font-semibold text-slate-600">
                     Unvan / Rol
                   </label>
@@ -266,11 +323,11 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.unvan as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("unvan", e.target.value)}
                     placeholder="Örn: Kıdemli Yazılım Mühendisi"
-                    className="w-full h-10 px-3.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs"
+                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
                   />
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <label className="block text-xs font-semibold text-slate-600">
                     Şirket / Organizasyon
                   </label>
@@ -279,11 +336,14 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.sirket as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("sirket", e.target.value)}
                     placeholder="Örn: NetWork Labs Inc."
-                    className="w-full h-10 px-3.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs"
+                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
                   />
                 </div>
+              </div>
 
-                <div className="space-y-1">
+              {/* E-posta ve Telefon (2 sütun) */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
                   <label className="block text-xs font-semibold text-slate-600">
                     E-posta
                   </label>
@@ -292,24 +352,11 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.eposta as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("eposta", e.target.value)}
                     placeholder="ornek@sirket.com"
-                    className="w-full h-10 px-3.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs"
+                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
                   />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="block text-xs font-semibold text-slate-600">
-                    LinkedIn URL
-                  </label>
-                  <input
-                    type="url"
-                    value={(ozellikler.linkedin as string) ?? ""}
-                    onChange={(e) => handleOzellikDegistir("linkedin", e.target.value)}
-                    placeholder="https://linkedin.com/in/kullanici"
-                    className="w-full h-10 px-3.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs"
-                  />
-                </div>
-
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <label className="block text-xs font-semibold text-slate-600">
                     Telefon
                   </label>
@@ -318,29 +365,36 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.telefon as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("telefon", e.target.value)}
                     placeholder="+90 555 123 4567"
-                    className="w-full h-10 px-3.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="block text-xs font-semibold text-slate-600">
-                    Görüşme & İletişim Notları
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={(ozellikler.notlar as string) ?? ""}
-                    onChange={(e) => handleOzellikDegistir("notlar", e.target.value)}
-                    placeholder="Tanışma vesilesi, ortak projeler, son görüşme..."
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs resize-none"
+                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
                   />
                 </div>
               </div>
-            )}
 
-            {/* KURUM ALANLARI */}
-            {tur === "kurum" && (
-              <div className="space-y-3.5">
-                <div className="space-y-1">
+              {/* LinkedIn tam genişlik */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold text-slate-600">
+                  LinkedIn URL
+                </label>
+                <input
+                  type="url"
+                  value={(ozellikler.linkedin as string) ?? ""}
+                  onChange={(e) => handleOzellikDegistir("linkedin", e.target.value)}
+                  placeholder="https://linkedin.com/in/kullanici"
+                  className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                />
+              </div>
+            </div>
+          )}
+
+          {tur === "kurum" && (
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-4 shadow-xs">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <span>🏢</span> Kurumsal Bilgiler
+              </h4>
+
+              {/* Sektör ve Web Sitesi (2 sütun) */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
                   <label className="block text-xs font-semibold text-slate-600">
                     Sektör / Faaliyet Alanı
                   </label>
@@ -349,11 +403,11 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.sektor as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("sektor", e.target.value)}
                     placeholder="Örn: Finans & Teknoloji"
-                    className="w-full h-10 px-3.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs"
+                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
                   />
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   <label className="block text-xs font-semibold text-slate-600">
                     Web Sitesi
                   </label>
@@ -362,95 +416,99 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                     value={(ozellikler.webSitesi as string) ?? ""}
                     onChange={(e) => handleOzellikDegistir("webSitesi", e.target.value)}
                     placeholder="https://sirket.com"
-                    className="w-full h-10 px-3.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="block text-xs font-semibold text-slate-600">
-                    Lokasyon (Şehir / Ülke)
-                  </label>
-                  <input
-                    type="text"
-                    value={(ozellikler.lokasyon as string) ?? ""}
-                    onChange={(e) => handleOzellikDegistir("lokasyon", e.target.value)}
-                    placeholder="Örn: İstanbul, Türkiye"
-                    className="w-full h-10 px-3.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="block text-xs font-semibold text-slate-600">
-                    Kurum Notları
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={(ozellikler.notlar as string) ?? ""}
-                    onChange={(e) => handleOzellikDegistir("notlar", e.target.value)}
-                    placeholder="Şirket kültürü, iş birliği fırsatları, önemli detaylar..."
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs resize-none"
+                    className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
                   />
                 </div>
               </div>
-            )}
 
-            {/* KAVRAM VEYA DİĞER ALANLARI */}
-            {(tur === "kavram" || tur === "diger") && (
-              <div className="space-y-3.5">
-                <div className="space-y-1">
-                  <label className="block text-xs font-semibold text-slate-600">
-                    {tur === "kavram" ? "Kavram Açıklaması / Tanımı" : "Açıklama"}
-                  </label>
-                  <textarea
-                    rows={3}
-                    value={(ozellikler.aciklama as string) ?? ""}
-                    onChange={(e) => handleOzellikDegistir("aciklama", e.target.value)}
-                    placeholder="Bu kavram veya varlığın haritadaki anlamı ve önemi..."
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs resize-none"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="block text-xs font-semibold text-slate-600">
-                    Ek Notlar
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={(ozellikler.notlar as string) ?? ""}
-                    onChange={(e) => handleOzellikDegistir("notlar", e.target.value)}
-                    placeholder="Referans kaynaklar, bağlantılı fikirler..."
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all shadow-2xs resize-none"
-                  />
-                </div>
+              {/* Lokasyon tam genişlik */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold text-slate-600">
+                  Lokasyon (Şehir / Ülke)
+                </label>
+                <input
+                  type="text"
+                  value={(ozellikler.lokasyon as string) ?? ""}
+                  onChange={(e) => handleOzellikDegistir("lokasyon", e.target.value)}
+                  placeholder="Örn: İstanbul, Türkiye"
+                  className="w-full h-11 px-4 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs"
+                />
               </div>
-            )}
+            </div>
+          )}
+
+          {(tur === "kavram" || tur === "diger") && (
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-4 shadow-xs">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <span>{tur === "kavram" ? "💡" : "📌"}</span>{" "}
+                {tur === "kavram" ? "Kavram Detayları" : "Detaylar"}
+              </h4>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold text-slate-600">
+                  {tur === "kavram" ? "Kavram Açıklaması / Tanımı" : "Açıklama"}
+                </label>
+                <textarea
+                  rows={3}
+                  value={(ozellikler.aciklama as string) ?? ""}
+                  onChange={(e) => handleOzellikDegistir("aciklama", e.target.value)}
+                  placeholder="Bu kavram veya varlığın haritadaki anlamı ve önemi..."
+                  className="w-full rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm p-3 focus:outline-none transition-all placeholder:text-slate-400 resize-y shadow-xs"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* 4. Notlar Alanı Kartı */}
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-4.5 space-y-3 shadow-xs">
+            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+              <span>📝</span>{" "}
+              {tur === "kisi"
+                ? "Görüşme & İletişim Notları"
+                : tur === "kurum"
+                ? "Kurum Notları"
+                : "Ek Notlar"}
+            </h4>
+            <textarea
+              rows={3}
+              value={(ozellikler.notlar as string) ?? ""}
+              onChange={(e) => handleOzellikDegistir("notlar", e.target.value)}
+              placeholder={
+                tur === "kisi"
+                  ? "Tanışma vesilesi, ortak projeler, son görüşme..."
+                  : tur === "kurum"
+                  ? "Şirket kültürü, iş birliği fırsatları, önemli detaylar..."
+                  : "Referans kaynaklar, bağlantılı fikirler..."
+              }
+              className="w-full rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-sm p-3 focus:outline-none transition-all placeholder:text-slate-400 resize-y min-h-[90px] shadow-xs"
+            />
           </div>
         </form>
 
-        {/* Alt Butonlar */}
-        <div className="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between gap-3">
+        {/* 5. Alt Butonlar Barı (Drawer Footer) */}
+        <div className="p-5 bg-slate-50/90 backdrop-blur border-t border-slate-200 flex items-center justify-between pb-6 pt-4 shrink-0">
           <button
             type="button"
             onClick={handleSil}
             disabled={yukleniyor || kaydediliyor}
-            className="h-10 px-4 text-xs font-semibold text-red-600 hover:bg-red-50 border border-red-200 rounded-xl transition-colors cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+            className="text-xs font-semibold text-red-600 hover:bg-red-50 border border-red-200/80 rounded-xl px-3.5 py-2.5 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5 active:scale-98"
           >
             <span>🗑️</span> Düğümü Sil
           </button>
 
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center">
             <button
               type="button"
               onClick={() => secilenDugumuAyarla(null)}
-              className="h-10 px-4 text-sm font-semibold text-slate-600 hover:bg-slate-200/70 rounded-xl transition-colors cursor-pointer"
+              className="text-xs font-medium text-slate-600 hover:bg-slate-200/60 rounded-xl px-4 py-2.5 mr-2 cursor-pointer transition-all active:scale-98"
             >
-              Kapat
+              Vazgeç
             </button>
             <button
-              type="button"
-              onClick={handleKaydet}
+              type="submit"
+              form="dugum-detay-form"
               disabled={yukleniyor || kaydediliyor || !etiket.trim()}
-              className="h-10 px-5 text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 active:scale-98 text-white rounded-xl shadow-sm transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+              className="text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl px-5 py-2.5 shadow-sm active:scale-98 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
             >
               {kaydediliyor ? (
                 <>
@@ -460,7 +518,7 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
               ) : (
                 <>
                   <span>💾</span>
-                  <span>Kaydet</span>
+                  <span>Değişiklikleri Kaydet</span>
                 </>
               )}
             </button>
