@@ -4,6 +4,7 @@ import SidebarPanel from "./components/panels/SidebarPanel";
 import GraphCanvas from "./components/graph/GraphCanvas";
 import MapModal from "./components/panels/MapModal";
 import NodeModal from "./components/panels/NodeModal";
+import NodeDetailDrawer from "./components/panels/NodeDetailDrawer";
 
 export function App() {
   const { haritalariYukle, haritalar, secilenHaritaId, dugumler, kenarlar, hata, hatayiTemizle } =
@@ -79,9 +80,10 @@ export function App() {
         </div>
       </main>
 
-      {/* Modallar */}
+      {/* Modallar ve Detay Paneli */}
       <MapModal acik={haritaModaliAcik} kapat={() => setHaritaModaliAcik(false)} />
       <NodeModal acik={dugumModaliAcik} kapat={() => setDugumModaliAcik(false)} />
+      <NodeDetailDrawer />
     </div>
   );
 }

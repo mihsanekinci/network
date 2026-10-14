@@ -15,6 +15,7 @@ import * as kenarServisi from "../services/kenarServisi";
 
 interface HaritaStore {
   secilenHaritaId: string | null;
+  secilenDugumId: string | null;
   haritalar: HaritaDTO[];
   dugumler: DugumDTO[];
   kenarlar: KenarDTO[];
@@ -23,6 +24,7 @@ interface HaritaStore {
 
   // Senkron durum güncelleyiciler
   secilenHaritayiAyarla: (id: string | null) => void;
+  secilenDugumuAyarla: (id: string | null) => void;
   haritalariAyarla: (haritalar: HaritaDTO[]) => void;
   dugumleriAyarla: (dugumler: DugumDTO[]) => void;
   kenarlariAyarla: (kenarlar: KenarDTO[]) => void;
@@ -49,6 +51,7 @@ interface HaritaStore {
 
 export const useHaritaStore = create<HaritaStore>((set, get) => ({
   secilenHaritaId: null,
+  secilenDugumId: null,
   haritalar: [],
   dugumler: [],
   kenarlar: [],
@@ -56,6 +59,7 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
   hata: null,
 
   secilenHaritayiAyarla: (id) => set({ secilenHaritaId: id }),
+  secilenDugumuAyarla: (id) => set({ secilenDugumId: id }),
   haritalariAyarla: (haritalar) => set({ haritalar }),
   dugumleriAyarla: (dugumler) => set({ dugumler }),
   kenarlariAyarla: (kenarlar) => set({ kenarlar }),
@@ -72,7 +76,7 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
   },
 
   haritaSec: async (id) => {
-    set({ secilenHaritaId: id });
+    set({ secilenHaritaId: id, secilenDugumId: null });
     if (!id) {
       set({ dugumler: [], kenarlar: [] });
       return;
@@ -88,6 +92,7 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
       set((s) => ({
         haritalar: [yeniHarita, ...s.haritalar],
         secilenHaritaId: yeniHarita.id,
+        secilenDugumId: null,
         dugumler: [],
         kenarlar: [],
         yukleniyor: false,
@@ -120,6 +125,7 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
       set((s) => ({
         haritalar: s.haritalar.filter((h) => h.id !== id),
         secilenHaritaId: s.secilenHaritaId === id ? null : s.secilenHaritaId,
+        secilenDugumId: s.secilenHaritaId === id ? null : s.secilenDugumId,
         dugumler: s.secilenHaritaId === id ? [] : s.dugumler,
         kenarlar: s.secilenHaritaId === id ? [] : s.kenarlar,
         yukleniyor: false,
@@ -186,6 +192,7 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
       set((s) => ({
         dugumler: s.dugumler.filter((d) => d.id !== id),
         kenarlar: s.kenarlar.filter((k) => k.kaynakId !== id && k.hedefId !== id),
+        secilenDugumId: s.secilenDugumId === id ? null : s.secilenDugumId,
       }));
       return true;
     }

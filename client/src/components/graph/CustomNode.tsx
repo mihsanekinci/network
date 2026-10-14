@@ -7,6 +7,7 @@ interface OzelDugumVerisi {
   etiket: string;
   tur: DugumTuru;
   ozellikler?: Record<string, unknown>;
+  secili?: boolean;
   onSil?: (id: string) => void;
 }
 
@@ -41,8 +42,9 @@ const TUR_STILLERI: Record<DugumTuru, { arkaplan: string; kenarlik: string; roze
   },
 };
 
-export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id }) => {
+export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, selected }) => {
   const turBilgisi = TUR_STILLERI[data.tur] ?? TUR_STILLERI.diger;
+  const secili = Boolean(selected || data.secili);
 
   const dugumuSil = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -51,9 +53,20 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id }) =
     }
   };
 
+  const unvan =
+    data.tur === "kisi" && typeof data.ozellikler?.unvan === "string"
+      ? data.ozellikler.unvan.trim()
+      : null;
+
   return (
     <div
-      className={`min-w-44 px-4 py-3 rounded-xl border-2 shadow-sm transition-all duration-150 ${turBilgisi.arkaplan} ${turBilgisi.kenarlik}`}
+      className={`min-w-44 px-4 py-3 rounded-xl border-2 transition-all duration-150 cursor-pointer ${
+        turBilgisi.arkaplan
+      } ${
+        secili
+          ? "border-indigo-600 ring-2 ring-indigo-500 ring-offset-2 shadow-md"
+          : `${turBilgisi.kenarlik} shadow-sm`
+      }`}
     >
       <Handle type="target" position={Position.Top} className="!w-3 !h-3 !bg-slate-400 hover:!bg-indigo-600" />
       <Handle type="target" position={Position.Left} id="sol" className="!w-3 !h-3 !bg-slate-400 hover:!bg-indigo-600" />
@@ -76,6 +89,12 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id }) =
       <div className="font-semibold text-slate-800 text-sm truncate" title={data.etiket}>
         {data.etiket}
       </div>
+
+      {unvan && (
+        <div className="text-xs text-slate-500 font-normal truncate mt-0.5" title={unvan}>
+          {unvan}
+        </div>
+      )}
 
       <Handle type="source" position={Position.Right} id="sag" className="!w-3 !h-3 !bg-slate-400 hover:!bg-indigo-600" />
       <Handle type="source" position={Position.Bottom} className="!w-3 !h-3 !bg-slate-400 hover:!bg-indigo-600" />

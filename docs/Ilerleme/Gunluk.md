@@ -92,6 +92,14 @@
   - Toplam 26 testin tamamı başarıyla geçti (`npm test`).
   - TypeScript tip doğrulaması (`tsc --noEmit`) 0 hata ile korundu.
 
+### Faz 12: Düğüm Detay & Düzenleme Paneli (14 Ekim 2026)
+- **Geliştirme:** Düğümlerin üzerine tıklandığında sağdan açılan zengin detay ve düzenleme çekmecesi (`NodeDetailDrawer.tsx`) inşa edildi.
+  - `haritaStore.ts` içine `secilenDugumId` ve `secilenDugumuAyarla` eklendi; harita değiştiğinde veya düğüm silindiğinde otomatik sıfırlama kurgulandı.
+  - `NodeDetailDrawer.tsx`: Kişi, Kurum, Kavram ve Diğer türlerine özel dinamik alanlar (Unvan, Şirket, E-posta, LinkedIn, Telefon, Sektör, Web Sitesi, Lokasyon, Notlar) oluşturuldu.
+  - Bağlantı istatistikleri (gelen/giden bağlantı sayısı ve bağlı düğüm isimleri) panelde görselleştirildi.
+  - `CustomNode.tsx`: Kişi kartlarında unvan alt başlığı (`data.ozellikler.unvan`) gösterildi; seçili düğüm indigo vurgu halkasıyla belirginleştirildi.
+  - `GraphCanvas.tsx`: Düğüme tıklama (`onNodeClick`) ve boşluğa tıklama (`onPaneClick`) ile paneli açma/kapama bağlandı.
+
 ---
 
 ## 🎯 Sıradaki Görevler (Roadmap & Backlog)

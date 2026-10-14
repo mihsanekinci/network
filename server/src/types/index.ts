@@ -80,3 +80,4 @@ export interface ApiYaniti<T> {
   veri?: T;
   hata?: string;
 }
+

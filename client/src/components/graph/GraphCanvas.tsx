@@ -22,6 +22,8 @@ const DUGUM_TURLERI = {
 export const GraphCanvas: React.FC = () => {
   const {
     secilenHaritaId,
+    secilenDugumId,
+    secilenDugumuAyarla,
     dugumler,
     kenarlar,
     kenarEkle,
@@ -38,18 +40,21 @@ export const GraphCanvas: React.FC = () => {
     return dugumler.map((d) => ({
       id: d.id,
       type: "ozelDugum",
+      selected: d.id === secilenDugumId,
       position: { x: d.pozisyonX, y: d.pozisyonY },
       data: {
         id: d.id,
         etiket: d.etiket,
         tur: d.tur,
         ozellikler: d.ozellikler,
+        secili: d.id === secilenDugumId,
         onSil: dugumSil,
       },
     }));
-  }, [dugumler, dugumSil]);
+  }, [dugumler, secilenDugumId, dugumSil]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setYerelDugumler(donusturulmusDugumler);
   }, [donusturulmusDugumler]);
 
@@ -122,6 +127,19 @@ export const GraphCanvas: React.FC = () => {
     [kenarSil]
   );
 
+  // Düğüme tıklandığında detay panelini aç
+  const dugumeTiklandi = useCallback(
+    (_etkinlik: React.MouseEvent, dugum: Node) => {
+      secilenDugumuAyarla(dugum.id);
+    },
+    [secilenDugumuAyarla]
+  );
+
+  // Tuvaldeki boş alana tıklandığında seçimi kaldır
+  const paneTiklandi = useCallback(() => {
+    secilenDugumuAyarla(null);
+  }, [secilenDugumuAyarla]);
+
   if (!secilenHaritaId) {
     return (
       <div className="flex-1 h-full flex flex-col items-center justify-center bg-slate-50 text-slate-500 p-8 text-center select-none">
@@ -165,6 +183,8 @@ export const GraphCanvas: React.FC = () => {
         onNodeDragStop={suruklemeBitti}
         onConnect={baglantiKuruldu}
         onEdgeClick={kenaraTiklandi}
+        onNodeClick={dugumeTiklandi}
+        onPaneClick={paneTiklandi}
         fitView
       >
         <Background variant={BackgroundVariant.Dots} gap={20} size={1.2} color="#cbd5e1" />
