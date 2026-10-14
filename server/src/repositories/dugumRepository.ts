@@ -1,4 +1,4 @@
-import { Dugum } from "@prisma/client";
+import { Dugum, Prisma } from "@prisma/client";
 import prisma from "../lib/prismaIstemcisi";
 
 interface DugumOlusturGirdisi {
@@ -39,20 +39,34 @@ class DugumRepository {
 
   async guncelle(id: string, veri: DugumGuncelleGirdisi): Promise<Dugum> {
     const { ozellikler, ...kalanVeri } = veri;
-    return prisma.dugum.update({
-      where: { id },
-      data: {
-        ...kalanVeri,
-        ...(ozellikler !== undefined && {
-          ozellikler: JSON.stringify(ozellikler),
-        }),
-      },
-    });
+    try {
+      return await prisma.dugum.update({
+        where: { id },
+        data: {
+          ...kalanVeri,
+          ...(ozellikler !== undefined && {
+            ozellikler: JSON.stringify(ozellikler),
+          }),
+        },
+      });
+    } catch (hata) {
+      if (hata instanceof Prisma.PrismaClientKnownRequestError && hata.code === "P2025") {
+        throw new Error("Düğüm bulunamadı");
+      }
+      throw hata;
+    }
   }
 
   // Cascade delete: şemadaki onDelete:Cascade kenarları otomatik siler
   async sil(id: string): Promise<void> {
-    await prisma.dugum.delete({ where: { id } });
+    try {
+      await prisma.dugum.delete({ where: { id } });
+    } catch (hata) {
+      if (hata instanceof Prisma.PrismaClientKnownRequestError && hata.code === "P2025") {
+        return;
+      }
+      throw hata;
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import dugumServisiVarsayilan from "../services/dugumServisi";
-import { DugumDTO, DugumOlusturDTO, DugumGuncelleDTO, ApiYaniti } from "../../../shared/types";
+import type { DugumDTO, DugumOlusturDTO, DugumGuncelleDTO, ApiYaniti } from "../types";
 
 interface DugumServisArayuzu {
   haritayaGoreGetir(haritaId: string): Promise<DugumDTO[]>;

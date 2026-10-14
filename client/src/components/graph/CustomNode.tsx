@@ -66,7 +66,7 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id }) =
           <button
             onClick={dugumuSil}
             title="Düğümü Sil"
-            className="text-slate-400 hover:text-red-600 text-xs px-1 rounded transition-colors"
+            className="nodrag nopan text-slate-400 hover:text-red-600 text-xs px-1 rounded transition-colors"
           >
             ✕
           </button>

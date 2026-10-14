@@ -1,4 +1,4 @@
-import { Kenar } from "@prisma/client";
+import { Kenar, Prisma } from "@prisma/client";
 import prisma from "../lib/prismaIstemcisi";
 
 interface KenarOlusturGirdisi {
@@ -19,7 +19,14 @@ class KenarRepository {
   }
 
   async sil(id: string): Promise<void> {
-    await prisma.kenar.delete({ where: { id } });
+    try {
+      await prisma.kenar.delete({ where: { id } });
+    } catch (hata) {
+      if (hata instanceof Prisma.PrismaClientKnownRequestError && hata.code === "P2025") {
+        return;
+      }
+      throw hata;
+    }
   }
 }
 

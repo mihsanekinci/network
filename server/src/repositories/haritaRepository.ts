@@ -1,4 +1,4 @@
-import { Harita } from "@prisma/client";
+import { Harita, Prisma } from "@prisma/client";
 import prisma from "../lib/prismaIstemcisi";
 
 interface HaritaOlusturGirdisi {
@@ -27,11 +27,25 @@ class HaritaRepository {
   }
 
   async guncelle(id: string, veri: HaritaGuncelleGirdisi): Promise<Harita> {
-    return prisma.harita.update({ where: { id }, data: veri });
+    try {
+      return await prisma.harita.update({ where: { id }, data: veri });
+    } catch (hata) {
+      if (hata instanceof Prisma.PrismaClientKnownRequestError && hata.code === "P2025") {
+        throw new Error("Harita bulunamadı");
+      }
+      throw hata;
+    }
   }
 
   async sil(id: string): Promise<void> {
-    await prisma.harita.delete({ where: { id } });
+    try {
+      await prisma.harita.delete({ where: { id } });
+    } catch (hata) {
+      if (hata instanceof Prisma.PrismaClientKnownRequestError && hata.code === "P2025") {
+        return;
+      }
+      throw hata;
+    }
   }
 }
 

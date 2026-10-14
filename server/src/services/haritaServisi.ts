@@ -1,5 +1,5 @@
 import { Harita } from "@prisma/client";
-import { HaritaDTO, HaritaOlusturDTO, HaritaGuncelleDTO } from "../../../shared/types";
+import type { HaritaDTO, HaritaOlusturDTO, HaritaGuncelleDTO } from "../types";
 import haritaRepositoryVarsayilan from "../repositories/haritaRepository";
 
 interface HaritaRepo {

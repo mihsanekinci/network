@@ -1,5 +1,5 @@
 import { Dugum } from "@prisma/client";
-import { DugumDTO, DugumOlusturDTO, DugumGuncelleDTO, DugumTuru } from "../../../shared/types";
+import type { DugumDTO, DugumOlusturDTO, DugumGuncelleDTO, DugumTuru } from "../types";
 import dugumRepositoryVarsayilan from "../repositories/dugumRepository";
 
 interface DugumRepo {

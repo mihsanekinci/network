@@ -1,5 +1,5 @@
 import { Dugum, Kenar } from "@prisma/client";
-import { KenarDTO, KenarOlusturDTO, KenarYonu } from "../../../shared/types";
+import type { KenarDTO, KenarOlusturDTO, KenarYonu } from "../types";
 import kenarRepositoryVarsayilan from "../repositories/kenarRepository";
 import dugumRepositoryVarsayilan from "../repositories/dugumRepository";
 

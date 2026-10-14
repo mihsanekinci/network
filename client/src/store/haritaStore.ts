@@ -155,6 +155,11 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
   dugumGuncelle: async (id, veri) => {
     const haritaId = get().secilenHaritaId;
     if (!haritaId) return null;
+
+    // Düğüm zaten mevcut listede yoksa (silinmişse) sunucuya istek gönderme
+    const dugumVarMi = get().dugumler.some((d) => d.id === id);
+    if (!dugumVarMi) return null;
+
     const yanit = await dugumServisi.dugumGuncelle(haritaId, id, veri);
     if (yanit.basarili && yanit.veri) {
       const guncel = yanit.veri;
@@ -163,6 +168,12 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
       }));
       return guncel;
     }
+
+    // Silinmiş/bulunamayan düğümün konum güncelleme hatasını ekrana yansıtma
+    if (yanit.hata?.toLowerCase().includes("bulunamadı")) {
+      return null;
+    }
+
     set({ hata: yanit.hata ?? "Düğüm güncellenemedi" });
     return null;
   },

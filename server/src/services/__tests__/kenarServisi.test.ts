@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Dugum, Kenar } from "@prisma/client";
-import { KenarOlusturDTO } from "../../../../shared/types";
+import type { KenarOlusturDTO } from "../../types";
 import { KenarServisi, type KenarRepo, type DugumRepo } from "../kenarServisi";
 
 describe("KenarServisi", () => {

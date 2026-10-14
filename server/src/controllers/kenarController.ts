@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import kenarServisiVarsayilan from "../services/kenarServisi";
-import { KenarDTO, KenarOlusturDTO, ApiYaniti } from "../../../shared/types";
+import type { KenarDTO, KenarOlusturDTO, ApiYaniti } from "../types";
 
 interface KenarServisArayuzu {
   haritayaGoreGetir(haritaId: string): Promise<KenarDTO[]>;

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Dugum } from "@prisma/client";
-import { DugumOlusturDTO, DugumGuncelleDTO } from "../../../../shared/types";
+import type { DugumOlusturDTO, DugumGuncelleDTO } from "../../types";
 import { DugumServisi, DugumRepo } from "../dugumServisi";
 
 const sahteDugum: Dugum = {

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import haritaServisiVarsayilan from "../services/haritaServisi";
-import { HaritaDTO, HaritaOlusturDTO, HaritaGuncelleDTO, ApiYaniti } from "../../../shared/types";
+import type { HaritaDTO, HaritaOlusturDTO, HaritaGuncelleDTO, ApiYaniti } from "../types";
 
 interface HaritaServisArayuzu {
   tumunuGetir(): Promise<HaritaDTO[]>;
