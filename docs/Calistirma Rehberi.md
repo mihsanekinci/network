@@ -39,6 +39,13 @@ cd client && npx tsc --noEmit -p tsconfig.app.json
 cd server && npx tsc --noEmit
 ```
 
+## Testleri Çalıştırma
+
+```bash
+cd server && npm test          # Tüm birim testleri tek seferlik çalıştırır (Vitest)
+cd server && npm run test:watch # Değişiklikleri izleyen modda çalıştırır
+```
+
 ## Sorun Giderme
 - **Beyaz ekran:** Tarayıcı konsolunu kontrol et. `reactflow` tipleri `import { type X }` ile alınmalı (bkz. [[React Flow Canvas]]).
 - **Port dolu:** `lsof -i :3000` veya `lsof -i :5173` ile eski süreci bul ve kapat.

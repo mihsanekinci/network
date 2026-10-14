@@ -82,6 +82,16 @@
   - `server/.env.example`: Backend için `DATABASE_URL` ve `PORT` tanımlarını içeren ortam değişkeni şablonu eklendi.
   - [[Calistirma Rehberi]] ve dokümantasyon haritası güncellendi.
 
+### Faz 11: Backend Servis Birim Testleri & Vitest Altyapısı (14 Ekim 2026)
+- **Geliştirme:** Backend servis katmanı için Vitest test kütüphanesi kuruldu ve izole birim testleri (unit tests) yazıldı.
+  - Servis sınıfları (`HaritaServisi`, `DugumServisi`, `KenarServisi`) ve repo arayüzleri dışa aktarılarak Dependency Injection ile sahte repository (mock repo) desteği sağlandı.
+  - `server/src/services/__tests__/` altında 3 test paketi oluşturuldu:
+    - `haritaServisi.test.ts` (10 test): DTO dönüşümleri, boş başlık denetimi, varlık doğrulama ve CRUD akışları.
+    - `dugumServisi.test.ts` (8 test): DTO ve JSON ozellikler ayrıştırma, mükerrer etiket kontrolü, boş etiket fırlatma, CRUD akışları.
+    - `kenarServisi.test.ts` (8 test): Kaynak/hedef düğüm varlık ve harita eşleşmesi denetimi, mükerrer bağlantı engeli, CRUD akışları.
+  - Toplam 26 testin tamamı başarıyla geçti (`npm test`).
+  - TypeScript tip doğrulaması (`tsc --noEmit`) 0 hata ile korundu.
+
 ---
 
 ## 🎯 Sıradaki Görevler (Roadmap & Backlog)
@@ -90,8 +100,9 @@
   - `haritaController.ts`, `dugumController.ts`, `kenarController.ts` implementasyonu.
   - Express rotalarının oluşturulması ve `server/src/index.ts` içine bağlanması.
   - *(Bkz: [[Rotalar ve Controllers]])*
-- [ ] **2. Backend Testleri:**
-  - Servis katmanı için Jest / Vitest unit testlerinin yazılması (`__tests__`).
+- [x] **2. Backend Testleri:**
+  - Servis katmanı için Vitest birim testlerinin yazılması (`__tests__`).
+  - Harita (10), Düğüm (8) ve Kenar (8) servisleri için toplam 26 birim testi yazıldı ve doğrulandı.
 - [x] **3. Frontend State & Servis Entegrasyonu:**
   - `client/src/services/` servislerinin canlı backend API ile senkronize edilmesi.
   - `client/src/store/haritaStore.ts` Zustand store'unun servislerle tam bağlanması.

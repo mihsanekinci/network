@@ -60,4 +60,5 @@ class DugumServisi {
   }
 }
 
+export { DugumServisi, type DugumRepo };
 export default new DugumServisi(dugumRepositoryVarsayilan);

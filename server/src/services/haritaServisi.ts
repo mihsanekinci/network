@@ -57,4 +57,5 @@ class HaritaServisi {
   }
 }
 
+export { HaritaServisi, type HaritaRepo };
 export default new HaritaServisi(haritaRepositoryVarsayilan);

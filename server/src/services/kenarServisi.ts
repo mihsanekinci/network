@@ -67,4 +67,5 @@ class KenarServisi {
   }
 }
 
+export { KenarServisi, type KenarRepo, type DugumRepo };
 export default new KenarServisi(kenarRepositoryVarsayilan, dugumRepositoryVarsayilan);
