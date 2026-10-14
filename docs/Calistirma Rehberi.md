@@ -2,6 +2,20 @@
 
 > Projeyi sıfırdan ayağa kaldırmak için gereken komutlar. Üst Not: [[00 - Ana Harita]]
 
+## İlk Kurulum (Sıfırdan Başlarken)
+
+```bash
+# Backend kurulumu
+cd server && npm install
+cp .env.example .env
+npx prisma migrate dev
+cd ..
+
+# Frontend kurulumu
+cd client && npm install
+cd ..
+```
+
 ## Günlük Kullanım — 2 Terminal
 
 | Terminal | Komut | Adres |

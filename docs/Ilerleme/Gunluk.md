@@ -75,6 +75,13 @@
 - `tsc --noEmit` (client, `tsconfig.app.json`) 0 hata, `vite build` başarılı.
 - [[React Flow Canvas]] ve [[Zustand ve Servisler]] notları güncellendi.
 
+### Faz 10: Temizlik, Kök Dokümantasyon & Kurulum Şablonu (8-14 Ekim 2026)
+- **Geliştirme:** Obsidian kişisel dosyalarının temizlenmesi, çevre değişkenleri şablonu ve kök README'nin oluşturulması.
+  - `chore/obsidian-takipten-cikar` PR #2 ile `.obsidian/` kişisel ayarları ve eklenti dosyaları `.gitignore` kapsamına alındı, repo hafifletildi.
+  - `README.md`: Projenin mimarisini, katman sırasını, teknolojilerini, API uçlarını ve iki terminalli çalıştırma adımlarını içeren kök kılavuz oluşturuldu.
+  - `server/.env.example`: Backend için `DATABASE_URL` ve `PORT` tanımlarını içeren ortam değişkeni şablonu eklendi.
+  - [[Calistirma Rehberi]] ve dokümantasyon haritası güncellendi.
+
 ---
 
 ## 🎯 Sıradaki Görevler (Roadmap & Backlog)
