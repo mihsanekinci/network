@@ -5,6 +5,7 @@ import GraphCanvas from "./components/graph/GraphCanvas";
 import MapModal from "./components/panels/MapModal";
 import NodeModal from "./components/panels/NodeModal";
 import NodeDetailDrawer from "./components/panels/NodeDetailDrawer";
+import SearchFilterBar from "./components/panels/SearchFilterBar";
 
 export function App() {
   const { haritalariYukle, haritalar, secilenHaritaId, dugumler, kenarlar, hata, hatayiTemizle } =
@@ -27,39 +28,51 @@ export function App() {
       {/* Ana Çalışma Alanı */}
       <main className="flex-1 flex flex-col h-full overflow-hidden">
         {/* Üst Bilgi ve Kontrol Çubuğu */}
-        <header className="h-14 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0 shadow-2xs">
-          <div className="flex items-center gap-3">
+        <header className="h-16 bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between gap-4 shrink-0 shadow-2xs">
+          {/* Sol: Harita Başlığı ve Sayaçlar */}
+          <div className="flex items-center gap-3.5 min-w-0">
             {secilenHarita ? (
               <>
-                <h2 className="text-sm font-bold text-slate-800">{secilenHarita.baslik}</h2>
+                <h2 className="text-base font-bold text-slate-800 truncate" title={secilenHarita.baslik}>
+                  {secilenHarita.baslik}
+                </h2>
                 {secilenHarita.aciklama && (
-                  <span className="text-xs text-slate-400 border-l border-slate-200 pl-3">
+                  <span className="hidden xl:inline text-xs text-slate-400 border-l border-slate-200 pl-3 truncate max-w-xs" title={secilenHarita.aciklama}>
                     {secilenHarita.aciklama}
                   </span>
                 )}
-                <div className="flex items-center gap-1.5 ml-2">
-                  <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600">
+                <div className="hidden sm:flex items-center gap-2 ml-1">
+                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200/60">
                     {dugumler.length} Düğüm
                   </span>
-                  <span className="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600">
+                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200/60">
                     {kenarlar.length} Bağlantı
                   </span>
                 </div>
               </>
             ) : (
-              <span className="text-xs text-slate-400 font-medium">
+              <span className="text-sm text-slate-400 font-medium">
                 Aktif bir harita seçilmedi
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-3">
+          {/* Orta: Arama ve Filtreleme Çubuğu (Aktif Harita Varken) */}
+          {secilenHaritaId && (
+            <div className="flex-1 flex justify-center max-w-2xl px-2">
+              <SearchFilterBar />
+            </div>
+          )}
+
+          {/* Sağ: Eylem Butonları */}
+          <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={() => setDugumModaliAcik(true)}
               disabled={!secilenHaritaId}
-              className="py-1.5 px-3.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold rounded-lg shadow-sm transition-colors flex items-center gap-1.5 cursor-pointer"
+              className="h-10 px-4 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-semibold rounded-xl shadow-sm transition-all flex items-center gap-2 cursor-pointer active:scale-98"
             >
-              <span>＋</span> Düğüm Ekle
+              <span className="text-base leading-none">＋</span>
+              <span>Düğüm Ekle</span>
             </button>
           </div>
         </header>

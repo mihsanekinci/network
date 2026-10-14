@@ -100,6 +100,15 @@
   - `CustomNode.tsx`: Kişi kartlarında unvan alt başlığı (`data.ozellikler.unvan`) gösterildi; seçili düğüm indigo vurgu halkasıyla belirginleştirildi.
   - `GraphCanvas.tsx`: Düğüme tıklama (`onNodeClick`) ve boşluğa tıklama (`onPaneClick`) ile paneli açma/kapama bağlandı.
 
+### Faz 13: UI/UX Modernizasyonu & Canlı Arama-Filtreleme (14 Ekim 2026)
+- **Geliştirme:** Tüm arayüz buton ve boşluklandırma standartları yenilendi, canlı arama ve tür filtreleme çubuğu (`SearchFilterBar.tsx`) eklendi.
+  - `haritaStore.ts`: `aramaMetni` ve `secilenTurFiltresi` ('hepsi' | 'kisi' | 'kurum' | 'kavram' | 'diger') durumları eklendi.
+  - `SearchFilterBar.tsx`: Header ortasına ferah arama çubuğu ve tür hap filtreleri (Pills) yerleştirildi; eşleşen düğüm sayacı bağlandı.
+  - `SidebarPanel.tsx`: `w-80` genişlik, `p-4` ferah kenar boşlukları, `h-10` "+ Yeni Harita" butonu ve kart görünümünde harita listesi tasarlandı.
+  - `App.tsx` Header: `h-16 px-6` ferahlatıldı, butonlar `h-10 px-4 rounded-xl` ve sayaçlar şık çiplere dönüştürüldü.
+  - `CustomNode.tsx`: `min-w-52` genişlik, zarif bağlantı noktaları ve filtreye uymayan düğümlerde `opacity-30 grayscale` odaklama efekti sağlandı.
+  - `NodeDetailDrawer.tsx`, `NodeModal.tsx`, `MapModal.tsx`: Sıkışık form alanları `h-10 text-sm rounded-xl` boyutlarına büyütüldü, alt eylem butonları kenarlardan ayrıldı.
+
 ---
 
 ## 🎯 Sıradaki Görevler (Roadmap & Backlog)

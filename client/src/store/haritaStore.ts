@@ -6,6 +6,7 @@ import type {
   DugumDTO,
   DugumOlusturDTO,
   DugumGuncelleDTO,
+  DugumTuru,
   KenarDTO,
   KenarOlusturDTO,
 } from "../types";
@@ -21,6 +22,12 @@ interface HaritaStore {
   kenarlar: KenarDTO[];
   yukleniyor: boolean;
   hata: string | null;
+
+  // Arama ve Filtreleme Durumu
+  aramaMetni: string;
+  secilenTurFiltresi: DugumTuru | "hepsi";
+  aramaMetniniAyarla: (metin: string) => void;
+  turFiltresiniAyarla: (tur: DugumTuru | "hepsi") => void;
 
   // Senkron durum güncelleyiciler
   secilenHaritayiAyarla: (id: string | null) => void;
@@ -57,7 +64,11 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
   kenarlar: [],
   yukleniyor: false,
   hata: null,
+  aramaMetni: "",
+  secilenTurFiltresi: "hepsi",
 
+  aramaMetniniAyarla: (metin) => set({ aramaMetni: metin }),
+  turFiltresiniAyarla: (tur) => set({ secilenTurFiltresi: tur }),
   secilenHaritayiAyarla: (id) => set({ secilenHaritaId: id }),
   secilenDugumuAyarla: (id) => set({ secilenDugumId: id }),
   haritalariAyarla: (haritalar) => set({ haritalar }),
@@ -76,7 +87,12 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
   },
 
   haritaSec: async (id) => {
-    set({ secilenHaritaId: id, secilenDugumId: null });
+    set({
+      secilenHaritaId: id,
+      secilenDugumId: null,
+      aramaMetni: "",
+      secilenTurFiltresi: "hepsi",
+    });
     if (!id) {
       set({ dugumler: [], kenarlar: [] });
       return;
@@ -128,6 +144,8 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
         secilenDugumId: s.secilenHaritaId === id ? null : s.secilenDugumId,
         dugumler: s.secilenHaritaId === id ? [] : s.dugumler,
         kenarlar: s.secilenHaritaId === id ? [] : s.kenarlar,
+        aramaMetni: s.secilenHaritaId === id ? "" : s.aramaMetni,
+        secilenTurFiltresi: s.secilenHaritaId === id ? "hepsi" : s.secilenTurFiltresi,
         yukleniyor: false,
       }));
       return true;

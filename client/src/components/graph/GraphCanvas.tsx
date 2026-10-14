@@ -31,27 +31,57 @@ export const GraphCanvas: React.FC = () => {
     dugumGuncelle,
     dugumSil,
     yukleniyor,
+    aramaMetni,
+    secilenTurFiltresi,
   } = useHaritaStore();
 
   const [yerelDugumler, setYerelDugumler] = useState<Node[]>([]);
 
+  const filtreAktif = aramaMetni.trim() !== "" || secilenTurFiltresi !== "hepsi";
+
   // Düğümleri React Flow formatına dönüştür
   const donusturulmusDugumler = useMemo<Node[]>(() => {
-    return dugumler.map((d) => ({
-      id: d.id,
-      type: "ozelDugum",
-      selected: d.id === secilenDugumId,
-      position: { x: d.pozisyonX, y: d.pozisyonY },
-      data: {
+    const arama = aramaMetni.trim().toLocaleLowerCase("tr");
+
+    return dugumler.map((d) => {
+      const turUyuyor = secilenTurFiltresi === "hepsi" || d.tur === secilenTurFiltresi;
+      let metinUyuyor = true;
+      if (arama) {
+        const etiketVar = d.etiket.toLocaleLowerCase("tr").includes(arama);
+        const unvanVar =
+          typeof d.ozellikler?.unvan === "string" &&
+          d.ozellikler.unvan.toLocaleLowerCase("tr").includes(arama);
+        const sirketVar =
+          typeof d.ozellikler?.sirket === "string" &&
+          d.ozellikler.sirket.toLocaleLowerCase("tr").includes(arama);
+        const notlarVar =
+          typeof d.ozellikler?.notlar === "string" &&
+          d.ozellikler.notlar.toLocaleLowerCase("tr").includes(arama);
+        const aciklamaVar =
+          typeof d.ozellikler?.aciklama === "string" &&
+          d.ozellikler.aciklama.toLocaleLowerCase("tr").includes(arama);
+        metinUyuyor = Boolean(etiketVar || unvanVar || sirketVar || notlarVar || aciklamaVar);
+      }
+      const eslesiyor = turUyuyor && metinUyuyor;
+
+      return {
         id: d.id,
-        etiket: d.etiket,
-        tur: d.tur,
-        ozellikler: d.ozellikler,
-        secili: d.id === secilenDugumId,
-        onSil: dugumSil,
-      },
-    }));
-  }, [dugumler, secilenDugumId, dugumSil]);
+        type: "ozelDugum",
+        selected: d.id === secilenDugumId,
+        position: { x: d.pozisyonX, y: d.pozisyonY },
+        data: {
+          id: d.id,
+          etiket: d.etiket,
+          tur: d.tur,
+          ozellikler: d.ozellikler,
+          secili: d.id === secilenDugumId,
+          eslesiyor,
+          filtreAktif,
+          onSil: dugumSil,
+        },
+      };
+    });
+  }, [dugumler, secilenDugumId, dugumSil, aramaMetni, secilenTurFiltresi, filtreAktif]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
