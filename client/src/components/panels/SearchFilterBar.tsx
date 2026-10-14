@@ -4,10 +4,10 @@ import type { DugumTuru } from "../../types";
 
 const TUR_SECENEKLERI: { tur: DugumTuru | "hepsi"; etiket: string }[] = [
   { tur: "hepsi", etiket: "Hepsi" },
-  { tur: "kisi", etiket: "👤 Kişiler" },
-  { tur: "kurum", etiket: "🏢 Kurumlar" },
-  { tur: "kavram", etiket: "💡 Kavramlar" },
-  { tur: "diger", etiket: "📌 Diğer" },
+  { tur: "kisi", etiket: "Kişi" },
+  { tur: "kurum", etiket: "Kurum" },
+  { tur: "kavram", etiket: "Kavram" },
+  { tur: "diger", etiket: "Diğer" },
 ];
 
 export const SearchFilterBar: React.FC = () => {
@@ -47,10 +47,10 @@ export const SearchFilterBar: React.FC = () => {
   const filtreAktif = aramaMetni.trim() !== "" || secilenTurFiltresi !== "hepsi";
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2 shrink-0">
       {/* Arama Input Alanı */}
       <div className="relative">
-        <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400 pointer-events-none text-sm">
+        <span className="absolute inset-y-0 left-0 flex items-center pl-2.5 text-slate-400 pointer-events-none text-xs">
           🔍
         </span>
         <input
@@ -58,14 +58,14 @@ export const SearchFilterBar: React.FC = () => {
           value={aramaMetni}
           onChange={(e) => aramaMetniniAyarla(e.target.value)}
           placeholder="Düğümlerde ara..."
-          className="w-64 h-10 pl-11 pr-9 text-sm rounded-xl bg-slate-100/80 border border-slate-200/80 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 focus:outline-none transition-all placeholder:text-slate-400 text-slate-800"
+          className="w-44 focus:w-56 h-8.5 pl-8 pr-7 text-xs rounded-lg bg-slate-100/90 border border-slate-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-slate-800"
         />
         {aramaMetni && (
           <button
             type="button"
             onClick={() => aramaMetniniAyarla("")}
             title="Aramayı Temizle"
-            className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer text-xs"
+            className="absolute inset-y-0 right-0 flex items-center pr-2 text-slate-400 hover:text-slate-600 text-[10px] cursor-pointer"
           >
             ✕
           </button>
@@ -73,7 +73,7 @@ export const SearchFilterBar: React.FC = () => {
       </div>
 
       {/* Tür Hap Filtreleri (Pills) */}
-      <div className="hidden lg:flex items-center gap-1.5 bg-slate-100/80 p-1 rounded-xl border border-slate-200/80">
+      <div className="hidden lg:flex items-center gap-0.5 bg-slate-100/70 p-0.5 rounded-lg border border-slate-200/80">
         {TUR_SECENEKLERI.map((secenek) => {
           const aktif = secilenTurFiltresi === secenek.tur;
           return (
@@ -81,9 +81,9 @@ export const SearchFilterBar: React.FC = () => {
               key={secenek.tur}
               type="button"
               onClick={() => turFiltresiniAyarla(secenek.tur)}
-              className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-2.5 py-1 text-xs font-medium rounded-md transition-all cursor-pointer ${
                 aktif
-                  ? "bg-white text-indigo-700 shadow-xs ring-1 ring-slate-200/80"
+                  ? "bg-white text-indigo-700 shadow-2xs font-semibold ring-1 ring-slate-200/80"
                   : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
               }`}
             >
@@ -95,8 +95,8 @@ export const SearchFilterBar: React.FC = () => {
 
       {/* Sayaç Çipi */}
       <div
-        className={`px-3 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200/70 whitespace-nowrap transition-all ${
-          filtreAktif ? "ring-2 ring-indigo-500/15 shadow-xs" : ""
+        className={`px-2 py-0.5 rounded-md text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200/70 whitespace-nowrap transition-all ${
+          filtreAktif ? "ring-2 ring-indigo-500/15 shadow-2xs" : ""
         }`}
         title={`${dugumler.length} düğüm arasından ${eslesenDugumSayisi} tanesi eşleşti`}
       >

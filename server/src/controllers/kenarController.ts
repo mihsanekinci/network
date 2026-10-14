@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import kenarServisiVarsayilan from "../services/kenarServisi";
-import type { KenarDTO, KenarOlusturDTO, ApiYaniti } from "../types";
+import type { KenarDTO, KenarOlusturDTO, KenarGuncelleDTO, ApiYaniti } from "../types";
 
 interface KenarServisArayuzu {
   haritayaGoreGetir(haritaId: string): Promise<KenarDTO[]>;
   olustur(veri: KenarOlusturDTO): Promise<KenarDTO>;
+  guncelle(id: string, veri: KenarGuncelleDTO): Promise<KenarDTO>;
   sil(id: string): Promise<void>;
 }
 
@@ -45,6 +46,21 @@ export class KenarController {
     } catch (hata) {
       const mesaj = hata instanceof Error ? hata.message : "Kenar oluşturulamadı";
       yanit.status(400).json({ basarili: false, hata: mesaj });
+    }
+  };
+
+  guncelle = async (
+    istek: Request,
+    yanit: Response<ApiYaniti<KenarDTO>>
+  ): Promise<void> => {
+    try {
+      const id = istek.params.id ?? istek.params.kenarId;
+      const guncelKenar = await this.kenarServisi.guncelle(id, istek.body);
+      yanit.status(200).json({ basarili: true, veri: guncelKenar });
+    } catch (hata) {
+      const mesaj = hata instanceof Error ? hata.message : "Kenar güncellenemedi";
+      const durumKodu = mesaj === "Kenar bulunamadı" ? 404 : 400;
+      yanit.status(durumKodu).json({ basarili: false, hata: mesaj });
     }
   };
 

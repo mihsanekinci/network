@@ -140,29 +140,37 @@
   - `NodeModal.tsx` & `MapModal.tsx`: `p-6 flex flex-col gap-5` ve `h-11 px-4 py-2.5` input boyutlarıyla ferahlatıldı.
 - **Doğrulama:** Backend 26/26 birim testi geçti; Client `tsc -b`, `vite build` ve `eslint .` sıfır hata ve sıfır uyarı ile doğrulandı.
 
+### Faz 16: Navbar & Header Rafinasyonu (Kompakt SaaS Boyutları) (14 Ekim 2026)
+- **Geliştirme:** Kullanıcı geri bildirimi doğrultusunda üst çubuktaki (Header / Navbar) öğelerin aşırı büyük, orantısız olması ve ekran daraldığında arama çubuğunun sayaç rozetlerini ezmesi ve "+ Düğüm Ekle" butonunun arkasında kalması çözüldü.
+  - `SearchFilterBar.tsx`: Arama input'u hantal `w-64` yerine `w-44 focus:w-56 h-8.5 pl-8 pr-7 text-xs rounded-lg` Linear/Notion tarzı dinamik genişleyen mikro çubuğa dönüştürüldü. Tür hap filtreleri (`Hepsi`, `Kişi`, `Kurum`, `Kavram`, `Diğer`) ve sayaç çipi kompakt boyutlara (`text-[11px]`) çekildi.
+  - `App.tsx` Header: `h-14 px-5` ile kompaktlaştırıldı, harita başlığı `truncate max-w-48` ile taşma korumasına alındı, sayaç rozetleri `px-2 py-0.5 text-[11px]` boyutuna küçültüldü. `+ Düğüm Ekle` butonu `h-8.5 px-3.5 text-xs` ile hizalandı ve `shrink-0` ile ezilme riski tamamen ortadan kaldırıldı.
+
+### Faz 17: Kenar / Bağlantı İlişki Türleri ve Etiketleme (Yol Haritası Adım 3) (14 Ekim 2026)
+- **Geliştirme:** İki düğüm birbirine bağlandığında veya mevcut bir bağlantı çizgisine tıklandığında ilişki türü belirleme, etiketleme ve çizgi üzerinde şık rozet gösterme özelliği uçtan uca hayata geçirildi.
+  - **Backend Katmanı:**
+    - `kenarRepository.ts`: `idIleGetir` ve `guncelle` metotları Prisma seviyesinde yazıldı.
+    - `kenarServisi.ts`: `KenarServisi.guncelle(id, veri)` metodu eklendi; varlık denetimi ve yön doğrulaması (`tek_yonlu`, `cift_yonlu`, `yonsuz`) yapıldı.
+    - `kenarController.ts` & `kenarRoutes.ts`: `PATCH` ve `PUT /api/haritalar/:haritaId/kenarlar/:id` rotaları bağlandı.
+    - `kenarServisi.test.ts`: 3 yeni birim testi yazılarak backend test havuzu 29/29'a çıkarıldı (%100 başarı).
+  - **Frontend Katmanı:**
+    - `kenarServisi.ts`: `kenarGuncelle` API istemci çağrısı eklendi.
+    - `haritaStore.ts`: `secilenKenarId`, `secilenKenariAyarla` ve `kenarGuncelle` eylemleri eklendi.
+    - `EdgeModal.tsx`: Seçilen bağlantının Kaynak ➔ Hedef düğüm rozetlerini gösteren görsel kart, 10 popüler hızlı ilişki şablonu (*İş Arkadaşı, Referans, Mentör, Eski Çalışan, Proje Ortağı, Stajyer, Danışman, Yatırımcı, Müşteri, Bağlantılı*), serbest metin inputu, 3 yönlü yön seçimi (➔ Tek Yönlü, ↔ Çift Yönlü, — Yönsüz) ve güvenli silme butonundan oluşan modern SaaS modalı geliştirildi.
+    - `GraphCanvas.tsx`: React Flow bağlantı çizgileri üzerine beyaz arka planlı, yuvarlatılmış şık rozet etiketleri (`labelBgRadius: 8`, `labelBgBorderRadius: 8`) ve yön durumuna göre ok işaretleri (`MarkerType.ArrowClosed`) yerleştirildi. Bağlantıya tıklandığında veya yeni bağlantı çizildiğinde modal otomatik açılacak şekilde bağlandı.
+- **Doğrulama:** Backend 29/29 Vitest birim testi geçti; Client `tsc -b`, `vite build` ve `eslint .` sıfır hata ve sıfır uyarı ile doğrulandı.
+
 ---
 
-## 🎯 Sıradaki Görevler (Roadmap & Backlog)
+## 🎯 Tamamlanan Yol Haritası (Roadmap)
 
-- [x] **1. Backend Controllers & Rotalar:**
-  - `haritaController.ts`, `dugumController.ts`, `kenarController.ts` implementasyonu.
-  - Express rotalarının oluşturulması ve `server/src/index.ts` içine bağlanması.
-  - *(Bkz: [[Rotalar ve Controllers]])*
-- [x] **2. Backend Testleri:**
-  - Servis katmanı için Vitest birim testlerinin yazılması (`__tests__`).
-  - Harita (10), Düğüm (8) ve Kenar (8) servisleri için toplam 26 birim testi yazıldı ve doğrulandı.
-- [x] **3. Frontend State & Servis Entegrasyonu:**
-  - `client/src/services/` servislerinin canlı backend API ile senkronize edilmesi.
-  - `client/src/store/haritaStore.ts` Zustand store'unun servislerle tam bağlanması.
-  - *(Bkz: [[Zustand ve Servisler]])*
-- [x] **4. React Flow Canvas:**
-  - `GraphCanvas` bileşeninin React Flow ile ayağa kaldırılması.
-  - Düğümlerin harita üzerinde sürüklenip bırakılması ve yeni bağlantılar (kenarlar) çizilmesi.
-  - *(Bkz: [[React Flow Canvas]])*
-- [x] **5. Arayüz Panelleri:**
-  - Düğüm detay ve ekleme paneli (`NodeModal.tsx`).
-  - Harita yönetim ve kenar paneli (`SidebarPanel.tsx`, `MapModal.tsx`).
-  - *(Bkz: [[React Flow Canvas]])*
+- [x] **1. Backend Controllers & Rotalar (Faz 6)**
+- [x] **2. Backend Servis Birim Testleri - Vitest (Faz 11, Faz 17)**
+- [x] **3. Frontend State & Servis Entegrasyonu - Zustand (Faz 7)**
+- [x] **4. React Flow Canvas Motoru (Faz 8)**
+- [x] **5. Düğüm Detay & Düzenleme Paneli - Drawer (Faz 12)**
+- [x] **6. Canlı Arama, Filtreleme & Sayaçlar (Faz 13, Faz 16)**
+- [x] **7. Figma/Miro Standardında Kapsamlı UI/UX Modernizasyonu (Faz 14, Faz 15, Faz 16)**
+- [x] **8. Kenar (Bağlantı) İlişki Türleri, Etiketleme & EdgeModal (Faz 17)**
 
 ---
 

@@ -24,10 +24,11 @@ export const GraphCanvas: React.FC = () => {
     secilenHaritaId,
     secilenDugumId,
     secilenDugumuAyarla,
+    secilenKenarId,
+    secilenKenariAyarla,
     dugumler,
     kenarlar,
     kenarEkle,
-    kenarSil,
     dugumGuncelle,
     dugumSil,
     yukleniyor,
@@ -90,31 +91,57 @@ export const GraphCanvas: React.FC = () => {
 
   // Kenarları React Flow formatına dönüştür
   const donusturulmusKenarlar = useMemo<Edge[]>(() => {
-    return kenarlar.map((k) => ({
-      id: k.id,
-      source: k.kaynakId,
-      target: k.hedefId,
-      label: k.etiket ?? undefined,
-      animated: k.yon === "tek_yonlu",
-      markerEnd: {
-        type: MarkerType.ArrowClosed,
-        color: "#6366f1",
-      },
-      style: {
-        stroke: "#6366f1",
-        strokeWidth: 2,
-      },
-      labelStyle: {
-        fill: "#475569",
-        fontWeight: 600,
-        fontSize: 12,
-      },
-      labelBgStyle: {
-        fill: "#f8fafc",
-        fillOpacity: 0.9,
-      },
-    }));
-  }, [kenarlar]);
+    return kenarlar.map((k) => {
+      const secili = k.id === secilenKenarId;
+      const renk = secili ? "#4f46e5" : "#6366f1";
+
+      const markerEnd: Edge["markerEnd"] =
+        k.yon === "yonsuz"
+          ? undefined
+          : {
+              type: MarkerType.ArrowClosed,
+              color: renk,
+            };
+
+      const markerStart: Edge["markerStart"] =
+        k.yon === "cift_yonlu"
+          ? {
+              type: MarkerType.ArrowClosed,
+              color: renk,
+            }
+          : undefined;
+
+      const animated = k.yon === "tek_yonlu";
+
+      return {
+        id: k.id,
+        source: k.kaynakId,
+        target: k.hedefId,
+        selected: secili,
+        label: k.etiket || undefined,
+        animated,
+        markerStart,
+        markerEnd,
+        style: {
+          stroke: renk,
+          strokeWidth: secili ? 3 : 1.75,
+        },
+        labelStyle: {
+          fill: "#1e293b",
+          fontWeight: 600,
+          fontSize: 11,
+        },
+        labelBgStyle: {
+          fill: "#ffffff",
+          fillOpacity: 0.95,
+          stroke: secili ? "#4f46e5" : "#cbd5e1",
+          strokeWidth: 1.5,
+        },
+        labelBgPadding: [8, 5] as [number, number],
+        labelBgBorderRadius: 8,
+      };
+    });
+  }, [kenarlar, secilenKenarId]);
 
   // Sürükleme durumunda yerel konumu güncelle
   const dugumlerDegisti = useCallback((degisiklikler: NodeChange[]) => {
@@ -134,41 +161,43 @@ export const GraphCanvas: React.FC = () => {
 
   // İki düğüm arasında yeni kenar bağlantısı kurma
   const baglantiKuruldu = useCallback(
-    (baglanti: Connection) => {
+    async (baglanti: Connection) => {
       if (!secilenHaritaId || !baglanti.source || !baglanti.target) return;
-      kenarEkle({
+      const yeniKenar = await kenarEkle({
         haritaId: secilenHaritaId,
         kaynakId: baglanti.source,
         hedefId: baglanti.target,
         yon: "tek_yonlu",
       });
-    },
-    [secilenHaritaId, kenarEkle]
-  );
-
-  // Kenara tıklandığında silme onayı
-  const kenaraTiklandi = useCallback(
-    (_etkinlik: React.MouseEvent, kenar: Edge) => {
-      const onay = window.confirm("Bu bağlantıyı silmek istediğinizden emin misiniz?");
-      if (onay) {
-        kenarSil(kenar.id);
+      if (yeniKenar) {
+        secilenKenariAyarla(yeniKenar.id);
       }
     },
-    [kenarSil]
+    [secilenHaritaId, kenarEkle, secilenKenariAyarla]
+  );
+
+  // Kenara tıklandığında düzenleme modalını aç
+  const kenaraTiklandi = useCallback(
+    (_etkinlik: React.MouseEvent, kenar: Edge) => {
+      secilenKenariAyarla(kenar.id);
+    },
+    [secilenKenariAyarla]
   );
 
   // Düğüme tıklandığında detay panelini aç
   const dugumeTiklandi = useCallback(
     (_etkinlik: React.MouseEvent, dugum: Node) => {
+      secilenKenariAyarla(null);
       secilenDugumuAyarla(dugum.id);
     },
-    [secilenDugumuAyarla]
+    [secilenDugumuAyarla, secilenKenariAyarla]
   );
 
   // Tuvaldeki boş alana tıklandığında seçimi kaldır
   const paneTiklandi = useCallback(() => {
     secilenDugumuAyarla(null);
-  }, [secilenDugumuAyarla]);
+    secilenKenariAyarla(null);
+  }, [secilenDugumuAyarla, secilenKenariAyarla]);
 
   if (!secilenHaritaId) {
     return (

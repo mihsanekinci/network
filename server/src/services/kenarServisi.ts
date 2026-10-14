@@ -1,13 +1,17 @@
 import { Dugum, Kenar } from "@prisma/client";
-import type { KenarDTO, KenarOlusturDTO, KenarYonu } from "../types";
+import type { KenarDTO, KenarOlusturDTO, KenarGuncelleDTO, KenarYonu } from "../types";
 import kenarRepositoryVarsayilan from "../repositories/kenarRepository";
 import dugumRepositoryVarsayilan from "../repositories/dugumRepository";
 
-interface KenarRepo {
+interface KenarRepositoryArayuzu {
   haritayaGoreGetir(haritaId: string): Promise<Kenar[]>;
+  idIleGetir(id: string): Promise<Kenar | null>;
   olustur(veri: KenarOlusturDTO): Promise<Kenar>;
+  guncelle(id: string, veri: { etiket?: string; yon?: string }): Promise<Kenar>;
   sil(id: string): Promise<void>;
 }
+
+type KenarRepo = KenarRepositoryArayuzu;
 
 interface DugumRepo {
   idileGetir(id: string): Promise<Dugum | null>;
@@ -44,6 +48,26 @@ class KenarServisi {
     return donustur(kenar);
   }
 
+  async guncelle(id: string, veri: KenarGuncelleDTO): Promise<KenarDTO> {
+    const mevcutKenar = await this.kenarRepository.idIleGetir(id);
+    if (!mevcutKenar) {
+      throw new Error("Kenar bulunamadı");
+    }
+
+    if (veri.yon !== undefined) {
+      const gecerliYonler: KenarYonu[] = ["tek_yonlu", "cift_yonlu", "yonsuz"];
+      if (!gecerliYonler.includes(veri.yon)) {
+        throw new Error("Geçersiz yön değeri");
+      }
+    }
+
+    const guncelKenar = await this.kenarRepository.guncelle(id, {
+      etiket: veri.etiket,
+      yon: veri.yon,
+    });
+    return donustur(guncelKenar);
+  }
+
   async sil(id: string): Promise<void> {
     await this.kenarRepository.sil(id);
   }
@@ -67,5 +91,5 @@ class KenarServisi {
   }
 }
 
-export { KenarServisi, type KenarRepo, type DugumRepo };
+export { KenarServisi, type KenarRepo, type KenarRepositoryArayuzu, type DugumRepo };
 export default new KenarServisi(kenarRepositoryVarsayilan, dugumRepositoryVarsayilan);

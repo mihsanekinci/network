@@ -14,8 +14,16 @@ class KenarRepository {
     return prisma.kenar.findMany({ where: { haritaId } });
   }
 
+  async idIleGetir(id: string): Promise<Kenar | null> {
+    return prisma.kenar.findUnique({ where: { id } });
+  }
+
   async olustur(veri: KenarOlusturGirdisi): Promise<Kenar> {
     return prisma.kenar.create({ data: veri });
+  }
+
+  async guncelle(id: string, veri: { etiket?: string; yon?: string }): Promise<Kenar> {
+    return prisma.kenar.update({ where: { id }, data: veri });
   }
 
   async sil(id: string): Promise<void> {

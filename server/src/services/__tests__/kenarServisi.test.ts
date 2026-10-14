@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { Dugum, Kenar } from "@prisma/client";
-import type { KenarOlusturDTO } from "../../types";
+import type { KenarOlusturDTO, KenarGuncelleDTO } from "../../types";
 import { KenarServisi, type KenarRepo, type DugumRepo } from "../kenarServisi";
 
 describe("KenarServisi", () => {
@@ -48,7 +48,9 @@ describe("KenarServisi", () => {
   beforeEach(() => {
     sahteKenarRepo = {
       haritayaGoreGetir: vi.fn(),
+      idIleGetir: vi.fn(),
       olustur: vi.fn(),
+      guncelle: vi.fn(),
       sil: vi.fn(),
     };
     sahteDugumRepo = {
@@ -171,6 +173,62 @@ describe("KenarServisi", () => {
         olusturulmaTarihi: ornekTarih.toISOString(),
         guncellenmeTarihi: ornekTarih.toISOString(),
       });
+    });
+  });
+
+  describe("guncelle", () => {
+    it("kenar etiketini ve yonunu basariyla guncellemeli", async () => {
+      const guncelKenar: Kenar = {
+        ...ornekKenar,
+        etiket: "ortak",
+        yon: "cift_yonlu",
+        guncellenmeTarihi: new Date("2026-01-02T12:00:00.000Z"),
+      };
+      vi.mocked(sahteKenarRepo.idIleGetir).mockResolvedValue(ornekKenar);
+      vi.mocked(sahteKenarRepo.guncelle).mockResolvedValue(guncelKenar);
+
+      const guncellemeVerisi: KenarGuncelleDTO = {
+        etiket: "ortak",
+        yon: "cift_yonlu",
+      };
+
+      const sonuc = await kenarServisi.guncelle("kenar-1", guncellemeVerisi);
+
+      expect(sahteKenarRepo.idIleGetir).toHaveBeenCalledWith("kenar-1");
+      expect(sahteKenarRepo.guncelle).toHaveBeenCalledWith("kenar-1", {
+        etiket: "ortak",
+        yon: "cift_yonlu",
+      });
+      expect(sonuc).toEqual({
+        id: "kenar-1",
+        haritaId: "harita-1",
+        kaynakId: "dugum-1",
+        hedefId: "dugum-2",
+        etiket: "ortak",
+        yon: "cift_yonlu",
+        olusturulmaTarihi: ornekTarih.toISOString(),
+        guncellenmeTarihi: "2026-01-02T12:00:00.000Z",
+      });
+    });
+
+    it("olmayan kenar icin hata firlatmali", async () => {
+      vi.mocked(sahteKenarRepo.idIleGetir).mockResolvedValue(null);
+
+      await expect(
+        kenarServisi.guncelle("olmayan-kenar", { etiket: "yeni" })
+      ).rejects.toThrow("Kenar bulunamadı");
+      expect(sahteKenarRepo.idIleGetir).toHaveBeenCalledWith("olmayan-kenar");
+      expect(sahteKenarRepo.guncelle).not.toHaveBeenCalled();
+    });
+
+    it("gecersiz yon degeri icin hata firlatmali", async () => {
+      vi.mocked(sahteKenarRepo.idIleGetir).mockResolvedValue(ornekKenar);
+
+      await expect(
+        kenarServisi.guncelle("kenar-1", { yon: "gecersiz_yon" as any })
+      ).rejects.toThrow("Geçersiz yön değeri");
+      expect(sahteKenarRepo.idIleGetir).toHaveBeenCalledWith("kenar-1");
+      expect(sahteKenarRepo.guncelle).not.toHaveBeenCalled();
     });
   });
 

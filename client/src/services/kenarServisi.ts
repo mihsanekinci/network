@@ -1,4 +1,4 @@
-import type { KenarDTO, KenarOlusturDTO, ApiYaniti } from "../types";
+import type { KenarDTO, KenarOlusturDTO, KenarGuncelleDTO, ApiYaniti } from "../types";
 import { API_TABANURL, istekGonder } from "./istemci";
 
 
@@ -24,6 +24,21 @@ export async function kenarOlustur(
   );
 }
 
+export async function kenarGuncelle(
+  haritaId: string,
+  kenarId: string,
+  veri: KenarGuncelleDTO
+): Promise<ApiYaniti<KenarDTO>> {
+  return istekGonder(
+    `${API_TABANURL}/haritalar/${haritaId}/kenarlar/${kenarId}`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(veri),
+    }
+  );
+}
+
 export async function kenarSil(
   haritaId: string,
   kenarId: string
@@ -33,3 +48,4 @@ export async function kenarSil(
     { method: "DELETE" }
   );
 }
+
