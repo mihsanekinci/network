@@ -30,8 +30,9 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
           : "w-0 border-r-0 opacity-0 pointer-events-none"
       }`}
     >
-      {/* Üst Başlık & Logo */}
-      <div className="p-4.5 border-b border-slate-100 flex items-center justify-between shrink-0 min-w-80">
+      <div className="w-80 h-full flex flex-col shrink-0">
+        {/* Üst Başlık & Logo */}
+        <div className="p-4.5 border-b border-slate-100 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
             N
@@ -118,13 +119,14 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
         })}
       </div>
 
-      {/* Alt Kısım (Footer) */}
-      <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-        <span className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500" />
-          Backend Bağlı
-        </span>
-        <span className="text-slate-300 font-medium">v1.0.0</span>
+        {/* Alt Kısım (Footer) */}
+        <div className="p-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+          <span className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            Backend Bağlı
+          </span>
+          <span className="text-slate-300 font-medium">v1.0.0</span>
+        </div>
       </div>
     </aside>
   );

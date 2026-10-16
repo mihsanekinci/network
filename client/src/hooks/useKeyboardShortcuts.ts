@@ -37,14 +37,14 @@ export function useKeyboardShortcuts({
         (e.target as HTMLElement).isContentEditable;
 
       // ⌘B veya Ctrl+B (Kenar Çubuğunu Aç/Kapat)
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") {
+      if (!isInput && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") {
         e.preventDefault();
         onToggleSidebar?.();
         return;
       }
 
       // ⌘K veya Ctrl+K (Kısayollar Kılavuzu)
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      if (!isInput && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         onToggleShortcuts();
         return;
@@ -58,7 +58,7 @@ export function useKeyboardShortcuts({
       }
 
       // ⌘N veya Ctrl+N (Yeni Düğüm Ekle)
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "n") {
+      if (!isInput && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "n") {
         e.preventDefault();
         if (secilenHaritaId) {
           onOpenNewNode();
@@ -67,7 +67,7 @@ export function useKeyboardShortcuts({
       }
 
       // ⌘D veya Ctrl+D (Otomatik Düzenle)
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "d") {
+      if (!isInput && (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "d") {
         e.preventDefault();
         if (secilenHaritaId) {
           onAutoLayout();

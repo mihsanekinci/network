@@ -45,6 +45,15 @@ const TUR_STILLERI: Record<
   },
 };
 
+const SLOT_YUZDELERI = ["15%", "32%", "50%", "68%", "85%"] as const;
+
+const YON_TANIMLARI = [
+  { yon: "ust", pozisyon: Position.Top, eksen: "left" },
+  { yon: "sag", pozisyon: Position.Right, eksen: "top" },
+  { yon: "alt", pozisyon: Position.Bottom, eksen: "left" },
+  { yon: "sol", pozisyon: Position.Left, eksen: "top" },
+] as const;
+
 export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, selected }) => {
   const turBilgisi = TUR_STILLERI[data.tur] ?? TUR_STILLERI.diger;
   const secili = Boolean(selected || data.secili);
@@ -113,29 +122,41 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
   }
 
   // Bağlantı noktaları (Handles) sınıfları
-  const handleSinifi = `!w-2.5 !h-2.5 !bg-indigo-500 !border-2 !border-white shadow-sm transition-opacity duration-150 ${
-    secili ? "!opacity-100" : "opacity-0 group-hover:opacity-100"
+  const handleSinifi = `!w-2.5 !h-2.5 !bg-indigo-500 !border-2 !border-white shadow-sm transition-all duration-150 cursor-crosshair ${
+    secili
+      ? "!opacity-100 hover:!scale-125 hover:!bg-indigo-600"
+      : "opacity-0 group-hover:opacity-100 hover:!scale-125 hover:!bg-indigo-600"
   }`;
 
   return (
     <div
       className={`min-w-56 max-w-72 p-4 rounded-2xl border-2 bg-white shadow-sm hover:shadow-md transition-all duration-200 relative group flex flex-col gap-2 cursor-pointer ${durumSinifi}`}
     >
-      {/* ÜST BAĞLANTI NOKTALARI (Top Handles: Slot 1: 25%, Slot 2: 50%, Slot 3: 75%) */}
-      <Handle type="target" position={Position.Top} id="ust-hedef-1" style={{ left: "25%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Top} id="ust-kaynak-1" style={{ left: "25%" }} className={handleSinifi} />
-      <Handle type="target" position={Position.Top} id="ust-hedef-2" style={{ left: "50%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Top} id="ust-kaynak-2" style={{ left: "50%" }} className={handleSinifi} />
-      <Handle type="target" position={Position.Top} id="ust-hedef-3" style={{ left: "75%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Top} id="ust-kaynak-3" style={{ left: "75%" }} className={handleSinifi} />
-
-      {/* SOL BAĞLANTI NOKTALARI (Left Handles: Slot 1: 25%, Slot 2: 50%, Slot 3: 75%) */}
-      <Handle type="target" position={Position.Left} id="sol-hedef-1" style={{ top: "25%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Left} id="sol-kaynak-1" style={{ top: "25%" }} className={handleSinifi} />
-      <Handle type="target" position={Position.Left} id="sol-hedef-2" style={{ top: "50%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Left} id="sol-kaynak-2" style={{ top: "50%" }} className={handleSinifi} />
-      <Handle type="target" position={Position.Left} id="sol-hedef-3" style={{ top: "75%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Left} id="sol-kaynak-3" style={{ top: "75%" }} className={handleSinifi} />
+      {/* 4 YÖNLÜ BAĞLANTI NOKTALARI (Her kenarda 5 slot: %15, %32, %50, %68, %85) */}
+      {YON_TANIMLARI.map(({ yon, pozisyon, eksen }) =>
+        SLOT_YUZDELERI.map((yuzde, indeks) => {
+          const slotNo = indeks + 1;
+          const stil = { [eksen]: yuzde };
+          return (
+            <React.Fragment key={`${yon}-${slotNo}`}>
+              <Handle
+                type="target"
+                position={pozisyon}
+                id={`${yon}-hedef-${slotNo}`}
+                style={stil}
+                className={handleSinifi}
+              />
+              <Handle
+                type="source"
+                position={pozisyon}
+                id={`${yon}-kaynak-${slotNo}`}
+                style={stil}
+                className={handleSinifi}
+              />
+            </React.Fragment>
+          );
+        })
+      )}
 
       {/* Silme Butonu (Sağ üst köşe) */}
       {data.onSil && (
@@ -208,22 +229,6 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
           <span className="truncate">{altBilgi}</span>
         </div>
       )}
-
-      {/* SAĞ BAĞLANTI NOKTALARI (Right Handles: Slot 1: 25%, Slot 2: 50%, Slot 3: 75%) */}
-      <Handle type="target" position={Position.Right} id="sag-hedef-1" style={{ top: "25%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Right} id="sag-kaynak-1" style={{ top: "25%" }} className={handleSinifi} />
-      <Handle type="target" position={Position.Right} id="sag-hedef-2" style={{ top: "50%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Right} id="sag-kaynak-2" style={{ top: "50%" }} className={handleSinifi} />
-      <Handle type="target" position={Position.Right} id="sag-hedef-3" style={{ top: "75%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Right} id="sag-kaynak-3" style={{ top: "75%" }} className={handleSinifi} />
-
-      {/* ALT BAĞLANTI NOKTALARI (Bottom Handles: Slot 1: 25%, Slot 2: 50%, Slot 3: 75%) */}
-      <Handle type="target" position={Position.Bottom} id="alt-hedef-1" style={{ left: "25%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Bottom} id="alt-kaynak-1" style={{ left: "25%" }} className={handleSinifi} />
-      <Handle type="target" position={Position.Bottom} id="alt-hedef-2" style={{ left: "50%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Bottom} id="alt-kaynak-2" style={{ left: "50%" }} className={handleSinifi} />
-      <Handle type="target" position={Position.Bottom} id="alt-hedef-3" style={{ left: "75%" }} className={handleSinifi} />
-      <Handle type="source" position={Position.Bottom} id="alt-kaynak-3" style={{ left: "75%" }} className={handleSinifi} />
     </div>
   );
 };

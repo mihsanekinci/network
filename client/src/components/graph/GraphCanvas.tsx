@@ -27,13 +27,39 @@ interface DugumKonumu {
   y: number;
 }
 
+interface KenarUcu {
+  kenarId: string;
+  rol: "kaynak" | "hedef";
+  karsiKonum: DugumKonumu;
+}
+
 const slotBelirle = (sira: number, toplam: number): number => {
-  if (toplam <= 1) return 2;
-  if (toplam === 2) return sira === 0 ? 1 : 3;
-  return (sira % 3) + 1;
+  if (toplam <= 1) return 3;
+  if (toplam === 2) {
+    const slotlar = [2, 4];
+    return slotlar[sira % 2];
+  }
+  if (toplam === 3) {
+    const slotlar = [1, 3, 5];
+    return slotlar[sira % 3];
+  }
+  if (toplam === 4) {
+    const slotlar = [1, 2, 4, 5];
+    return slotlar[sira % 4];
+  }
+  return (sira % 5) + 1;
 };
 
-const yonBelirle = (kaynak: DugumKonumu, hedef: DugumKonumu): { kaynakYon: YonTipi; hedefYon: YonTipi } => {
+const yonBelirle = (
+  kaynakId: string,
+  hedefId: string,
+  kaynak: DugumKonumu,
+  hedef: DugumKonumu
+): { kaynakYon: YonTipi; hedefYon: YonTipi } => {
+  if (kaynakId === hedefId) {
+    return { kaynakYon: "sag", hedefYon: "ust" };
+  }
+
   const dx = hedef.x - kaynak.x;
   const dy = hedef.y - kaynak.y;
 
@@ -147,36 +173,63 @@ export const GraphCanvas: React.FC = () => {
     const kenarYonleri = kenarlar.map((k) => {
       const kaynakKonum = dugumKonumHaritasi.get(k.kaynakId) ?? { x: 0, y: 0 };
       const hedefKonum = dugumKonumHaritasi.get(k.hedefId) ?? { x: 200, y: 0 };
-      const { kaynakYon, hedefYon } = yonBelirle(kaynakKonum, hedefKonum);
-      return { kenar: k, kaynakYon, hedefYon };
+      const { kaynakYon, hedefYon } = yonBelirle(
+        k.kaynakId,
+        k.hedefId,
+        kaynakKonum,
+        hedefKonum
+      );
+      return { kenar: k, kaynakKonum, hedefKonum, kaynakYon, hedefYon };
     });
 
-    // 2. Adım: Aynı düğümün aynı yüzüne bağlanan kenar sayılarını topla
-    const hedefYonSayaci = new Map<string, number>();
-    const kaynakYonSayaci = new Map<string, number>();
+    // 2. Adım: Her düğümün her bir yüzeyine bağlanan tüm uçları (kaynak veya hedef) topla
+    const baglantiNoktalari = new Map<string, KenarUcu[]>();
     for (const item of kenarYonleri) {
-      const hAnahtar = `${item.kenar.hedefId}-${item.hedefYon}`;
-      hedefYonSayaci.set(hAnahtar, (hedefYonSayaci.get(hAnahtar) ?? 0) + 1);
-      const kAnahtar = `${item.kenar.kaynakId}-${item.kaynakYon}`;
-      kaynakYonSayaci.set(kAnahtar, (kaynakYonSayaci.get(kAnahtar) ?? 0) + 1);
+      const kAnahtar = `${item.kenar.kaynakId}:::${item.kaynakYon}`;
+      const kListe = baglantiNoktalari.get(kAnahtar) ?? [];
+      kListe.push({
+        kenarId: item.kenar.id,
+        rol: "kaynak",
+        karsiKonum: item.hedefKonum,
+      });
+      baglantiNoktalari.set(kAnahtar, kListe);
+
+      const hAnahtar = `${item.kenar.hedefId}:::${item.hedefYon}`;
+      const hListe = baglantiNoktalari.get(hAnahtar) ?? [];
+      hListe.push({
+        kenarId: item.kenar.id,
+        rol: "hedef",
+        karsiKonum: item.kaynakKonum,
+      });
+      baglantiNoktalari.set(hAnahtar, hListe);
     }
 
-    // 3. Adım: Her kenara çakışmayı önleyecek benzersiz slot ata
-    const hedefSiraSayaci = new Map<string, number>();
-    const kaynakSiraSayaci = new Map<string, number>();
+    // 3. Adım: Çakışmaları ve kesişmeleri önlemek için her yöndeki uçları karşı konuma göre sırala ve slot ata
+    const atananSlotlar = new Map<string, number>();
+
+    for (const [anahtar, liste] of baglantiNoktalari.entries()) {
+      const [, yon] = anahtar.split(":::") as [string, YonTipi];
+      const sirali = [...liste].sort((a, b) => {
+        if (yon === "sag" || yon === "sol") {
+          const fark = a.karsiKonum.y - b.karsiKonum.y;
+          if (fark !== 0) return fark;
+        } else {
+          const fark = a.karsiKonum.x - b.karsiKonum.x;
+          if (fark !== 0) return fark;
+        }
+        return a.kenarId.localeCompare(b.kenarId);
+      });
+
+      const toplam = sirali.length;
+      sirali.forEach((item, sira) => {
+        const slot = slotBelirle(sira, toplam);
+        atananSlotlar.set(`${item.kenarId}:::${item.rol}`, slot);
+      });
+    }
 
     return kenarYonleri.map(({ kenar: k, kaynakYon, hedefYon }) => {
-      const hAnahtar = `${k.hedefId}-${hedefYon}`;
-      const hedefToplam = hedefYonSayaci.get(hAnahtar) ?? 1;
-      const hedefSira = hedefSiraSayaci.get(hAnahtar) ?? 0;
-      hedefSiraSayaci.set(hAnahtar, hedefSira + 1);
-      const hedefSlot = slotBelirle(hedefSira, hedefToplam);
-
-      const kAnahtar = `${k.kaynakId}-${kaynakYon}`;
-      const kaynakToplam = kaynakYonSayaci.get(kAnahtar) ?? 1;
-      const kaynakSira = kaynakSiraSayaci.get(kAnahtar) ?? 0;
-      kaynakSiraSayaci.set(kAnahtar, kaynakSira + 1);
-      const kaynakSlot = slotBelirle(kaynakSira, kaynakToplam);
+      const kaynakSlot = atananSlotlar.get(`${k.id}:::kaynak`) ?? 3;
+      const hedefSlot = atananSlotlar.get(`${k.id}:::hedef`) ?? 3;
 
       const sourceHandle = `${kaynakYon}-kaynak-${kaynakSlot}`;
       const targetHandle = `${hedefYon}-hedef-${hedefSlot}`;

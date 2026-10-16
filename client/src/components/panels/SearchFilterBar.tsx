@@ -22,17 +22,26 @@ export const SearchFilterBar: React.FC = () => {
   const [filtreMenusuAcik, setFiltreMenusuAcik] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Menü dışına tıklandığında kapat
+  // Menü dışına tıklandığında veya ESC basıldığında kapat
   useEffect(() => {
     const disariTiklandi = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setFiltreMenusuAcik(false);
       }
     };
+    const tusDinle = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setFiltreMenusuAcik(false);
+      }
+    };
     if (filtreMenusuAcik) {
       document.addEventListener("mousedown", disariTiklandi);
+      window.addEventListener("keydown", tusDinle);
     }
-    return () => document.removeEventListener("mousedown", disariTiklandi);
+    return () => {
+      document.removeEventListener("mousedown", disariTiklandi);
+      window.removeEventListener("keydown", tusDinle);
+    };
   }, [filtreMenusuAcik]);
 
   // Her türe ait düğüm sayıları
@@ -114,7 +123,22 @@ export const SearchFilterBar: React.FC = () => {
         >
           <span>{seciliTurBilgisi.simge}</span>
           <span className="hidden sm:inline">{seciliTurBilgisi.etiket}</span>
-          <span className="text-[10px] text-slate-400 ml-0.5">▾</span>
+          {secilenTurFiltresi !== "hepsi" ? (
+            <span
+              role="button"
+              tabIndex={0}
+              onClick={(e) => {
+                e.stopPropagation();
+                turFiltresiniAyarla("hepsi");
+              }}
+              title="Tür Filtresini Sıfırla"
+              className="text-[10px] text-indigo-400 hover:text-indigo-800 p-0.5 rounded-full hover:bg-indigo-100 transition-colors ml-0.5"
+            >
+              ✕
+            </span>
+          ) : (
+            <span className="text-[10px] text-slate-400 ml-0.5">▾</span>
+          )}
         </button>
 
         {filtreMenusuAcik && (

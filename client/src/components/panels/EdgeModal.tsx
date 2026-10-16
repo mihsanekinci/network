@@ -114,16 +114,22 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
     yerelSablonlariKaydet(guncel);
   };
 
-  // ESC tuşuyla modalı kapat
+  // ESC tuşuyla modalı veya şablon girişini kapat
   useEffect(() => {
     const tusDinle = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        if (yeniSablonGirisAcik) {
+          e.stopPropagation();
+          setYeniSablonGirisAcik(false);
+          setYeniSablonMetni("");
+          return;
+        }
         secilenKenariAyarla(null);
       }
     };
     window.addEventListener("keydown", tusDinle);
     return () => window.removeEventListener("keydown", tusDinle);
-  }, [secilenKenariAyarla]);
+  }, [secilenKenariAyarla, yeniSablonGirisAcik]);
 
   const kaynakTur = kaynakDugum?.tur ?? "diger";
   const hedefTur = hedefDugum?.tur ?? "diger";
@@ -343,7 +349,7 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
                   >
                     <button
                       type="button"
-                      onClick={() => setEtiket(sablon)}
+                      onClick={() => setEtiket(secili ? "" : sablon)}
                       className="px-2 py-1 cursor-pointer"
                     >
                       ★ {sablon}
