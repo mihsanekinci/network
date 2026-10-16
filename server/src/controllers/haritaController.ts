@@ -8,6 +8,7 @@ interface HaritaServisArayuzu {
   olustur(veri: HaritaOlusturDTO): Promise<HaritaDTO>;
   guncelle(id: string, veri: HaritaGuncelleDTO): Promise<HaritaDTO>;
   sil(id: string): Promise<void>;
+  iceAktar(paket: any): Promise<HaritaDTO>;
 }
 
 export class HaritaController {
@@ -40,6 +41,16 @@ export class HaritaController {
       yanit.status(201).json({ basarili: true, veri: yeniHarita });
     } catch (hata) {
       const mesaj = hata instanceof Error ? hata.message : "Harita oluşturulamadı";
+      yanit.status(400).json({ basarili: false, hata: mesaj });
+    }
+  };
+
+  iceAktar = async (istek: Request, yanit: Response<ApiYaniti<HaritaDTO>>): Promise<void> => {
+    try {
+      const yeniHarita = await this.haritaServisi.iceAktar(istek.body);
+      yanit.status(201).json({ basarili: true, veri: yeniHarita });
+    } catch (hata) {
+      const mesaj = hata instanceof Error ? hata.message : "Harita içe aktarılamadı";
       yanit.status(400).json({ basarili: false, hata: mesaj });
     }
   };

@@ -163,4 +163,24 @@ describe("DugumServisi", () => {
       expect(sahteRepo.sil).toHaveBeenCalledWith("dugum-1");
     });
   });
+
+  describe("topluKonumGuncelle", () => {
+    it("düğüm konumlarını topluca güncellemeli", async () => {
+      sahteRepo.topluKonumGuncelle = vi.fn().mockResolvedValue(undefined);
+      const konumlar = [{ id: "dugum-1", pozisyonX: 150, pozisyonY: 250 }];
+
+      await dugumServisi.topluKonumGuncelle("harita-1", konumlar);
+
+      expect(sahteRepo.topluKonumGuncelle).toHaveBeenCalledWith(konumlar);
+    });
+
+    it("boş liste geldiğinde repo çağrılmamalı", async () => {
+      sahteRepo.topluKonumGuncelle = vi.fn().mockResolvedValue(undefined);
+
+      await dugumServisi.topluKonumGuncelle("harita-1", []);
+
+      expect(sahteRepo.topluKonumGuncelle).not.toHaveBeenCalled();
+    });
+  });
 });
+

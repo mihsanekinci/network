@@ -45,3 +45,18 @@ export async function dugumSil(
     { method: "DELETE" }
   );
 }
+
+export async function topluKonumGuncelle(
+  haritaId: string,
+  konumlar: Array<{ id: string; pozisyonX: number; pozisyonY: number }>
+): Promise<ApiYaniti<void>> {
+  return istekGonder(
+    `${API_TABANURL}/haritalar/${haritaId}/dugumler/toplu-konum`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ konumlar }),
+    }
+  );
+}
+

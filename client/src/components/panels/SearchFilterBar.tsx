@@ -54,10 +54,11 @@ export const SearchFilterBar: React.FC = () => {
           🔍
         </span>
         <input
+          id="arama-input"
           type="text"
           value={aramaMetni}
           onChange={(e) => aramaMetniniAyarla(e.target.value)}
-          placeholder="Düğümlerde ara..."
+          placeholder="Düğümlerde ara... (⌘F)"
           className="w-44 focus:w-56 h-8.5 pl-8 pr-7 text-xs rounded-lg bg-slate-100/90 border border-slate-200 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder:text-slate-400 text-slate-800"
         />
         {aramaMetni && (

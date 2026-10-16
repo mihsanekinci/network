@@ -10,6 +10,8 @@ import type {
   KenarDTO,
   KenarOlusturDTO,
   KenarGuncelleDTO,
+  HaritaPaketiDTO,
+  DugumKonumGuncellemeDTO,
 } from "../types";
 import * as haritaServisi from "../services/haritaServisi";
 import * as dugumServisi from "../services/dugumServisi";
@@ -31,6 +33,12 @@ interface HaritaStore {
   aramaMetniniAyarla: (metin: string) => void;
   turFiltresiniAyarla: (tur: DugumTuru | "hepsi") => void;
 
+  // Yol Analizi ve Vurgulama
+  vurgulananDugumIdler: Set<string>;
+  vurgulananKenarIdler: Set<string>;
+  yolVurgula: (dugumIdler: string[], kenarIdler: string[]) => void;
+  yolVurgusunuTemizle: () => void;
+
   // Senkron durum güncelleyiciler
   secilenHaritayiAyarla: (id: string | null) => void;
   secilenDugumuAyarla: (id: string | null) => void;
@@ -44,6 +52,7 @@ interface HaritaStore {
   haritalariYukle: () => Promise<void>;
   haritaSec: (id: string | null) => Promise<void>;
   haritaOlustur: (veri: HaritaOlusturDTO) => Promise<HaritaDTO | null>;
+  haritaIceAktar: (paket: HaritaPaketiDTO) => Promise<HaritaDTO | null>;
   haritaGuncelle: (id: string, veri: HaritaGuncelleDTO) => Promise<HaritaDTO | null>;
   haritaSil: (id: string) => Promise<boolean>;
 
@@ -51,6 +60,7 @@ interface HaritaStore {
   dugumleriYukle: (haritaId: string) => Promise<void>;
   dugumEkle: (veri: DugumOlusturDTO) => Promise<DugumDTO | null>;
   dugumGuncelle: (id: string, veri: DugumGuncelleDTO) => Promise<DugumDTO | null>;
+  dugumKonumlariTopluGuncelle: (konumlar: DugumKonumGuncellemeDTO[]) => Promise<boolean>;
   dugumSil: (id: string) => Promise<boolean>;
 
   // Asenkron Kenar Eylemleri
@@ -71,9 +81,21 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
   hata: null,
   aramaMetni: "",
   secilenTurFiltresi: "hepsi",
+  vurgulananDugumIdler: new Set<string>(),
+  vurgulananKenarIdler: new Set<string>(),
 
   aramaMetniniAyarla: (metin) => set({ aramaMetni: metin }),
   turFiltresiniAyarla: (tur) => set({ secilenTurFiltresi: tur }),
+  yolVurgula: (dugumIdler, kenarIdler) =>
+    set({
+      vurgulananDugumIdler: new Set(dugumIdler),
+      vurgulananKenarIdler: new Set(kenarIdler),
+    }),
+  yolVurgusunuTemizle: () =>
+    set({
+      vurgulananDugumIdler: new Set(),
+      vurgulananKenarIdler: new Set(),
+    }),
   secilenHaritayiAyarla: (id) => set({ secilenHaritaId: id }),
   secilenDugumuAyarla: (id) => set({ secilenDugumId: id }),
   secilenKenariAyarla: (id) => set({ secilenKenarId: id }),
@@ -99,6 +121,8 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
       secilenKenarId: null,
       aramaMetni: "",
       secilenTurFiltresi: "hepsi",
+      vurgulananDugumIdler: new Set(),
+      vurgulananKenarIdler: new Set(),
     });
     if (!id) {
       set({ dugumler: [], kenarlar: [] });
@@ -124,6 +148,25 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
       return yeniHarita;
     }
     set({ hata: yanit.hata ?? "Harita oluşturulamadı", yukleniyor: false });
+    return null;
+  },
+
+  haritaIceAktar: async (paket) => {
+    set({ yukleniyor: true, hata: null });
+    const yanit = await haritaServisi.haritaIceAktar(paket);
+    if (yanit.basarili && yanit.veri) {
+      const yeniHarita = yanit.veri;
+      set((s) => ({
+        haritalar: [yeniHarita, ...s.haritalar],
+        secilenHaritaId: yeniHarita.id,
+        secilenDugumId: null,
+        secilenKenarId: null,
+        yukleniyor: false,
+      }));
+      await Promise.all([get().dugumleriYukle(yeniHarita.id), get().kenarlariYukle(yeniHarita.id)]);
+      return yeniHarita;
+    }
+    set({ hata: yanit.hata ?? "Harita içe aktarılamadı", yukleniyor: false });
     return null;
   },
 
@@ -209,6 +252,35 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
 
     set({ hata: yanit.hata ?? "Düğüm güncellenemedi" });
     return null;
+  },
+
+  dugumKonumlariTopluGuncelle: async (konumlar) => {
+    const haritaId = get().secilenHaritaId;
+    if (!haritaId || konumlar.length === 0) return false;
+
+    // Önce yerel durumu anında güncelle (hızlı ve akıcı UI)
+    const konumMap = new Map(konumlar.map((k) => [k.id, k]));
+    set((s) => ({
+      dugumler: s.dugumler.map((d) => {
+        const yeniKonum = konumMap.get(d.id);
+        if (yeniKonum) {
+          return {
+            ...d,
+            pozisyonX: yeniKonum.pozisyonX,
+            pozisyonY: yeniKonum.pozisyonY,
+          };
+        }
+        return d;
+      }),
+    }));
+
+    // Sunucuya arka planda kalıcı hale getir
+    const yanit = await dugumServisi.topluKonumGuncelle(haritaId, konumlar);
+    if (!yanit.basarili) {
+      set({ hata: yanit.hata ?? "Düğüm konumları kaydedilemedi" });
+      return false;
+    }
+    return true;
   },
 
   dugumSil: async (id) => {

@@ -1,5 +1,11 @@
 import { Dugum } from "@prisma/client";
-import type { DugumDTO, DugumOlusturDTO, DugumGuncelleDTO, DugumTuru } from "../types";
+import type {
+  DugumDTO,
+  DugumOlusturDTO,
+  DugumGuncelleDTO,
+  DugumTuru,
+  DugumKonumGuncellemeDTO,
+} from "../types";
 import dugumRepositoryVarsayilan from "../repositories/dugumRepository";
 
 interface DugumRepo {
@@ -8,6 +14,7 @@ interface DugumRepo {
   olustur(veri: DugumOlusturDTO): Promise<Dugum>;
   guncelle(id: string, veri: DugumGuncelleDTO): Promise<Dugum>;
   sil(id: string): Promise<void>;
+  topluKonumGuncelle(konumlar: DugumKonumGuncellemeDTO[]): Promise<void>;
 }
 
 function donustur(dugum: Dugum): DugumDTO {
@@ -51,6 +58,14 @@ class DugumServisi {
   async sil(id: string): Promise<void> {
     await this.varliginiDogrula(id);
     await this.dugumRepository.sil(id);
+  }
+
+  async topluKonumGuncelle(
+    _haritaId: string,
+    konumlar: DugumKonumGuncellemeDTO[]
+  ): Promise<void> {
+    if (!Array.isArray(konumlar) || konumlar.length === 0) return;
+    await this.dugumRepository.topluKonumGuncelle(konumlar);
   }
 
   private async varliginiDogrula(id: string): Promise<Dugum> {

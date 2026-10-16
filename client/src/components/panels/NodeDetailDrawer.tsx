@@ -269,6 +269,20 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
               />
             </div>
 
+            {/* Fotoğraf / Logo URL */}
+            <div className="flex flex-col gap-1.5">
+              <label className="block text-xs font-bold text-slate-700">
+                Fotoğraf / Logo URL <span className="text-slate-400 font-normal">(İsteğe Bağlı)</span>
+              </label>
+              <input
+                type="url"
+                value={((ozellikler.fotograf || ozellikler.avatarUrl) as string) ?? ""}
+                onChange={(e) => handleOzellikDegistir("fotograf", e.target.value)}
+                placeholder="https://example.com/avatar.jpg"
+                className="w-full h-11 px-4 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
+              />
+            </div>
+
             {/* Düğüm Türü Seçimi: 2 Sütunlu Kartlar */}
             <div className="flex flex-col gap-1.5">
               <label className="block text-xs font-bold text-slate-700">

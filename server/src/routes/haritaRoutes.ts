@@ -12,6 +12,7 @@ haritaRotalari.use("/:haritaId/kenarlar", kenarRotalari);
 // Harita CRUD rotaları
 haritaRotalari.get("/", haritaController.tumunuGetir);
 haritaRotalari.post("/", haritaController.olustur);
+haritaRotalari.post("/ice-aktar", haritaController.iceAktar);
 haritaRotalari.get("/:id", haritaController.idileGetir);
 haritaRotalari.put("/:id", haritaController.guncelle);
 haritaRotalari.delete("/:id", haritaController.sil);

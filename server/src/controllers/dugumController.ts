@@ -1,12 +1,19 @@
 import { Request, Response } from "express";
 import dugumServisiVarsayilan from "../services/dugumServisi";
-import type { DugumDTO, DugumOlusturDTO, DugumGuncelleDTO, ApiYaniti } from "../types";
+import type {
+  DugumDTO,
+  DugumOlusturDTO,
+  DugumGuncelleDTO,
+  DugumKonumGuncellemeDTO,
+  ApiYaniti,
+} from "../types";
 
 interface DugumServisArayuzu {
   haritayaGoreGetir(haritaId: string): Promise<DugumDTO[]>;
   olustur(veri: DugumOlusturDTO): Promise<DugumDTO>;
   guncelle(id: string, veri: DugumGuncelleDTO): Promise<DugumDTO>;
   sil(id: string): Promise<void>;
+  topluKonumGuncelle(haritaId: string, konumlar: DugumKonumGuncellemeDTO[]): Promise<void>;
 }
 
 export class DugumController {
@@ -76,6 +83,21 @@ export class DugumController {
       const mesaj = hata instanceof Error ? hata.message : "Düğüm silinemedi";
       const durumKodu = mesaj === "Düğüm bulunamadı" ? 404 : 400;
       yanit.status(durumKodu).json({ basarili: false, hata: mesaj });
+    }
+  };
+
+  topluKonumGuncelle = async (
+    istek: Request,
+    yanit: Response<ApiYaniti<void>>
+  ): Promise<void> => {
+    try {
+      const haritaId = istek.params.haritaId;
+      const konumlar = Array.isArray(istek.body.konumlar) ? istek.body.konumlar : istek.body;
+      await this.dugumServisi.topluKonumGuncelle(haritaId, konumlar);
+      yanit.status(200).json({ basarili: true });
+    } catch (hata) {
+      const mesaj = hata instanceof Error ? hata.message : "Düğüm konumları güncellenemedi";
+      yanit.status(400).json({ basarili: false, hata: mesaj });
     }
   };
 }

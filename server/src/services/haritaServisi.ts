@@ -1,5 +1,5 @@
 import { Harita } from "@prisma/client";
-import type { HaritaDTO, HaritaOlusturDTO, HaritaGuncelleDTO } from "../types";
+import type { HaritaDTO, HaritaOlusturDTO, HaritaGuncelleDTO, HaritaPaketiDTO } from "../types";
 import haritaRepositoryVarsayilan from "../repositories/haritaRepository";
 
 interface HaritaRepo {
@@ -8,6 +8,7 @@ interface HaritaRepo {
   olustur(veri: HaritaOlusturDTO): Promise<Harita>;
   guncelle(id: string, veri: HaritaGuncelleDTO): Promise<Harita>;
   sil(id: string): Promise<void>;
+  iceAktar(paket: HaritaPaketiDTO): Promise<Harita>;
 }
 
 function donustur(harita: Harita): HaritaDTO {
@@ -48,6 +49,21 @@ class HaritaServisi {
   async sil(id: string): Promise<void> {
     await this.varliginiDogrula(id);
     await this.haritaRepository.sil(id);
+  }
+
+  async iceAktar(paket: HaritaPaketiDTO): Promise<HaritaDTO> {
+    if (!paket || !paket.harita || !paket.harita.baslik?.trim()) {
+      throw new Error("Geçerli bir harita başlığı gereklidir");
+    }
+    if (!Array.isArray(paket.dugumler)) {
+      throw new Error("Düğümler listesi gereklidir");
+    }
+    if (!Array.isArray(paket.kenarlar)) {
+      throw new Error("Kenarlar listesi gereklidir");
+    }
+
+    const olusturulanHarita = await this.haritaRepository.iceAktar(paket);
+    return donustur(olusturulanHarita);
   }
 
   private async varliginiDogrula(id: string): Promise<Harita> {

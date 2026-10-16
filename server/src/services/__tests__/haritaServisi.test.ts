@@ -189,4 +189,38 @@ describe("HaritaServisi", () => {
       expect(mockRepo.sil).not.toHaveBeenCalled();
     });
   });
+
+  describe("iceAktar", () => {
+    it("geçerli paket ile haritayı içe aktarmalı", async () => {
+      mockRepo.iceAktar = vi.fn().mockResolvedValue(ornekHarita);
+      const paket = {
+        surum: "1.0",
+        disaAktarmaTarihi: "2026-10-16T12:00:00.000Z",
+        harita: { baslik: "İçe Aktarılan Harita" },
+        dugumler: [],
+        kenarlar: [],
+      };
+
+      const sonuc = await servis.iceAktar(paket);
+
+      expect(mockRepo.iceAktar).toHaveBeenCalledWith(paket);
+      expect(sonuc.id).toBe("harita-1");
+      expect(sonuc.baslik).toBe("Staj Takip Haritası");
+    });
+
+    it("başlık eksikse hata fırlatmalı", async () => {
+      const gecersizPaket = {
+        surum: "1.0",
+        disaAktarmaTarihi: "2026-10-16T12:00:00.000Z",
+        harita: { baslik: "   " },
+        dugumler: [],
+        kenarlar: [],
+      };
+
+      await expect(servis.iceAktar(gecersizPaket as any)).rejects.toThrow(
+        "Geçerli bir harita başlığı gereklidir"
+      );
+    });
+  });
 });
+

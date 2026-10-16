@@ -159,18 +159,33 @@
     - `GraphCanvas.tsx`: React Flow bağlantı çizgileri üzerine beyaz arka planlı, yuvarlatılmış şık rozet etiketleri (`labelBgRadius: 8`, `labelBgBorderRadius: 8`) ve yön durumuna göre ok işaretleri (`MarkerType.ArrowClosed`) yerleştirildi. Bağlantıya tıklandığında veya yeni bağlantı çizildiğinde modal otomatik açılacak şekilde bağlandı.
 - **Doğrulama:** Backend 29/29 Vitest birim testi geçti; Client `tsc -b`, `vite build` ve `eslint .` sıfır hata ve sıfır uyarı ile doğrulandı.
 
+### Faz 18: İleri Seviye SaaS Özellikleri & Ağ Analitiği (16 Ekim 2026)
+- **Geliştirme:** Kullanıcı geri bildirimi ve yol haritası doğrultusunda 5 kritik özellik uçtan uca hayata geçirildi:
+  1. **Dışa / İçe Aktarma (Export & Import):** `html-to-image` ile retina kalitesinde tek tıkla PNG graf indirme; `HaritaPaketiDTO` standardında JSON tam yedekleme ve `POST /api/haritalar/ice-aktar` ucu üzerinden transaction ile içe aktarma.
+  2. **Otomatik Hizalama (Dagre Auto-Layout):** `@dagrejs/dagre` motoru ile hiyerarşik (Top-to-Bottom) tek tıkla (`⌘D`) otomatik düzenleme; `PATCH /api/haritalar/:haritaId/dugumler/toplu-konum` ile veritabanına toplu kayıt.
+  3. **Ağ Analitiği & İlişki Rotası (Network Insights & BFS Pathfinder):** `hesaplaAgMetrikleri` ile ağ yoğunluğu, tür dağılımı ve ilk 5 kilit aktör tespiti. İki düğüm arasındaki en kısa yolu (BFS) bulup tuvalde altın/amber neon efektiyle parlatma (`ring-amber-400`, `stroke-amber-500`).
+  4. **Profil Fotoğrafları & Avatarlar:** `fotograf` / `avatarUrl` desteği, kişi düğümleri için baş harflerden degrade renkli avatar çemberi, formlara URL giriş alanı.
+  5. **Klavye Kısayolları (Power-User):** `useKeyboardShortcuts` ile `⌘K` (Kısayollar Kılavuzu), `⌘N` (Yeni Düğüm), `⌘F` (Arama), `⌘D` (Otomatik Düzenle), `Delete` (Seçiliyi Sil) ve `Escape`.
+- **Doğrulama:** Backend 33/33 Vitest testleri (%100 başarı); Client `tsc -b`, `vite build` ve `eslint .` sıfır hata ve sıfır uyarı ile doğrulandı.
+- **Obsidian Brain:** `notes/` altında tam bir İkinci Beyin yapısı (`notes/00_Index.md`, ADR'lar, konseptler, sorun çözümü ve oturum günlüğü) kuruldu.
+
 ---
 
 ## 🎯 Tamamlanan Yol Haritası (Roadmap)
 
 - [x] **1. Backend Controllers & Rotalar (Faz 6)**
-- [x] **2. Backend Servis Birim Testleri - Vitest (Faz 11, Faz 17)**
-- [x] **3. Frontend State & Servis Entegrasyonu - Zustand (Faz 7)**
-- [x] **4. React Flow Canvas Motoru (Faz 8)**
-- [x] **5. Düğüm Detay & Düzenleme Paneli - Drawer (Faz 12)**
+- [x] **2. Backend Servis Birim Testleri - Vitest (Faz 11, Faz 17, Faz 18)**
+- [x] **3. Frontend State & Servis Entegrasyonu - Zustand (Faz 7, Faz 18)**
+- [x] **4. React Flow Canvas Motoru (Faz 8, Faz 18)**
+- [x] **5. Düğüm Detay & Düzenleme Paneli - Drawer (Faz 12, Faz 18)**
 - [x] **6. Canlı Arama, Filtreleme & Sayaçlar (Faz 13, Faz 16)**
 - [x] **7. Figma/Miro Standardında Kapsamlı UI/UX Modernizasyonu (Faz 14, Faz 15, Faz 16)**
 - [x] **8. Kenar (Bağlantı) İlişki Türleri, Etiketleme & EdgeModal (Faz 17)**
+- [x] **9. PNG/JSON Dışa & İçe Aktarma (Faz 18)**
+- [x] **10. Dagre Otomatik Graf Düzenleme (Faz 18)**
+- [x] **11. Ağ Analitiği & BFS En Kısa Yol Bulucu (Faz 18)**
+- [x] **12. Avatarlar ve Klavye Kısayolları (Faz 18)**
+- [x] **13. Obsidian Brain Protokolü Entegrasyonu (Faz 18)**
 
 ---
 

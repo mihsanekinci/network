@@ -68,6 +68,19 @@ class DugumRepository {
       throw hata;
     }
   }
+
+  async topluKonumGuncelle(
+    konumlar: Array<{ id: string; pozisyonX: number; pozisyonY: number }>
+  ): Promise<void> {
+    await prisma.$transaction(
+      konumlar.map((k) =>
+        prisma.dugum.update({
+          where: { id: k.id },
+          data: { pozisyonX: k.pozisyonX, pozisyonY: k.pozisyonY },
+        })
+      )
+    );
+  }
 }
 
 export default new DugumRepository();

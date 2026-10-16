@@ -12,5 +12,7 @@ export type {
   KenarOlusturDTO,
   KenarGuncelleDTO,
   KenarYonu,
+  DugumKonumGuncellemeDTO,
+  HaritaPaketiDTO,
   ApiYaniti,
 } from "../../../shared/types";

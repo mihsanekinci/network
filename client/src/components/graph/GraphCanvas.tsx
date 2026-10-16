@@ -34,11 +34,15 @@ export const GraphCanvas: React.FC = () => {
     yukleniyor,
     aramaMetni,
     secilenTurFiltresi,
+    vurgulananDugumIdler,
+    vurgulananKenarIdler,
+    yolVurgusunuTemizle,
   } = useHaritaStore();
 
   const [yerelDugumler, setYerelDugumler] = useState<Node[]>([]);
 
   const filtreAktif = aramaMetni.trim() !== "" || secilenTurFiltresi !== "hepsi";
+  const yolAktif = vurgulananDugumIdler.size > 0;
 
   // Düğümleri React Flow formatına dönüştür
   const donusturulmusDugumler = useMemo<Node[]>(() => {
@@ -78,11 +82,22 @@ export const GraphCanvas: React.FC = () => {
           secili: d.id === secilenDugumId,
           eslesiyor,
           filtreAktif,
+          yolAktif,
+          yolParcasi: vurgulananDugumIdler.has(d.id),
           onSil: dugumSil,
         },
       };
     });
-  }, [dugumler, secilenDugumId, dugumSil, aramaMetni, secilenTurFiltresi, filtreAktif]);
+  }, [
+    dugumler,
+    secilenDugumId,
+    dugumSil,
+    aramaMetni,
+    secilenTurFiltresi,
+    filtreAktif,
+    yolAktif,
+    vurgulananDugumIdler,
+  ]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -92,8 +107,24 @@ export const GraphCanvas: React.FC = () => {
   // Kenarları React Flow formatına dönüştür
   const donusturulmusKenarlar = useMemo<Edge[]>(() => {
     return kenarlar.map((k) => {
+      const yolKenari = vurgulananKenarIdler.has(k.id);
       const secili = k.id === secilenKenarId;
-      const renk = secili ? "#4f46e5" : "#6366f1";
+
+      let renk = secili ? "#4f46e5" : "#6366f1";
+      let strokeWidth = secili ? 3 : 1.75;
+      let animated = k.yon === "tek_yonlu";
+
+      if (yolAktif) {
+        if (yolKenari) {
+          renk = "#f59e0b"; // Altın/amber vurgusu
+          strokeWidth = 3.5;
+          animated = true;
+        } else {
+          renk = "#cbd5e1";
+          strokeWidth = 1;
+          animated = false;
+        }
+      }
 
       const markerEnd: Edge["markerEnd"] =
         k.yon === "yonsuz"
@@ -111,8 +142,6 @@ export const GraphCanvas: React.FC = () => {
             }
           : undefined;
 
-      const animated = k.yon === "tek_yonlu";
-
       return {
         id: k.id,
         source: k.kaynakId,
@@ -124,24 +153,24 @@ export const GraphCanvas: React.FC = () => {
         markerEnd,
         style: {
           stroke: renk,
-          strokeWidth: secili ? 3 : 1.75,
+          strokeWidth,
         },
         labelStyle: {
-          fill: "#1e293b",
-          fontWeight: 600,
+          fill: yolAktif && yolKenari ? "#b45309" : "#1e293b",
+          fontWeight: 700,
           fontSize: 11,
         },
         labelBgStyle: {
           fill: "#ffffff",
           fillOpacity: 0.95,
-          stroke: secili ? "#4f46e5" : "#cbd5e1",
-          strokeWidth: 1.5,
+          stroke: yolAktif && yolKenari ? "#f59e0b" : secili ? "#4f46e5" : "#cbd5e1",
+          strokeWidth: yolAktif && yolKenari ? 2 : 1.5,
         },
         labelBgPadding: [8, 5] as [number, number],
         labelBgBorderRadius: 8,
       };
     });
-  }, [kenarlar, secilenKenarId]);
+  }, [kenarlar, secilenKenarId, yolAktif, vurgulananKenarIdler]);
 
   // Sürükleme durumunda yerel konumu güncelle
   const dugumlerDegisti = useCallback((degisiklikler: NodeChange[]) => {
@@ -222,6 +251,22 @@ export const GraphCanvas: React.FC = () => {
         <div className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm border border-slate-200 text-xs text-indigo-600 font-medium flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
           Senkronize ediliyor...
+        </div>
+      )}
+
+      {/* Rota Vurgulama Aktif Uyarısı */}
+      {yolAktif && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40 px-4 py-2 bg-slate-900/90 text-white rounded-full shadow-xl backdrop-blur-md flex items-center gap-3 text-xs animate-in fade-in slide-in-from-top-2">
+          <span className="flex items-center gap-1.5 font-medium">
+            <span className="text-amber-400">✨</span>
+            <span>İlişki Rotası Vurgulandı ({vurgulananDugumIdler.size} Düğüm)</span>
+          </span>
+          <button
+            onClick={yolVurgusunuTemizle}
+            className="px-2.5 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold text-[11px] transition-colors cursor-pointer"
+          >
+            Vurguyu Temizle ✕
+          </button>
         </div>
       )}
 

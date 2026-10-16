@@ -10,6 +10,8 @@ interface OzelDugumVerisi {
   secili?: boolean;
   eslesiyor?: boolean;
   filtreAktif?: boolean;
+  yolAktif?: boolean;
+  yolParcasi?: boolean;
   onSil?: (id: string) => void;
 }
 
@@ -54,6 +56,18 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
     }
   };
 
+  const basHarfler = useMemo(() => {
+    if (!data.etiket) return "?";
+    const kelimeler = data.etiket.trim().split(/\s+/);
+    if (kelimeler.length === 1) return kelimeler[0].slice(0, 2).toUpperCase();
+    return (kelimeler[0][0] + kelimeler[kelimeler.length - 1][0]).toUpperCase();
+  }, [data.etiket]);
+
+  const fotografUrl = useMemo(() => {
+    const raw = data.ozellikler?.fotograf ?? data.ozellikler?.avatarUrl;
+    return typeof raw === "string" && raw.trim().startsWith("http") ? raw.trim() : null;
+  }, [data.ozellikler]);
+
   const altBilgi = useMemo(() => {
     if (data.tur === "kisi") {
       const unvan =
@@ -83,7 +97,13 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
   // Durum tabanlı sınıf belirleme
   let durumSinifi = turBilgisi.kenarlik;
 
-  if (filtreDisi) {
+  if (data.yolAktif) {
+    if (data.yolParcasi) {
+      durumSinifi = "border-amber-500 ring-4 ring-amber-400/40 shadow-xl scale-[1.04] z-30 bg-amber-50/20";
+    } else {
+      durumSinifi = "border-slate-200 opacity-25 grayscale-[70%] scale-95 pointer-events-none !shadow-none";
+    }
+  } else if (filtreDisi) {
     durumSinifi =
       "border-slate-200 opacity-30 grayscale-[60%] [filter:grayscale(60%)] scale-95 pointer-events-none !shadow-none";
   } else if (secili) {
@@ -92,7 +112,7 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
     durumSinifi = `${turBilgisi.kenarlik} ring-2 ring-indigo-500/40 shadow-md scale-[1.01]`;
   }
 
-  // Bağlantı noktaları (Handles) sınıfları: normalde gizli, hover veya seçim durumunda görünür
+  // Bağlantı noktaları (Handles) sınıfları
   const handleSinifi = `!w-2.5 !h-2.5 !bg-indigo-500 !border-2 !border-white shadow-sm transition-opacity duration-150 ${
     secili ? "!opacity-100" : "opacity-0 group-hover:opacity-100"
   }`;
@@ -101,17 +121,8 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
     <div
       className={`min-w-56 max-w-72 p-4 rounded-2xl border-2 bg-white shadow-sm hover:shadow-md transition-all duration-200 relative group flex flex-col gap-2 cursor-pointer ${durumSinifi}`}
     >
-      <Handle
-        type="target"
-        position={Position.Top}
-        className={handleSinifi}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id="sol"
-        className={handleSinifi}
-      />
+      <Handle type="target" position={Position.Top} className={handleSinifi} />
+      <Handle type="target" position={Position.Left} id="sol" className={handleSinifi} />
 
       {/* Silme Butonu (Sağ üst köşe) */}
       {data.onSil && (
@@ -121,25 +132,38 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
           title="Düğümü Sil"
           className="absolute top-3 right-3 nodrag nopan opacity-0 group-hover:opacity-100 w-6 h-6 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-all cursor-pointer"
         >
-          <svg
-            className="w-3.5 h-3.5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       )}
 
-      {/* Tür Rozeti */}
-      <span
-        className={`px-2.5 py-1 text-xs font-semibold rounded-full self-start flex items-center gap-1.5 ${turBilgisi.rozet}`}
-      >
-        <span>{turBilgisi.simge}</span>
-        <span>{turBilgisi.etiket}</span>
-      </span>
+      {/* Üst Kısım: Avatar ve Tür Rozeti */}
+      <div className="flex items-center justify-between gap-2">
+        <span
+          className={`px-2.5 py-1 text-xs font-semibold rounded-full flex items-center gap-1.5 ${turBilgisi.rozet}`}
+        >
+          <span>{turBilgisi.simge}</span>
+          <span>{turBilgisi.etiket}</span>
+        </span>
+
+        {/* Profil Fotoğrafı veya Baş Harf Avatarı */}
+        {fotografUrl ? (
+          <img
+            src={fotografUrl}
+            alt={data.etiket}
+            className="w-7 h-7 rounded-full object-cover border border-slate-200 shrink-0 shadow-2xs"
+            onError={(e) => {
+              // Hatalı URL'de avatarı gizle
+              (e.target as HTMLElement).style.display = "none";
+            }}
+          />
+        ) : data.tur === "kisi" ? (
+          <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-600 text-white font-bold text-[10px] flex items-center justify-center shrink-0 shadow-2xs">
+            {basHarfler}
+          </div>
+        ) : null}
+      </div>
 
       {/* Düğüm Adı (Etiket) */}
       <div
@@ -172,17 +196,8 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
         </div>
       )}
 
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="sag"
-        className={handleSinifi}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        className={handleSinifi}
-      />
+      <Handle type="source" position={Position.Right} id="sag" className={handleSinifi} />
+      <Handle type="source" position={Position.Bottom} className={handleSinifi} />
     </div>
   );
 };

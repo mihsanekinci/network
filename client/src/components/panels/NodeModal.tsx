@@ -11,6 +11,7 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
   const { secilenHaritaId, dugumEkle, dugumler, yukleniyor } = useHaritaStore();
   const [etiket, setEtiket] = useState("");
   const [tur, setTur] = useState<DugumTuru>("kisi");
+  const [fotograf, setFotograf] = useState("");
 
   if (!acik) return null;
 
@@ -23,18 +24,24 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
     const pozisyonX = 250 + (mevcutSayi % 4) * 180;
     const pozisyonY = 150 + Math.floor(mevcutSayi / 4) * 120;
 
+    const ozellikler: Record<string, unknown> = {};
+    if (fotograf.trim()) {
+      ozellikler.fotograf = fotograf.trim();
+    }
+
     const sonuc = await dugumEkle({
       haritaId: secilenHaritaId,
       etiket: etiket.trim(),
       tur,
       pozisyonX,
       pozisyonY,
-      ozellikler: {},
+      ozellikler,
     });
 
     if (sonuc) {
       setEtiket("");
       setTur("kisi");
+      setFotograf("");
       kapat();
     }
   };
@@ -107,6 +114,19 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
                 );
               })}
             </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="block text-xs font-bold text-slate-700">
+              Fotoğraf / Logo URL <span className="text-slate-400 font-normal">(İsteğe Bağlı)</span>
+            </label>
+            <input
+              type="url"
+              value={fotograf}
+              onChange={(e) => setFotograf(e.target.value)}
+              placeholder="https://example.com/profil.jpg"
+              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-xs text-slate-800 placeholder:text-slate-400"
+            />
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">

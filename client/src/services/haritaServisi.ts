@@ -1,6 +1,11 @@
-import type { HaritaDTO, HaritaOlusturDTO, HaritaGuncelleDTO, ApiYaniti } from "../types";
+import type {
+  HaritaDTO,
+  HaritaOlusturDTO,
+  HaritaGuncelleDTO,
+  HaritaPaketiDTO,
+  ApiYaniti,
+} from "../types";
 import { API_TABANURL, istekGonder } from "./istemci";
-
 
 export async function haritalariGetir(): Promise<ApiYaniti<HaritaDTO[]>> {
   return istekGonder(`${API_TABANURL}/haritalar`);
@@ -20,6 +25,16 @@ export async function haritaOlustur(
   });
 }
 
+export async function haritaIceAktar(
+  paket: HaritaPaketiDTO
+): Promise<ApiYaniti<HaritaDTO>> {
+  return istekGonder(`${API_TABANURL}/haritalar/ice-aktar`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(paket),
+  });
+}
+
 export async function haritaGuncelle(
   id: string,
   veri: HaritaGuncelleDTO
@@ -36,3 +51,4 @@ export async function haritaSil(id: string): Promise<ApiYaniti<void>> {
     method: "DELETE",
   });
 }
+

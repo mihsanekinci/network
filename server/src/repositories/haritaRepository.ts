@@ -47,6 +47,71 @@ class HaritaRepository {
       throw hata;
     }
   }
+
+  async iceAktar(paket: {
+    harita: { baslik: string; aciklama?: string };
+    dugumler: Array<{
+      id?: string;
+      etiket: string;
+      tur: string;
+      pozisyonX: number;
+      pozisyonY: number;
+      ozellikler?: Record<string, unknown>;
+    }>;
+    kenarlar: Array<{
+      id?: string;
+      kaynakId: string;
+      hedefId: string;
+      etiket?: string;
+      yon?: string;
+    }>;
+  }): Promise<Harita> {
+    return prisma.$transaction(async (tx) => {
+      const yeniHarita = await tx.harita.create({
+        data: {
+          baslik: paket.harita.baslik,
+          aciklama: paket.harita.aciklama,
+        },
+      });
+
+      const eskiIdYeniIdEslestirmesi = new Map<string, string>();
+
+      for (const dugum of paket.dugumler) {
+        const yeniDugum = await tx.dugum.create({
+          data: {
+            haritaId: yeniHarita.id,
+            etiket: dugum.etiket,
+            tur: dugum.tur,
+            pozisyonX: dugum.pozisyonX,
+            pozisyonY: dugum.pozisyonY,
+            ozellikler: JSON.stringify(dugum.ozellikler ?? {}),
+          },
+        });
+        if (dugum.id) {
+          eskiIdYeniIdEslestirmesi.set(dugum.id, yeniDugum.id);
+        }
+      }
+
+      for (const kenar of paket.kenarlar) {
+        const yeniKaynakId = eskiIdYeniIdEslestirmesi.get(kenar.kaynakId) ?? kenar.kaynakId;
+        const yeniHedefId = eskiIdYeniIdEslestirmesi.get(kenar.hedefId) ?? kenar.hedefId;
+
+        if (yeniKaynakId && yeniHedefId && yeniKaynakId !== yeniHedefId) {
+          await tx.kenar.create({
+            data: {
+              haritaId: yeniHarita.id,
+              kaynakId: yeniKaynakId,
+              hedefId: yeniHedefId,
+              etiket: kenar.etiket,
+              yon: kenar.yon ?? "tek_yonlu",
+            },
+          });
+        }
+      }
+
+      return yeniHarita;
+    });
+  }
 }
 
 export default new HaritaRepository();

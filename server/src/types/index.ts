@@ -75,6 +75,36 @@ export interface KenarGuncelleDTO {
   yon?: KenarYonu;
 }
 
+export interface DugumKonumGuncellemeDTO {
+  id: string;
+  pozisyonX: number;
+  pozisyonY: number;
+}
+
+export interface HaritaPaketiDTO {
+  surum: string;
+  disaAktarmaTarihi: string;
+  harita: {
+    baslik: string;
+    aciklama?: string;
+  };
+  dugumler: Array<{
+    id?: string;
+    etiket: string;
+    tur: DugumTuru;
+    pozisyonX: number;
+    pozisyonY: number;
+    ozellikler?: Record<string, unknown>;
+  }>;
+  kenarlar: Array<{
+    id?: string;
+    kaynakId: string;
+    hedefId: string;
+    etiket?: string;
+    yon?: KenarYonu;
+  }>;
+}
+
 export interface ApiYaniti<T> {
   basarili: boolean;
   veri?: T;
