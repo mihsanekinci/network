@@ -7,6 +7,7 @@ import type {
   DugumKonumGuncellemeDTO,
 } from "../types";
 import dugumRepositoryVarsayilan from "../repositories/dugumRepository";
+import { NotFoundError, ValidationError, ConflictError } from "../errors";
 
 interface DugumRepo {
   haritayaGoreGetir(haritaId: string): Promise<Dugum[]>;
@@ -40,10 +41,10 @@ class DugumServisi {
   }
 
   async olustur(veri: DugumOlusturDTO): Promise<DugumDTO> {
-    if (!veri.etiket.trim()) throw new Error("Etiket boş olamaz");
+    if (!veri.etiket.trim()) throw new ValidationError("Etiket boş olamaz");
     const mevcutlar = await this.dugumRepository.haritayaGoreGetir(veri.haritaId);
     if (mevcutlar.some((d) => d.etiket === veri.etiket)) {
-      throw new Error("Bu etiket zaten kullanılıyor");
+      throw new ConflictError("Bu etiket zaten kullanılıyor");
     }
     const dugum = await this.dugumRepository.olustur(veri);
     return donustur(dugum);
@@ -70,7 +71,7 @@ class DugumServisi {
 
   private async varliginiDogrula(id: string): Promise<Dugum> {
     const dugum = await this.dugumRepository.idileGetir(id);
-    if (!dugum) throw new Error("Düğüm bulunamadı");
+    if (!dugum) throw new NotFoundError("Düğüm bulunamadı");
     return dugum;
   }
 }

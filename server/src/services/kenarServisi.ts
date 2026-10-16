@@ -2,6 +2,7 @@ import { Dugum, Kenar } from "@prisma/client";
 import type { KenarDTO, KenarOlusturDTO, KenarGuncelleDTO, KenarYonu } from "../types";
 import kenarRepositoryVarsayilan from "../repositories/kenarRepository";
 import dugumRepositoryVarsayilan from "../repositories/dugumRepository";
+import { NotFoundError, ValidationError, ConflictError } from "../errors";
 
 interface KenarRepositoryArayuzu {
   haritayaGoreGetir(haritaId: string): Promise<Kenar[]>;
@@ -51,13 +52,13 @@ class KenarServisi {
   async guncelle(id: string, veri: KenarGuncelleDTO): Promise<KenarDTO> {
     const mevcutKenar = await this.kenarRepository.idIleGetir(id);
     if (!mevcutKenar) {
-      throw new Error("Kenar bulunamadı");
+      throw new NotFoundError("Kenar bulunamadı");
     }
 
     if (veri.yon !== undefined) {
       const gecerliYonler: KenarYonu[] = ["tek_yonlu", "cift_yonlu", "yonsuz"];
       if (!gecerliYonler.includes(veri.yon)) {
-        throw new Error("Geçersiz yön değeri");
+        throw new ValidationError("Geçersiz yön değeri");
       }
     }
 
@@ -74,11 +75,11 @@ class KenarServisi {
 
   private async dugumlarAyniHaritadaOlmali(veri: KenarOlusturDTO): Promise<void> {
     const kaynak = await this.dugumRepository.idileGetir(veri.kaynakId);
-    if (!kaynak) throw new Error("Kaynak düğüm bulunamadı");
+    if (!kaynak) throw new NotFoundError("Kaynak düğüm bulunamadı");
     const hedef = await this.dugumRepository.idileGetir(veri.hedefId);
-    if (!hedef) throw new Error("Hedef düğüm bulunamadı");
+    if (!hedef) throw new NotFoundError("Hedef düğüm bulunamadı");
     if (kaynak.haritaId !== veri.haritaId || hedef.haritaId !== veri.haritaId) {
-      throw new Error("Kaynak ve hedef düğümler aynı haritada olmalıdır");
+      throw new ValidationError("Kaynak ve hedef düğümler aynı haritada olmalıdır");
     }
   }
 
@@ -87,7 +88,7 @@ class KenarServisi {
     const mevcut = mevcutlar.some(
       (k) => k.kaynakId === veri.kaynakId && k.hedefId === veri.hedefId
     );
-    if (mevcut) throw new Error("Bu bağlantı zaten mevcut");
+    if (mevcut) throw new ConflictError("Bu bağlantı zaten mevcut");
   }
 }
 

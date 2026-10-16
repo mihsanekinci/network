@@ -1,6 +1,7 @@
 import { Harita } from "@prisma/client";
 import type { HaritaDTO, HaritaOlusturDTO, HaritaGuncelleDTO, HaritaPaketiDTO } from "../types";
 import haritaRepositoryVarsayilan from "../repositories/haritaRepository";
+import { NotFoundError, ValidationError } from "../errors";
 
 interface HaritaRepo {
   tumunuGetir(): Promise<Harita[]>;
@@ -35,7 +36,7 @@ class HaritaServisi {
   }
 
   async olustur(veri: HaritaOlusturDTO): Promise<HaritaDTO> {
-    if (!veri.baslik.trim()) throw new Error("Başlık boş olamaz");
+    if (!veri.baslik.trim()) throw new ValidationError("Başlık boş olamaz");
     const harita = await this.haritaRepository.olustur(veri);
     return donustur(harita);
   }
@@ -53,13 +54,13 @@ class HaritaServisi {
 
   async iceAktar(paket: HaritaPaketiDTO): Promise<HaritaDTO> {
     if (!paket || !paket.harita || !paket.harita.baslik?.trim()) {
-      throw new Error("Geçerli bir harita başlığı gereklidir");
+      throw new ValidationError("Geçerli bir harita başlığı gereklidir");
     }
     if (!Array.isArray(paket.dugumler)) {
-      throw new Error("Düğümler listesi gereklidir");
+      throw new ValidationError("Düğümler listesi gereklidir");
     }
     if (!Array.isArray(paket.kenarlar)) {
-      throw new Error("Kenarlar listesi gereklidir");
+      throw new ValidationError("Kenarlar listesi gereklidir");
     }
 
     const olusturulanHarita = await this.haritaRepository.iceAktar(paket);
@@ -68,7 +69,7 @@ class HaritaServisi {
 
   private async varliginiDogrula(id: string): Promise<Harita> {
     const harita = await this.haritaRepository.idileGetir(id);
-    if (!harita) throw new Error("Harita bulunamadı");
+    if (!harita) throw new NotFoundError("Harita bulunamadı");
     return harita;
   }
 }

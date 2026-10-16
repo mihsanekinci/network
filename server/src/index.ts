@@ -4,6 +4,7 @@ import cors from "cors";
 import haritaRotalari from "./routes/haritaRoutes";
 import dugumRotalari from "./routes/dugumRoutes";
 import kenarRotalari from "./routes/kenarRoutes";
+import { errorHandler } from "./middlewares/errorHandler";
 
 const uygulama = express();
 const PORT = process.env.PORT ?? 3000;
@@ -24,6 +25,9 @@ uygulama.use("/dugumler", dugumRotalari);
 uygulama.use("/api/dugumler", dugumRotalari);
 uygulama.use("/kenarlar", kenarRotalari);
 uygulama.use("/api/kenarlar", kenarRotalari);
+
+// Merkezi hata yönetimi middleware'i (tüm rotalardan sonra eklenmelidir)
+uygulama.use(errorHandler);
 
 uygulama.listen(PORT, () => {
   console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor`);

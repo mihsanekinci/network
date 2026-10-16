@@ -7,6 +7,8 @@ import type {
   DugumKonumGuncellemeDTO,
   ApiYaniti,
 } from "../types";
+import { asyncHandler } from "../middlewares/asyncHandler";
+import { ValidationError } from "../errors";
 
 interface DugumServisArayuzu {
   haritayaGoreGetir(haritaId: string): Promise<DugumDTO[]>;
@@ -19,87 +21,68 @@ interface DugumServisArayuzu {
 export class DugumController {
   constructor(private readonly dugumServisi: DugumServisArayuzu) {}
 
-  haritayaGoreGetir = async (
-    istek: Request,
-    yanit: Response<ApiYaniti<DugumDTO[]>>
-  ): Promise<void> => {
-    try {
+  haritayaGoreGetir = asyncHandler(
+    async (
+      istek: Request,
+      yanit: Response<ApiYaniti<DugumDTO[]>>
+    ): Promise<void> => {
       const haritaId = istek.params.haritaId ?? (istek.query.haritaId as string);
       if (!haritaId) {
-        yanit.status(400).json({ basarili: false, hata: "Harita ID belirtilmelidir" });
-        return;
+        throw new ValidationError("Harita ID belirtilmelidir");
       }
       const dugumler = await this.dugumServisi.haritayaGoreGetir(haritaId);
       yanit.status(200).json({ basarili: true, veri: dugumler });
-    } catch (hata) {
-      const mesaj = hata instanceof Error ? hata.message : "Düğümler getirilemedi";
-      yanit.status(500).json({ basarili: false, hata: mesaj });
     }
-  };
+  );
 
-  olustur = async (
-    istek: Request,
-    yanit: Response<ApiYaniti<DugumDTO>>
-  ): Promise<void> => {
-    try {
+  olustur = asyncHandler(
+    async (
+      istek: Request,
+      yanit: Response<ApiYaniti<DugumDTO>>
+    ): Promise<void> => {
       const haritaId = istek.params.haritaId ?? istek.body.haritaId;
       if (!haritaId) {
-        yanit.status(400).json({ basarili: false, hata: "Harita ID belirtilmelidir" });
-        return;
+        throw new ValidationError("Harita ID belirtilmelidir");
       }
       const veri: DugumOlusturDTO = { ...istek.body, haritaId };
       const yeniDugum = await this.dugumServisi.olustur(veri);
       yanit.status(201).json({ basarili: true, veri: yeniDugum });
-    } catch (hata) {
-      const mesaj = hata instanceof Error ? hata.message : "Düğüm oluşturulamadı";
-      yanit.status(400).json({ basarili: false, hata: mesaj });
     }
-  };
+  );
 
-  guncelle = async (
-    istek: Request,
-    yanit: Response<ApiYaniti<DugumDTO>>
-  ): Promise<void> => {
-    try {
+  guncelle = asyncHandler(
+    async (
+      istek: Request,
+      yanit: Response<ApiYaniti<DugumDTO>>
+    ): Promise<void> => {
       const id = istek.params.id ?? istek.params.dugumId;
       const guncelDugum = await this.dugumServisi.guncelle(id, istek.body);
       yanit.status(200).json({ basarili: true, veri: guncelDugum });
-    } catch (hata) {
-      const mesaj = hata instanceof Error ? hata.message : "Düğüm güncellenemedi";
-      const durumKodu = mesaj === "Düğüm bulunamadı" ? 404 : 400;
-      yanit.status(durumKodu).json({ basarili: false, hata: mesaj });
     }
-  };
+  );
 
-  sil = async (
-    istek: Request,
-    yanit: Response<ApiYaniti<void>>
-  ): Promise<void> => {
-    try {
+  sil = asyncHandler(
+    async (
+      istek: Request,
+      yanit: Response<ApiYaniti<void>>
+    ): Promise<void> => {
       const id = istek.params.id ?? istek.params.dugumId;
       await this.dugumServisi.sil(id);
       yanit.status(200).json({ basarili: true });
-    } catch (hata) {
-      const mesaj = hata instanceof Error ? hata.message : "Düğüm silinemedi";
-      const durumKodu = mesaj === "Düğüm bulunamadı" ? 404 : 400;
-      yanit.status(durumKodu).json({ basarili: false, hata: mesaj });
     }
-  };
+  );
 
-  topluKonumGuncelle = async (
-    istek: Request,
-    yanit: Response<ApiYaniti<void>>
-  ): Promise<void> => {
-    try {
+  topluKonumGuncelle = asyncHandler(
+    async (
+      istek: Request,
+      yanit: Response<ApiYaniti<void>>
+    ): Promise<void> => {
       const haritaId = istek.params.haritaId;
       const konumlar = Array.isArray(istek.body.konumlar) ? istek.body.konumlar : istek.body;
       await this.dugumServisi.topluKonumGuncelle(haritaId, konumlar);
       yanit.status(200).json({ basarili: true });
-    } catch (hata) {
-      const mesaj = hata instanceof Error ? hata.message : "Düğüm konumları güncellenemedi";
-      yanit.status(400).json({ basarili: false, hata: mesaj });
     }
-  };
+  );
 }
 
 export default new DugumController(dugumServisiVarsayilan);
