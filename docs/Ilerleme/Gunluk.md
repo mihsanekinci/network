@@ -188,6 +188,25 @@
      - Analiz, Otomatik Düzenle (`⌘D`), Dışa/İçe Aktar ve Klavye Kısayolları (`⌘K`) aksiyonları modern bir "Seçenekler ▾" (⚙️) menüsü altında toplanarak menülerin üst üste binmesi kökten engellendi.
 - **Doğrulama:** Backend 33/33 Vitest birim testi (%100 başarı); Client `npm run build` (`tsc -b && vite build`) ve `npm run lint` (`eslint .`) 0 hata, 0 uyarı ile doğrulandı.
 
+
+### Faz 20: Backend Hardening (Zod, AppError, Prisma Indexes & ACID Transactions, 143 E2E Tests)
+- **Tarih:** 16 Ekim 2026
+- **Geliştirici:** Lead Architect & Specialized Subagents (BackendSchemaValidator, BackendErrorHandler, DatabaseArchitect, BackendQAEngineer)
+- **Yapılanlar:**
+  1. **Zod ile Çalışma Zamanı Şema Doğrulaması (`server/src/schemas/` & `validate.ts`):**
+     - Tüm `POST`, `PUT`, `PATCH` uç noktaları için Zod şemaları (`haritaSchema.ts`, `dugumSchema.ts`, `kenarSchema.ts`) oluşturuldu.
+     - `dogrulaGovde` ve `dogrulaParametre` Express middleware'leri ile geçersiz veri girişlerinde standart 400 Bad Request yanıtı dönmesi sağlandı.
+  2. **Merkezi Hata Hiyerarşisi (`server/src/errors/` & `errorHandler.ts`):**
+     - `AppError` tabanlı nesne yönelimli hata sınıfları (`NotFoundError`, `ValidationError`, `ConflictError`, `DatabaseError`) inşa edildi.
+     - `asyncHandler` wrapper'ı ile controller'lardaki tekrar eden try/catch blokları temizlendi.
+     - Global `errorHandler` Express middleware'i ile kontrollü hata yanıtları ve 500 fallback güvenliği sağlandı.
+  3. **Veritabanı İndeksleme & ACID Transaction Güvenliği (`schema.prisma` & Repositories):**
+     - SQLite performansını güvenceye almak için `Dugum` ve `Kenar` tablolarına bileşik indeksler eklendi (`haritaId`, `haritaId + etiket`, `kaynakId + hedefId`).
+     - `iceAktar` ve `topluKonumGuncelle` operasyonları `prisma.$transaction` içine alınarak atomik hale getirildi; ID mapping garantisi sağlandı.
+  4. **Uçtan Uca API Entegrasyon Testleri (`server/src/__tests__/api/`):**
+     - Dinamik port tahsis eden sıfır bağımlılıklı `testIstemcisi.ts` test altyapısı kuruldu.
+     - Sağlık, Harita (13 test), Düğüm (11 test) ve Kenar (10 test) API test süitleri ile toplam 143 testin tamamı %100 başarıyla geçti.
+
 ---
 
 ## 🎯 Tamamlanan Yol Haritası (Roadmap)
@@ -205,6 +224,7 @@
 - [x] **11. Ağ Analitiği & BFS En Kısa Yol Bulucu (Faz 18)**
 - [x] **12. Avatarlar ve Klavye Kısayolları (Faz 18)**
 - [x] **13. Obsidian Brain Protokolü Entegrasyonu (Faz 18)**
+- [x] **14. Backend Hardening: Zod, AppError, ACID Transactions & 143 E2E Tests (Faz 20)**
 
 ---
 
@@ -225,5 +245,10 @@
 - **Gerekçe:** Geliştirme ortamında ek veritabanı kurulumlarına ihtiyaç duymadan hızlı başlamak için SQLite seçildi; Prisma ORM sayesinde canlı ortamda PostgreSQL'e geçiş tek satırlık sağlayıcı değişikliğiyle mümkün kılınacak.
 - **İlgili:** [[Prisma ve SQLite]]
 
+### ADR-004: Backend Dayanıklılık, Şema Doğrulama ve ACID İşlem Mimarisi
+- **Durum:** Kabul edildi.
+- **Gerekçe:** Runtime veri bütünlüğü Zod şemaları ile garantiye alındı, hata yönetimi OOP tabanlı AppError hiyerarşisi ile standartlaştırıldı, SQLite indeksleri ile sorgu performansı artırıldı ve içe aktarma gibi çok adımlı işlemler prisma.$transaction ile atomik hale getirildi.
+- **İlgili:** [[Backend Resilience and Validation Strategy]] | [[2026-10-16 - Backend Hardening and Modular Architecture]]
+
 ---
-*İlgili Notlar:* [[00 - Ana Harita]] | [[Katmanli Mimari]] | [[Prisma ve SQLite]] | [[Rotalar ve Controllers]] | [[Zustand ve Servisler]] | [[React Flow Canvas]]
+*İlgili Notlar:* [[00 - Ana Harita]] | [[Katmanli Mimari]] | [[Prisma ve SQLite]] | [[Rotalar ve Controllers]] | [[Zustand ve Servisler]] | [[React Flow Canvas]] | [[Backend Resilience and Validation Strategy]]
