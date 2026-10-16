@@ -109,5 +109,6 @@ export interface ApiYaniti<T> {
   basarili: boolean;
   veri?: T;
   hata?: string;
+  detaylar?: Array<{ alan: string; mesaj: string }>;
 }
 
