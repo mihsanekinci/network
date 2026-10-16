@@ -2,10 +2,16 @@ import React from "react";
 import { useHaritaStore } from "../../store/haritaStore";
 
 interface YanPanelOzellikleri {
+  acik: boolean;
+  kapat: () => void;
   yeniHaritaAc: () => void;
 }
 
-export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({ yeniHaritaAc }) => {
+export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
+  acik,
+  kapat,
+  yeniHaritaAc,
+}) => {
   const { haritalar, secilenHaritaId, haritaSec, haritaSil, yukleniyor } = useHaritaStore();
 
   const haritayiSilOnayli = (e: React.MouseEvent, id: string, baslik: string) => {
@@ -17,9 +23,15 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({ yeniHaritaAc }) =>
   };
 
   return (
-    <aside className="w-80 h-full bg-white border-r border-slate-200/80 flex flex-col shrink-0">
+    <aside
+      className={`h-full bg-white flex flex-col shrink-0 transition-all duration-300 ease-in-out overflow-hidden z-20 ${
+        acik
+          ? "w-80 border-r border-slate-200/80 opacity-100"
+          : "w-0 border-r-0 opacity-0 pointer-events-none"
+      }`}
+    >
       {/* Üst Başlık & Logo */}
-      <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+      <div className="p-4.5 border-b border-slate-100 flex items-center justify-between shrink-0 min-w-80">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
             N
@@ -29,6 +41,18 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({ yeniHaritaAc }) =>
             <p className="text-xs text-slate-500 font-medium">Node-Edge Harita</p>
           </div>
         </div>
+
+        {/* Kenar Çubuğunu Kapat Butonu */}
+        <button
+          type="button"
+          onClick={kapat}
+          title="Kenar Çubuğunu Gizle (⌘B)"
+          className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center transition-colors cursor-pointer"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+          </svg>
+        </button>
       </div>
 
       {/* Yeni Harita Butonu */}

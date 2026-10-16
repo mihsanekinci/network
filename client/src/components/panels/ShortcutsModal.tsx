@@ -10,6 +10,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({ acik, kapat }) =
 
   const kisayollar = [
     { tuslar: ["⌘", "K"], mac: "⌘K", win: "Ctrl+K", aciklama: "Kısayollar Kılavuzunu Aç" },
+    { tuslar: ["⌘", "B"], mac: "⌘B", win: "Ctrl+B", aciklama: "Kenar Çubuğunu Aç / Kapat" },
     { tuslar: ["⌘", "N"], mac: "⌘N", win: "Ctrl+N", aciklama: "Yeni Düğüm Ekle Modalı" },
     { tuslar: ["⌘", "F"], mac: "⌘F", win: "Ctrl+F", aciklama: "Arama Çubuğuna Odaklan" },
     { tuslar: ["⌘", "D"], mac: "⌘D", win: "Ctrl+D", aciklama: "Otomatik Hizala (Dagre Layout)" },

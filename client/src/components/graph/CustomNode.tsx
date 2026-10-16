@@ -121,8 +121,21 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
     <div
       className={`min-w-56 max-w-72 p-4 rounded-2xl border-2 bg-white shadow-sm hover:shadow-md transition-all duration-200 relative group flex flex-col gap-2 cursor-pointer ${durumSinifi}`}
     >
-      <Handle type="target" position={Position.Top} className={handleSinifi} />
-      <Handle type="target" position={Position.Left} id="sol" className={handleSinifi} />
+      {/* ÜST BAĞLANTI NOKTALARI (Top Handles: Slot 1: 25%, Slot 2: 50%, Slot 3: 75%) */}
+      <Handle type="target" position={Position.Top} id="ust-hedef-1" style={{ left: "25%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Top} id="ust-kaynak-1" style={{ left: "25%" }} className={handleSinifi} />
+      <Handle type="target" position={Position.Top} id="ust-hedef-2" style={{ left: "50%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Top} id="ust-kaynak-2" style={{ left: "50%" }} className={handleSinifi} />
+      <Handle type="target" position={Position.Top} id="ust-hedef-3" style={{ left: "75%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Top} id="ust-kaynak-3" style={{ left: "75%" }} className={handleSinifi} />
+
+      {/* SOL BAĞLANTI NOKTALARI (Left Handles: Slot 1: 25%, Slot 2: 50%, Slot 3: 75%) */}
+      <Handle type="target" position={Position.Left} id="sol-hedef-1" style={{ top: "25%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Left} id="sol-kaynak-1" style={{ top: "25%" }} className={handleSinifi} />
+      <Handle type="target" position={Position.Left} id="sol-hedef-2" style={{ top: "50%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Left} id="sol-kaynak-2" style={{ top: "50%" }} className={handleSinifi} />
+      <Handle type="target" position={Position.Left} id="sol-hedef-3" style={{ top: "75%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Left} id="sol-kaynak-3" style={{ top: "75%" }} className={handleSinifi} />
 
       {/* Silme Butonu (Sağ üst köşe) */}
       {data.onSil && (
@@ -196,8 +209,21 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
         </div>
       )}
 
-      <Handle type="source" position={Position.Right} id="sag" className={handleSinifi} />
-      <Handle type="source" position={Position.Bottom} className={handleSinifi} />
+      {/* SAĞ BAĞLANTI NOKTALARI (Right Handles: Slot 1: 25%, Slot 2: 50%, Slot 3: 75%) */}
+      <Handle type="target" position={Position.Right} id="sag-hedef-1" style={{ top: "25%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Right} id="sag-kaynak-1" style={{ top: "25%" }} className={handleSinifi} />
+      <Handle type="target" position={Position.Right} id="sag-hedef-2" style={{ top: "50%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Right} id="sag-kaynak-2" style={{ top: "50%" }} className={handleSinifi} />
+      <Handle type="target" position={Position.Right} id="sag-hedef-3" style={{ top: "75%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Right} id="sag-kaynak-3" style={{ top: "75%" }} className={handleSinifi} />
+
+      {/* ALT BAĞLANTI NOKTALARI (Bottom Handles: Slot 1: 25%, Slot 2: 50%, Slot 3: 75%) */}
+      <Handle type="target" position={Position.Bottom} id="alt-hedef-1" style={{ left: "25%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Bottom} id="alt-kaynak-1" style={{ left: "25%" }} className={handleSinifi} />
+      <Handle type="target" position={Position.Bottom} id="alt-hedef-2" style={{ left: "50%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Bottom} id="alt-kaynak-2" style={{ left: "50%" }} className={handleSinifi} />
+      <Handle type="target" position={Position.Bottom} id="alt-hedef-3" style={{ left: "75%" }} className={handleSinifi} />
+      <Handle type="source" position={Position.Bottom} id="alt-kaynak-3" style={{ left: "75%" }} className={handleSinifi} />
     </div>
   );
 };

@@ -25,6 +25,7 @@ Bu kasa, **NetWork** projesinin tüm geliştirme oturumlarını, mimari ve strat
 
 ### 10. Oturum Günlükleri (Sessions & Logs)
 - [[2026-10-16 - Advanced Features and Obsidian Brain Integration]] - İleri seviye 5 özellik (Export/Import, Dagre Auto-Layout, Pathfinder, Avatarlar, Kısayollar) ve Obsidian Brain entegrasyonu.
+- [[2026-10-16 - UI and Connection Refinements]] - Özel ilişki şablonları, 4 yönlü multi-slot bağlantılar, açılır-kapanır sidebar ve kompakt navbar seçenekler menüsü.
 
 ### 20. Kararlar ve Tercihler (Decisions & Strategy - ADR)
 - [[Export Import and Backup Strategy]] - PNG görsel ve JSON tam paket yedekleme/içe aktarma mimarisi.

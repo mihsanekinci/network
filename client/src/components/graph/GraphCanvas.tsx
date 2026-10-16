@@ -10,6 +10,7 @@ import ReactFlow, {
   BackgroundVariant,
   type NodeChange,
   applyNodeChanges,
+  ConnectionMode,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import { useHaritaStore } from "../../store/haritaStore";
@@ -17,6 +18,33 @@ import CustomNode from "./CustomNode";
 
 const DUGUM_TURLERI = {
   ozelDugum: CustomNode,
+};
+
+type YonTipi = "ust" | "sag" | "alt" | "sol";
+
+interface DugumKonumu {
+  x: number;
+  y: number;
+}
+
+const slotBelirle = (sira: number, toplam: number): number => {
+  if (toplam <= 1) return 2;
+  if (toplam === 2) return sira === 0 ? 1 : 3;
+  return (sira % 3) + 1;
+};
+
+const yonBelirle = (kaynak: DugumKonumu, hedef: DugumKonumu): { kaynakYon: YonTipi; hedefYon: YonTipi } => {
+  const dx = hedef.x - kaynak.x;
+  const dy = hedef.y - kaynak.y;
+
+  if (Math.abs(dx) >= Math.abs(dy)) {
+    return dx >= 0
+      ? { kaynakYon: "sag", hedefYon: "sol" }
+      : { kaynakYon: "sol", hedefYon: "sag" };
+  }
+  return dy >= 0
+    ? { kaynakYon: "alt", hedefYon: "ust" }
+    : { kaynakYon: "ust", hedefYon: "alt" };
 };
 
 export const GraphCanvas: React.FC = () => {
@@ -104,9 +132,55 @@ export const GraphCanvas: React.FC = () => {
     setYerelDugumler(donusturulmusDugumler);
   }, [donusturulmusDugumler]);
 
-  // Kenarları React Flow formatına dönüştür
+  // Düğüm konum haritası
+  const dugumKonumHaritasi = useMemo(() => {
+    const harita = new Map<string, DugumKonumu>();
+    for (const d of yerelDugumler) {
+      harita.set(d.id, { x: d.position.x, y: d.position.y });
+    }
+    return harita;
+  }, [yerelDugumler]);
+
+  // Kenarları React Flow formatına dönüştür ve bağlantı noktalarını dağıt
   const donusturulmusKenarlar = useMemo<Edge[]>(() => {
-    return kenarlar.map((k) => {
+    // 1. Adım: Her kenar için ideal yönleri belirle
+    const kenarYonleri = kenarlar.map((k) => {
+      const kaynakKonum = dugumKonumHaritasi.get(k.kaynakId) ?? { x: 0, y: 0 };
+      const hedefKonum = dugumKonumHaritasi.get(k.hedefId) ?? { x: 200, y: 0 };
+      const { kaynakYon, hedefYon } = yonBelirle(kaynakKonum, hedefKonum);
+      return { kenar: k, kaynakYon, hedefYon };
+    });
+
+    // 2. Adım: Aynı düğümün aynı yüzüne bağlanan kenar sayılarını topla
+    const hedefYonSayaci = new Map<string, number>();
+    const kaynakYonSayaci = new Map<string, number>();
+    for (const item of kenarYonleri) {
+      const hAnahtar = `${item.kenar.hedefId}-${item.hedefYon}`;
+      hedefYonSayaci.set(hAnahtar, (hedefYonSayaci.get(hAnahtar) ?? 0) + 1);
+      const kAnahtar = `${item.kenar.kaynakId}-${item.kaynakYon}`;
+      kaynakYonSayaci.set(kAnahtar, (kaynakYonSayaci.get(kAnahtar) ?? 0) + 1);
+    }
+
+    // 3. Adım: Her kenara çakışmayı önleyecek benzersiz slot ata
+    const hedefSiraSayaci = new Map<string, number>();
+    const kaynakSiraSayaci = new Map<string, number>();
+
+    return kenarYonleri.map(({ kenar: k, kaynakYon, hedefYon }) => {
+      const hAnahtar = `${k.hedefId}-${hedefYon}`;
+      const hedefToplam = hedefYonSayaci.get(hAnahtar) ?? 1;
+      const hedefSira = hedefSiraSayaci.get(hAnahtar) ?? 0;
+      hedefSiraSayaci.set(hAnahtar, hedefSira + 1);
+      const hedefSlot = slotBelirle(hedefSira, hedefToplam);
+
+      const kAnahtar = `${k.kaynakId}-${kaynakYon}`;
+      const kaynakToplam = kaynakYonSayaci.get(kAnahtar) ?? 1;
+      const kaynakSira = kaynakSiraSayaci.get(kAnahtar) ?? 0;
+      kaynakSiraSayaci.set(kAnahtar, kaynakSira + 1);
+      const kaynakSlot = slotBelirle(kaynakSira, kaynakToplam);
+
+      const sourceHandle = `${kaynakYon}-kaynak-${kaynakSlot}`;
+      const targetHandle = `${hedefYon}-hedef-${hedefSlot}`;
+
       const yolKenari = vurgulananKenarIdler.has(k.id);
       const secili = k.id === secilenKenarId;
 
@@ -146,6 +220,8 @@ export const GraphCanvas: React.FC = () => {
         id: k.id,
         source: k.kaynakId,
         target: k.hedefId,
+        sourceHandle,
+        targetHandle,
         selected: secili,
         label: k.etiket || undefined,
         animated,
@@ -170,7 +246,13 @@ export const GraphCanvas: React.FC = () => {
         labelBgBorderRadius: 8,
       };
     });
-  }, [kenarlar, secilenKenarId, yolAktif, vurgulananKenarIdler]);
+  }, [
+    kenarlar,
+    secilenKenarId,
+    yolAktif,
+    vurgulananKenarIdler,
+    dugumKonumHaritasi,
+  ]);
 
   // Sürükleme durumunda yerel konumu güncelle
   const dugumlerDegisti = useCallback((degisiklikler: NodeChange[]) => {
@@ -295,6 +377,7 @@ export const GraphCanvas: React.FC = () => {
         nodes={yerelDugumler}
         edges={donusturulmusKenarlar}
         nodeTypes={DUGUM_TURLERI}
+        connectionMode={ConnectionMode.Loose}
         onNodesChange={dugumlerDegisti}
         onNodeDragStop={suruklemeBitti}
         onConnect={baglantiKuruldu}

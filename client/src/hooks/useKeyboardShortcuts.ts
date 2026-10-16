@@ -7,6 +7,7 @@ interface KeyboardShortcutsProps {
   onAutoLayout: () => void;
   onFocusSearch: () => void;
   onCloseModals: () => void;
+  onToggleSidebar?: () => void;
 }
 
 export function useKeyboardShortcuts({
@@ -15,6 +16,7 @@ export function useKeyboardShortcuts({
   onAutoLayout,
   onFocusSearch,
   onCloseModals,
+  onToggleSidebar,
 }: KeyboardShortcutsProps): void {
   const {
     secilenHaritaId,
@@ -33,6 +35,13 @@ export function useKeyboardShortcuts({
         e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement ||
         (e.target as HTMLElement).isContentEditable;
+
+      // ⌘B veya Ctrl+B (Kenar Çubuğunu Aç/Kapat)
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "b") {
+        e.preventDefault();
+        onToggleSidebar?.();
+        return;
+      }
 
       // ⌘K veya Ctrl+K (Kısayollar Kılavuzu)
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
@@ -103,5 +112,6 @@ export function useKeyboardShortcuts({
     onAutoLayout,
     onFocusSearch,
     onCloseModals,
+    onToggleSidebar,
   ]);
 }

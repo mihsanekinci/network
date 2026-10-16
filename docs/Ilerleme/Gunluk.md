@@ -169,6 +169,25 @@
 - **Doğrulama:** Backend 33/33 Vitest testleri (%100 başarı); Client `tsc -b`, `vite build` ve `eslint .` sıfır hata ve sıfır uyarı ile doğrulandı.
 - **Obsidian Brain:** `notes/` altında tam bir İkinci Beyin yapısı (`notes/00_Index.md`, ADR'lar, konseptler, sorun çözümü ve oturum günlüğü) kuruldu.
 
+### Faz 19: Özel Şablonlar, Çok Yönlü & Dağıtık Bağlantılar, Açılır Sidebar ve Kompakt Navbar (16 Ekim 2026)
+- **Geliştirme:** Kullanıcı talepleri doğrultusunda tuval ve arayüz ergonomisi üst seviyeye taşındı:
+  1. **Özel Hızlı İlişki Şablonları (`EdgeModal.tsx`):**
+     - `localStorage` üzerinde kalıcı kullanıcı tanımlı ilişki şablonu altyapısı kuruldu.
+     - Modal içerisinde dinamik "+ Yeni Şablon Ekle" formu ve serbest metin girildiğinde tek tıkla şablon listesine kaydetme yeteneği (`+ "${etiket}" şablonlara ekle`) sağlandı.
+     - Özel şablonları silme (`✕`) desteği eklendi.
+  2. **Her Yönden Bağlantı & Çoklu Ok Dağıtımı (`CustomNode.tsx` & `GraphCanvas.tsx`):**
+     - Düğümlerin tüm kenarlarından (Üst, Sağ, Alt, Sol) hem kaynak hem hedef bağlantı alabilmesi için her kenara 3'er slotlu (`-1`, `-2`, `-3`) Handle'lar yerleştirildi.
+     - React Flow `ConnectionMode.Loose` ile serbest bağlantı serbestisi sağlandı.
+     - `GraphCanvas.tsx`'te bağıl konum vektörüne göre otomatik yüzey seçimi (`yonBelirle`) ve aynı yüzeye bağlanan çoklu oklarda üst üste binmeyi önleyen dinamik slot dağıtım algoritması (`slotBelirle`) uygulandı.
+  3. **Açılır-Kapanır Sol Panel (`SidebarPanel.tsx` & `App.tsx`):**
+     - Sidebar collapsible hale getirildi, durumu `localStorage`'da saklandı.
+     - Navbar'da ve sidebar başlığında açma/kapama butonları ile `⌘B` (Ctrl+B) klavye kısayolu entegre edildi.
+  4. **Kompakt Navbar, Dikey Bilgi Hiyerarşisi & Seçenekler Menüsü (`SearchFilterBar.tsx` & `App.tsx`):**
+     - Harita başlığı ve sayaçları dikey micro-stack düzenine kavuşturularak başlık altına alındı.
+     - Arama ve filtreleme çubuğu, tür bazlı kompakt açılır menü (dropdown popover) ve dinamik kategori sayaçları ile sadeleştirildi.
+     - Analiz, Otomatik Düzenle (`⌘D`), Dışa/İçe Aktar ve Klavye Kısayolları (`⌘K`) aksiyonları modern bir "Seçenekler ▾" (⚙️) menüsü altında toplanarak menülerin üst üste binmesi kökten engellendi.
+- **Doğrulama:** Backend 33/33 Vitest birim testi (%100 başarı); Client `npm run build` (`tsc -b && vite build`) ve `npm run lint` (`eslint .`) 0 hata, 0 uyarı ile doğrulandı.
+
 ---
 
 ## 🎯 Tamamlanan Yol Haritası (Roadmap)
