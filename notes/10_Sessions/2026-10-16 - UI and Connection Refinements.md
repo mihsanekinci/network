@@ -16,10 +16,10 @@
 
 ### 2. 4 Yönlü Bağlantı & Çoklu Ok Dağıtımı (`CustomNode.tsx` & `GraphCanvas.tsx`)
 - Düğümlerin yalnızca üstten veya kısıtlı yönlerden bağlanabilme kısıtı kaldırıldı.
-- `CustomNode.tsx` içine her 4 kenarda (Üst, Sağ, Alt, Sol) üçer slotlu (`-1`, `-2`, `-3`) hedef ve kaynak Handle bileşenleri yerleştirildi.
+- `CustomNode.tsx` içine her 4 kenarda (Üst, Sağ, Alt, Sol) beşer slotlu (%15, %32, %50, %68, %85) toplam 20 hedef ve kaynak Handle bileşeni yerleştirildi.
 - React Flow üzerinde `ConnectionMode.Loose` etkinleştirilerek istenilen her noktadan serbest sürükle-bırak bağlantı kurulması sağlandı.
-- `GraphCanvas.tsx`'te iki düğümün tuvaldeki bağıl konumuna göre en uygun yüzeyi hesaplayan (`yonBelirle`) ve aynı yüzeye bağlanan çoklu kenarları paralel slotlara paylaştıran (`slotBelirle`) akıllı yönlendirme algoritması kurgulandı.
-- Böylece birden fazla düğüm aynı düğüme bağlandığında tüm okların tek bir noktada üst üste binmesi sorunu kökten çözüldü.
+- `GraphCanvas.tsx`'te iki düğümün tuvaldeki bağıl konumuna göre en uygun yüzeyi hesaplayan (`yonBelirle`), kendine bağlanan düğümlerde sağ-üst köşe kavisli yönlendirme yapan ve bir yüzeye bağlanan tüm uçları (kaynak + hedef) ortak fiziksel alanda karşı koordinata göre sıralayarak sıfır çakışma ve sıfır çizgi kesişmesi sağlayan dinamik slot dağıtım algoritması (`slotBelirle`) kurgulandı.
+- Böylece birden fazla düğüm aynı düğüme bağlandığında veya karşılıklı ilişkilerde (A➔B, B➔A) okların tek bir noktada üst üste binmesi sorunu kökten çözüldü.
 
 ### 3. Açılır-Kapanır Kenar Çubuğu (`SidebarPanel.tsx` & `App.tsx`)
 - Sol taraftaki harita listesi ve logo alanı açılır-kapanır (collapsible) hale getirildi.
