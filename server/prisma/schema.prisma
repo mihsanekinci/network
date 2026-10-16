@@ -40,6 +40,8 @@ model Dugum {
   gidentKenarlar  Kenar[] @relation("KaynakDugum")
   gelenKenarlar   Kenar[] @relation("HedefDugum")
 
+  @@index([haritaId])
+  @@index([haritaId, etiket])
   @@map("dugumler")
 }
 
@@ -58,5 +60,8 @@ model Kenar {
   kaynak Dugum  @relation("KaynakDugum", fields: [kaynakId], references: [id], onDelete: Cascade)
   hedef  Dugum  @relation("HedefDugum", fields: [hedefId], references: [id], onDelete: Cascade)
 
+  @@index([haritaId])
+  @@index([kaynakId, hedefId])
+  @@index([hedefId])
   @@map("kenarlar")
 }

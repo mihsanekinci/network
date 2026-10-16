@@ -1,5 +1,6 @@
 import { Harita, Prisma } from "@prisma/client";
 import prisma from "../lib/prismaIstemcisi";
+import type { HaritaPaketiDTO } from "../types";
 
 interface HaritaOlusturGirdisi {
   baslik: string;
@@ -48,24 +49,7 @@ class HaritaRepository {
     }
   }
 
-  async iceAktar(paket: {
-    harita: { baslik: string; aciklama?: string };
-    dugumler: Array<{
-      id?: string;
-      etiket: string;
-      tur: string;
-      pozisyonX: number;
-      pozisyonY: number;
-      ozellikler?: Record<string, unknown>;
-    }>;
-    kenarlar: Array<{
-      id?: string;
-      kaynakId: string;
-      hedefId: string;
-      etiket?: string;
-      yon?: string;
-    }>;
-  }): Promise<Harita> {
+  async iceAktar(paket: HaritaPaketiDTO): Promise<Harita> {
     return prisma.$transaction(async (tx) => {
       const yeniHarita = await tx.harita.create({
         data: {

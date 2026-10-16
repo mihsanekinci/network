@@ -1,5 +1,6 @@
 import { Dugum, Prisma } from "@prisma/client";
 import prisma from "../lib/prismaIstemcisi";
+import type { DugumKonumGuncellemeDTO } from "../types";
 
 interface DugumOlusturGirdisi {
   haritaId: string;
@@ -70,16 +71,20 @@ class DugumRepository {
   }
 
   async topluKonumGuncelle(
-    konumlar: Array<{ id: string; pozisyonX: number; pozisyonY: number }>
+    konumlar: DugumKonumGuncellemeDTO[]
   ): Promise<void> {
-    await prisma.$transaction(
-      konumlar.map((k) =>
-        prisma.dugum.update({
-          where: { id: k.id },
-          data: { pozisyonX: k.pozisyonX, pozisyonY: k.pozisyonY },
-        })
-      )
-    );
+    if (konumlar.length === 0) {
+      return;
+    }
+
+    await prisma.$transaction(async (tx) => {
+      for (const konum of konumlar) {
+        await tx.dugum.update({
+          where: { id: konum.id },
+          data: { pozisyonX: konum.pozisyonX, pozisyonY: konum.pozisyonY },
+        });
+      }
+    });
   }
 }
 
