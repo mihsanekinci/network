@@ -29,8 +29,11 @@ uygulama.use("/api/kenarlar", kenarRotalari);
 // Merkezi hata yönetimi middleware'i (tüm rotalardan sonra eklenmelidir)
 uygulama.use(errorHandler);
 
-uygulama.listen(PORT, () => {
-  console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor`);
-});
+if (process.env.NODE_ENV !== "test") {
+  uygulama.listen(PORT, () => {
+    console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor`);
+  });
+}
+
 
 export default uygulama;
