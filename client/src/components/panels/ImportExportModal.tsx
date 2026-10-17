@@ -102,7 +102,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
         <div className="p-6 flex flex-col gap-6">
           {/* Dışa Aktarma Bölümü */}
           <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-slate-800 tracking-tight">
               Dışa Aktar (Aktif Harita: {aktifHarita?.baslik ?? "Seçilmedi"})
             </h4>
             <div className="grid grid-cols-2 gap-3">
@@ -140,7 +140,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
 
           {/* İçe Aktarma Bölümü */}
           <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-slate-800 tracking-tight">
               İçe Aktar (JSON Dosyası Yükle)
             </h4>
 

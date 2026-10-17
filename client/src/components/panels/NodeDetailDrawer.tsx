@@ -15,6 +15,7 @@ import {
   Globe,
   MapPin,
   ExternalLink,
+  Copy,
 } from "lucide-react";
 import { useHaritaStore } from "../../store/haritaStore";
 import { TUR_TASARIM_TOKENLARI } from "../../constants/designTokens";
@@ -51,6 +52,15 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
   );
   const [kaydediliyor, setKaydediliyor] = useState(false);
   const [bildirim, setBildirim] = useState<string | null>(null);
+  const [idKopyalandi, setIdKopyalandi] = useState(false);
+
+  const handleIdKopyala = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(dugum.id);
+    setIdKopyalandi(true);
+    setTimeout(() => setIdKopyalandi(false), 2000);
+  };
 
   // ESC tuşuyla paneli kapatma
   useEffect(() => {
@@ -169,9 +179,25 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
                   {aktifToken.etiket}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 font-mono mt-0.5 truncate">
-                ID: {dugum.id.slice(0, 8)}...
-              </p>
+              <div className="flex items-center gap-1.5 mt-1">
+                <button
+                  type="button"
+                  onClick={handleIdKopyala}
+                  title={`Benzersiz veritabanı CUID anahtarını kopyala: ${dugum.id}`}
+                  className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-100/90 hover:bg-slate-200/80 active:scale-95 border border-slate-200/80 text-[10px] font-mono text-slate-500 hover:text-slate-800 transition-all cursor-pointer btn-tactile group/id"
+                >
+                  <span className="text-slate-400 font-sans font-medium">ID:</span>
+                  <span className="text-slate-600 font-mono font-medium">{dugum.id.slice(0, 10)}...</span>
+                  {idKopyalandi ? (
+                    <Check className="w-3 h-3 text-emerald-600 animate-in zoom-in" />
+                  ) : (
+                    <Copy className="w-3 h-3 text-slate-400 group-hover/id:text-slate-600 transition-colors" />
+                  )}
+                  {idKopyalandi && (
+                    <span className="text-[10px] text-emerald-600 font-sans font-semibold">Kopyalandı!</span>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
           <button
@@ -283,7 +309,7 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
 
           {/* 2. Temel Bilgiler Kartı */}
           <div className="p-4.5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-2xs">
-            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+            <h4 className="text-xs font-bold text-slate-800 tracking-tight flex items-center gap-2">
               <FileText className="w-3.5 h-3.5 text-indigo-600" />
               <span>Temel Bilgiler</span>
             </h4>
@@ -366,9 +392,9 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
           {/* 3. Detay & İletişim Kartı (Türe Göre Dinamik) */}
           {tur === "kisi" && (
             <div className="p-4.5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-2xs">
-              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+              <h4 className="text-xs font-bold text-slate-800 tracking-tight flex items-center gap-2">
                 <Briefcase className="w-3.5 h-3.5 text-sky-600" />
-                <span>Kişi Detay & İletişim Bilgileri</span>
+                <span>Kişi Detay ve İletişim Bilgileri</span>
               </h4>
 
               {/* Unvan ve Şirket (2 sütun) */}
@@ -450,7 +476,7 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
 
           {tur === "kurum" && (
             <div className="p-4.5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-2xs">
-              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+              <h4 className="text-xs font-bold text-slate-800 tracking-tight flex items-center gap-2">
                 <Building className="w-3.5 h-3.5 text-emerald-600" />
                 <span>Kurumsal Bilgiler</span>
               </h4>
@@ -504,7 +530,7 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
 
           {(tur === "kavram" || tur === "diger") && (
             <div className="p-4.5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-2xs">
-              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+              <h4 className="text-xs font-bold text-slate-800 tracking-tight flex items-center gap-2">
                 <FileText className="w-3.5 h-3.5 text-amber-600" />
                 <span>{tur === "kavram" ? "Kavram Detayları" : "Detaylar"}</span>
               </h4>
@@ -526,11 +552,11 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
 
           {/* 4. Notlar Alanı Kartı */}
           <div className="p-4.5 bg-white border border-slate-200/90 rounded-2xl flex flex-col gap-4 shadow-2xs">
-            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+            <h4 className="text-xs font-bold text-slate-800 tracking-tight flex items-center gap-2">
               <FileText className="w-3.5 h-3.5 text-slate-500" />
               <span>
                 {tur === "kisi"
-                  ? "Görüşme & İletişim Notları"
+                  ? "Görüşme ve İletişim Notları"
                   : tur === "kurum"
                   ? "Kurum Notları"
                   : "Ek Notlar"}

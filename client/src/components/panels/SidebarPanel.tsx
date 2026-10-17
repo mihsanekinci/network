@@ -113,8 +113,8 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
 
         {/* Harita Listesi */}
         <div className="flex-1 overflow-y-auto px-3 pb-3 space-y-1.5">
-          <div className="px-1.5 py-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-            <span>Haritalar</span>
+          <div className="px-1.5 py-1 text-[11px] font-semibold text-slate-400 flex items-center justify-between">
+            <span>Kayıtlı Haritalar</span>
             <span className="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-[10px] text-slate-500">
               {haritalar.length}
             </span>
