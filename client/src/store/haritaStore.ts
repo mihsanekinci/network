@@ -39,6 +39,15 @@ interface HaritaStore {
   yolVurgula: (dugumIdler: string[], kenarIdler: string[]) => void;
   yolVurgusunuTemizle: () => void;
 
+  // Otomatik Düzenleme Durumu ve Geri Bildirimleri
+  otomatikDuzenlendi: boolean;
+  otomatikDuzenlemeTiklamaSayisi: number;
+  otomatikDuzenlemeUyarisi: string | null;
+  otomatikDuzenlemeUyarisiAyarla: (uyari: string | null) => void;
+  otomatikDuzenlemeDurumunuSifirla: () => void;
+  otomatikDuzenlemeyiIsaretle: () => void;
+  otomatikDuzenlemeTekrarTiklandi: () => string;
+
   // Senkron durum güncelleyiciler
   secilenHaritayiAyarla: (id: string | null) => void;
   secilenDugumuAyarla: (id: string | null) => void;
@@ -84,6 +93,37 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
   vurgulananDugumIdler: new Set<string>(),
   vurgulananKenarIdler: new Set<string>(),
 
+  // Otomatik Düzenleme Durumu
+  otomatikDuzenlendi: false,
+  otomatikDuzenlemeTiklamaSayisi: 0,
+  otomatikDuzenlemeUyarisi: null,
+  otomatikDuzenlemeUyarisiAyarla: (uyari) => set({ otomatikDuzenlemeUyarisi: uyari }),
+  otomatikDuzenlemeDurumunuSifirla: () =>
+    set({
+      otomatikDuzenlendi: false,
+      otomatikDuzenlemeTiklamaSayisi: 0,
+      otomatikDuzenlemeUyarisi: null,
+    }),
+  otomatikDuzenlemeyiIsaretle: () =>
+    set({
+      otomatikDuzenlendi: true,
+      otomatikDuzenlemeTiklamaSayisi: 0,
+      otomatikDuzenlemeUyarisi: null,
+    }),
+  otomatikDuzenlemeTekrarTiklandi: () => {
+    const sayac = get().otomatikDuzenlemeTiklamaSayisi;
+    const mesaj =
+      sayac === 0
+        ? "Otomatik düzenleme zaten etkin!"
+        : "Her şey zaten olması gereken yerde : )";
+    if (sayac === 0) {
+      set({ otomatikDuzenlemeTiklamaSayisi: 1, otomatikDuzenlemeUyarisi: mesaj });
+    } else {
+      set({ otomatikDuzenlemeUyarisi: mesaj });
+    }
+    return mesaj;
+  },
+
   aramaMetniniAyarla: (metin) => set({ aramaMetni: metin }),
   turFiltresiniAyarla: (tur) => set({ secilenTurFiltresi: tur }),
   yolVurgula: (dugumIdler, kenarIdler) =>
@@ -123,6 +163,9 @@ export const useHaritaStore = create<HaritaStore>((set, get) => ({
       secilenTurFiltresi: "hepsi",
       vurgulananDugumIdler: new Set(),
       vurgulananKenarIdler: new Set(),
+      otomatikDuzenlendi: false,
+      otomatikDuzenlemeTiklamaSayisi: 0,
+      otomatikDuzenlemeUyarisi: null,
     });
     if (!id) {
       set({ dugumler: [], kenarlar: [] });

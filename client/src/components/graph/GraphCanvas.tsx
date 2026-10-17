@@ -13,6 +13,17 @@ import ReactFlow, {
   ConnectionMode,
 } from "reactflow";
 import "reactflow/dist/style.css";
+import {
+  Map as MapIcon,
+  Sparkles,
+  Route,
+  X,
+  User,
+  Building2,
+  Lightbulb,
+  Component,
+  Loader2,
+} from "lucide-react";
 import { useHaritaStore } from "../../store/haritaStore";
 import CustomNode from "./CustomNode";
 
@@ -91,6 +102,7 @@ export const GraphCanvas: React.FC = () => {
     vurgulananDugumIdler,
     vurgulananKenarIdler,
     yolVurgusunuTemizle,
+    otomatikDuzenlemeDurumunuSifirla,
   } = useHaritaStore();
 
   const [yerelDugumler, setYerelDugumler] = useState<Node[]>([]);
@@ -315,12 +327,13 @@ export const GraphCanvas: React.FC = () => {
   // Sürükleme bittiğinde backend ve store'a kalıcı kaydet
   const suruklemeBitti = useCallback(
     (_etkinlik: React.MouseEvent, dugum: Node) => {
+      otomatikDuzenlemeDurumunuSifirla();
       dugumGuncelle(dugum.id, {
         pozisyonX: Math.round(dugum.position.x),
         pozisyonY: Math.round(dugum.position.y),
       });
     },
-    [dugumGuncelle]
+    [dugumGuncelle, otomatikDuzenlemeDurumunuSifirla]
   );
 
   // İki düğüm arasında yeni kenar bağlantısı kurma
@@ -367,12 +380,12 @@ export const GraphCanvas: React.FC = () => {
     return (
       <div className="flex-1 h-full flex flex-col items-center justify-center bg-slate-50 text-slate-500 p-8 text-center select-none relative overflow-hidden">
         <div className="absolute w-96 h-96 rounded-full bg-indigo-50/50 blur-3xl pointer-events-none" />
-        <div className="relative bg-white/90 backdrop-blur-md px-10 py-9 rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/40 max-w-md mx-auto">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-3xl shadow-sm">
-            🗺️
+        <div className="relative glass-floating px-10 py-9 rounded-3xl border border-slate-200/90 shadow-xl max-w-md mx-auto">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-indigo-50/90 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs">
+            <MapIcon className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-bold text-slate-800 mb-2">Harita Seçilmedi</h2>
-          <p className="text-sm text-slate-600 leading-relaxed">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-900 mb-2 tracking-tight">Harita Seçilmedi</h2>
+          <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
             Sol panelden mevcut bir haritayı seçin veya <strong className="font-semibold text-indigo-600">+ Yeni Harita</strong> butonuna tıklayarak ilk haritanızı oluşturun.
           </p>
         </div>
@@ -383,44 +396,48 @@ export const GraphCanvas: React.FC = () => {
   return (
     <div className="flex-1 h-full relative bg-slate-50">
       {yukleniyor && (
-        <div className="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-sm border border-slate-200 text-xs text-indigo-600 font-medium flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
-          Senkronize ediliyor...
+        <div className="absolute top-4 right-4 z-10 glass-panel px-3 py-1.5 rounded-xl shadow-xs text-xs text-indigo-600 font-medium flex items-center gap-2">
+          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          <span>Senkronize ediliyor...</span>
         </div>
       )}
 
       {/* Rota Vurgulama Aktif Uyarısı */}
       {yolAktif && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40 px-4 py-2 bg-slate-900/90 text-white rounded-full shadow-xl backdrop-blur-md flex items-center gap-3 text-xs animate-in fade-in slide-in-from-top-2">
-          <span className="flex items-center gap-1.5 font-medium">
-            <span className="text-amber-400">✨</span>
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40 px-4 py-2 bg-slate-900/95 text-white rounded-full shadow-xl backdrop-blur-md flex items-center gap-3 text-xs animate-in fade-in slide-in-from-top-2 border border-slate-700/60">
+          <span className="flex items-center gap-2 font-medium">
+            <Route className="w-4 h-4 text-amber-400" />
             <span>İlişki Rotası Vurgulandı ({vurgulananDugumIdler.size} Düğüm)</span>
           </span>
           <button
+            type="button"
             onClick={yolVurgusunuTemizle}
-            className="px-2.5 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-semibold text-[11px] transition-colors cursor-pointer"
+            className="px-2.5 py-1 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-medium text-[11px] transition-colors cursor-pointer flex items-center gap-1 btn-tactile"
           >
-            Vurguyu Temizle ✕
+            <span>Temizle</span>
+            <X className="w-3 h-3" />
           </button>
         </div>
       )}
 
       {yerelDugumler.length === 0 && !yukleniyor && (
         <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center z-10 text-center p-6 select-none">
-          <div className="bg-white/90 backdrop-blur-md px-8 py-7 rounded-3xl border border-slate-200/80 shadow-xl shadow-slate-200/50 max-w-sm mx-auto">
-            <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-gradient-to-tr from-indigo-50 to-indigo-100 border border-indigo-200/60 flex items-center justify-center text-indigo-600 text-2xl shadow-sm">
-              ✨
+          <div className="glass-floating px-8 py-7 rounded-3xl border border-slate-200/90 shadow-xl max-w-sm mx-auto pointer-events-auto">
+            <div className="w-14 h-14 mx-auto mb-4 rounded-2xl bg-indigo-50/90 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-xs">
+              <Sparkles className="w-7 h-7" />
             </div>
-            <h3 className="text-base font-bold text-slate-800 mb-1.5">Bu Haritada Henüz Düğüm Yok</h3>
-            <p className="text-xs text-slate-500 leading-relaxed mb-4">
-              Ağınızı oluşturmaya başlamak için yukarıdaki <strong className="font-semibold text-indigo-600">+ Düğüm Ekle</strong> butonunu kullanarak kişi, şirket veya kavram ekleyin.
+            <h3 className="text-base font-bold text-slate-900 mb-1.5 tracking-tight">Bu Haritada Henüz Düğüm Yok</h3>
+            <p className="text-xs text-slate-500 leading-relaxed mb-4 font-normal">
+              Ağınızı oluşturmaya başlamak için yukarıdaki <strong className="font-semibold text-indigo-600">+ Düğüm Ekle</strong> butonunu kullanarak kişi, kurum veya kavram ekleyin.
             </p>
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-center gap-3 text-xs text-slate-400 font-medium">
-              <span className="flex items-center gap-1">👤 Kişi</span>
+            <div className="pt-3 border-t border-slate-100 flex items-center justify-center gap-3 text-xs text-slate-500 font-medium">
+              <span className="flex items-center gap-1.5"><User className="w-3.5 h-3.5 text-sky-500" /> Kişi</span>
               <span>•</span>
-              <span className="flex items-center gap-1">🏢 Kurum</span>
+              <span className="flex items-center gap-1.5"><Building2 className="w-3.5 h-3.5 text-emerald-500" /> Kurum</span>
               <span>•</span>
-              <span className="flex items-center gap-1">💡 Kavram</span>
+              <span className="flex items-center gap-1.5"><Lightbulb className="w-3.5 h-3.5 text-amber-500" /> Kavram</span>
+              <span>•</span>
+              <span className="flex items-center gap-1.5"><Component className="w-3.5 h-3.5 text-purple-500" /> Diğer</span>
             </div>
           </div>
         </div>

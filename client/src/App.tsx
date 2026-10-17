@@ -1,4 +1,19 @@
 import { useEffect, useState, useCallback, useRef } from "react";
+import {
+  PanelLeftClose,
+  PanelLeftOpen,
+  Plus,
+  Wand2,
+  MoreHorizontal,
+  Activity,
+  Layers,
+  Keyboard,
+  Loader2,
+  AlertCircle,
+  X,
+  Network,
+  Sparkles,
+} from "lucide-react";
 import { useHaritaStore } from "./store/haritaStore";
 import SidebarPanel from "./components/panels/SidebarPanel";
 import GraphCanvas from "./components/graph/GraphCanvas";
@@ -23,6 +38,11 @@ export function App() {
     hata,
     hatayiTemizle,
     dugumKonumlariTopluGuncelle,
+    otomatikDuzenlendi,
+    otomatikDuzenlemeUyarisi,
+    otomatikDuzenlemeUyarisiAyarla,
+    otomatikDuzenlemeyiIsaretle,
+    otomatikDuzenlemeTekrarTiklandi,
   } = useHaritaStore();
 
   const [haritaModaliAcik, setHaritaModaliAcik] = useState(false);
@@ -48,6 +68,16 @@ export function App() {
     haritalariYukle();
   }, [haritalariYukle]);
 
+  // Otomatik düzenleme uyarı balonunu otomatik kapat
+  useEffect(() => {
+    if (otomatikDuzenlemeUyarisi) {
+      const zamanlayici = setTimeout(() => {
+        otomatikDuzenlemeUyarisiAyarla(null);
+      }, 2600);
+      return () => clearTimeout(zamanlayici);
+    }
+  }, [otomatikDuzenlemeUyarisi, otomatikDuzenlemeUyarisiAyarla]);
+
   // Seçenekler menüsü dışına tıklandığında kapat
   useEffect(() => {
     const disariTiklandi = (e: MouseEvent) => {
@@ -64,14 +94,31 @@ export function App() {
   // Otomatik Yerleşim (Dagre Auto-Layout) Eylemi
   const handleOtomatikDuzenle = useCallback(async () => {
     if (!secilenHaritaId || dugumler.length === 0 || duzenleniyor) return;
+
+    // Eğer zaten otomatik hizalanmışsa uyarı ver
+    if (otomatikDuzenlendi) {
+      otomatikDuzenlemeTekrarTiklandi();
+      return;
+    }
+
     setDuzenleniyor(true);
     try {
       const yeniKonumlar = otomatikKonumlandir(dugumler, kenarlar, "TB");
       await dugumKonumlariTopluGuncelle(yeniKonumlar);
+      otomatikDuzenlemeyiIsaretle();
     } finally {
       setDuzenleniyor(false);
     }
-  }, [secilenHaritaId, dugumler, kenarlar, duzenleniyor, dugumKonumlariTopluGuncelle]);
+  }, [
+    secilenHaritaId,
+    dugumler,
+    kenarlar,
+    duzenleniyor,
+    otomatikDuzenlendi,
+    otomatikDuzenlemeTekrarTiklandi,
+    otomatikDuzenlemeyiIsaretle,
+    dugumKonumlariTopluGuncelle,
+  ]);
 
   // Arama çubuğuna odaklanma
   const handleAramayaOdaklan = useCallback(() => {
@@ -114,28 +161,30 @@ export function App() {
       />
 
       {/* Ana Çalışma Alanı */}
-      <main className="flex-1 flex flex-col h-full overflow-hidden">
-        {/* Üst Bilgi ve Kontrol Çubuğu (Navbar) */}
-        <header className="h-14 px-4 sm:px-5 border-b border-slate-200/80 bg-white/85 backdrop-blur-md flex items-center justify-between gap-2.5 shrink-0 z-10">
-          {/* Sol: Kenar Çubuğu Butonu + Harita Başlığı ve Alt Bilgileri */}
+      <main className="flex-1 flex flex-col h-full overflow-hidden relative">
+        {/* Üst Yüzen Cam Adacık (Floating Glass Island Header) */}
+        <header className="glass-floating rounded-2xl mx-3 sm:mx-4 mt-3 mb-2 px-3 sm:px-4 py-2 flex items-center justify-between gap-2.5 sm:gap-3 shrink-0 z-20">
+          {/* Sol Kısım: Kenar Çubuğu Butonu + Harita Başlığı ve Sayaç Rozetleri */}
           <div className="flex items-center gap-2.5 min-w-0 shrink">
             <button
               type="button"
               onClick={() => sidebarDurumuDegistir(!sidebarAcik)}
               title={sidebarAcik ? "Kenar Çubuğunu Gizle (⌘B)" : "Kenar Çubuğunu Göster (⌘B)"}
-              className="w-8.5 h-8.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer shrink-0 shadow-2xs"
+              className="w-8.5 h-8.5 rounded-xl border border-slate-200/90 bg-white/80 hover:bg-slate-50 text-slate-600 hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-2xs btn-tactile"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7" />
-              </svg>
+              {sidebarAcik ? (
+                <PanelLeftClose className="w-4 h-4 text-slate-600" />
+              ) : (
+                <PanelLeftOpen className="w-4 h-4 text-slate-600" />
+              )}
             </button>
 
             {!sidebarAcik && (
-              <div className="hidden sm:flex items-center gap-1.5 shrink-0 pr-1 border-r border-slate-200">
+              <div className="hidden md:flex items-center gap-1.5 shrink-0 pr-2 border-r border-slate-200/80">
                 <div className="w-6 h-6 rounded-lg bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-2xs">
-                  N
+                  <Network className="w-3.5 h-3.5" />
                 </div>
-                <span className="font-bold text-slate-800 text-xs mr-2">NetWork</span>
+                <span className="font-bold text-slate-800 text-xs">NetWork</span>
               </div>
             )}
 
@@ -143,20 +192,24 @@ export function App() {
               {secilenHarita ? (
                 <>
                   <h2
-                    className="text-xs sm:text-sm font-bold text-slate-900 truncate max-w-44 md:max-w-64 leading-tight"
+                    className="text-xs sm:text-sm font-bold text-slate-800 truncate max-w-36 sm:max-w-48 md:max-w-60 leading-tight"
                     title={secilenHarita.baslik}
                   >
                     {secilenHarita.baslik}
                   </h2>
-                  <div className="text-[11px] text-slate-500 font-medium flex items-center gap-1.5 leading-tight truncate">
-                    <span className="text-indigo-600 font-semibold">{dugumler.length} Düğüm</span>
+                  <div className="text-[11px] text-slate-500 font-medium flex items-center gap-1.5 leading-tight truncate mt-0.5">
+                    <span className="inline-flex items-center text-indigo-600 font-semibold">
+                      {dugumler.length} düğüm
+                    </span>
                     <span className="text-slate-300">•</span>
-                    <span className="text-slate-600 font-semibold">{kenarlar.length} Bağlantı</span>
+                    <span className="inline-flex items-center text-slate-600 font-semibold">
+                      {kenarlar.length} bağlantı
+                    </span>
                     {secilenHarita.aciklama && (
                       <>
-                        <span className="text-slate-300 hidden md:inline">•</span>
+                        <span className="text-slate-300 hidden lg:inline">•</span>
                         <span
-                          className="hidden md:inline truncate max-w-44 text-slate-400 font-normal"
+                          className="hidden lg:inline truncate max-w-40 text-slate-400 font-normal"
                           title={secilenHarita.aciklama}
                         >
                           {secilenHarita.aciklama}
@@ -166,47 +219,74 @@ export function App() {
                   </div>
                 </>
               ) : (
-                <span className="text-xs text-slate-400 font-medium">Aktif bir harita seçilmedi</span>
+                <span className="text-xs text-slate-400 font-medium">Aktif harita seçilmedi</span>
               )}
             </div>
           </div>
 
-          {/* Orta: Kompakt Arama ve Filtreleme Çubuğu */}
+          {/* Orta Kısım: Kompakt Arama ve Filtreleme Çubuğu */}
           <div className="flex-1 flex justify-center items-center px-1 min-w-0">
             {secilenHaritaId && <SearchFilterBar />}
           </div>
 
-          {/* Sağ: Aksiyon Butonları & Seçenekler Menüsü */}
+          {/* Sağ Kısım: Aksiyon Butonları & Seçenekler Menüsü */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* + Düğüm Ekle Butonu (Ana Aksiyon) */}
+            {/* + Düğüm Ekle Butonu */}
             <button
+              type="button"
               onClick={() => setDugumModaliAcik(true)}
               disabled={!secilenHaritaId}
               title="Yeni Düğüm Ekle (⌘N)"
-              className="h-8.5 px-3.5 bg-indigo-600 hover:bg-indigo-700 active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer"
+              className="h-8.5 px-3 bg-indigo-600 hover:bg-indigo-700 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-semibold rounded-xl shadow-2xs hover:shadow-indigo-500/20 transition-all flex items-center gap-1.5 cursor-pointer btn-tactile shrink-0"
             >
-              <span className="text-sm leading-none font-bold">＋</span>
+              <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
               <span className="hidden sm:inline">Düğüm Ekle</span>
             </button>
 
-            {/* Seçenekler / Araçlar Açılır Menüsü (Dropdown) */}
+            {/* Otomatik Düzenle Butonu */}
+            <button
+              type="button"
+              onClick={handleOtomatikDuzenle}
+              disabled={!secilenHaritaId || dugumler.length === 0 || duzenleniyor}
+              title={
+                otomatikDuzenlendi
+                  ? "Otomatik düzenleme etkin (Tekrar düzenlemek için düğümleri sürükleyin)"
+                  : "Otomatik Hiyerarşik Hizala (⌘D)"
+              }
+              className={`h-8.5 px-2.5 sm:px-3 rounded-xl shadow-2xs transition-all flex items-center gap-1.5 text-xs font-semibold shrink-0 cursor-pointer btn-tactile ${
+                otomatikDuzenlendi
+                  ? "bg-slate-100/90 border border-slate-200 text-slate-400 opacity-60 hover:opacity-100 hover:bg-slate-100"
+                  : "bg-white/90 hover:bg-white active:scale-95 border border-slate-200/90 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 hover:text-slate-900"
+              }`}
+            >
+              {duzenleniyor ? (
+                <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin" />
+              ) : (
+                <Wand2 className={`w-3.5 h-3.5 ${otomatikDuzenlendi ? "text-slate-400" : "text-amber-500"}`} />
+              )}
+              <span className="hidden md:inline">
+                {duzenleniyor ? "Düzenleniyor..." : "Düzenle"}
+              </span>
+            </button>
+
+            {/* ⋯ Seçenekler / Araçlar Açılır Menüsü */}
             <div className="relative" ref={seceneklerRef}>
               <button
                 type="button"
                 onClick={() => setSeceneklerMenusuAcik((prev) => !prev)}
                 disabled={!secilenHaritaId}
-                title="Harita Seçenekleri & Araçlar"
-                className="h-8.5 px-3 bg-white hover:bg-slate-50 border border-slate-200/90 hover:border-slate-300 active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 text-xs font-semibold rounded-xl shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Diğer Seçenekler ve Araçlar"
+                className={`h-8.5 w-8.5 bg-white/90 hover:bg-white active:scale-95 border border-slate-200/90 hover:border-slate-300 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 rounded-xl shadow-2xs transition-all flex items-center justify-center cursor-pointer btn-tactile shrink-0 ${
+                  seceneklerMenusuAcik ? "ring-2 ring-indigo-500/20 border-indigo-300 bg-white" : ""
+                }`}
               >
-                <span>⚙️</span>
-                <span className="hidden sm:inline">Seçenekler</span>
-                <span className="text-[10px] text-slate-400">▾</span>
+                <MoreHorizontal className="w-4 h-4 text-slate-600" />
               </button>
 
               {seceneklerMenusuAcik && (
-                <div className="absolute right-0 top-full mt-1.5 w-60 bg-white rounded-2xl shadow-xl border border-slate-200/90 p-1.5 z-50 animate-in fade-in zoom-in-95 duration-100 flex flex-col gap-1">
-                  <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
-                    Harita Araçları
+                <div className="absolute right-0 top-full mt-2 w-64 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/90 p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-0.5">
+                  <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100/90 flex items-center justify-between">
+                    <span>Harita Araçları</span>
                   </div>
 
                   {/* Ağ Analitiği */}
@@ -216,10 +296,10 @@ export function App() {
                       setSeceneklerMenusuAcik(false);
                       setAnalizModaliAcik(true);
                     }}
-                    className="w-full px-3 py-2 text-left rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2.5 cursor-pointer group"
+                    className="w-full px-2.5 py-2 text-left rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2.5 cursor-pointer group"
                   >
-                    <span className="w-7 h-7 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center text-sm shrink-0">
-                      📊
+                    <span className="w-7 h-7 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <Activity className="w-3.5 h-3.5" />
                     </span>
                     <div className="flex-1 min-w-0">
                       <div className="text-xs font-bold text-slate-800 group-hover:text-indigo-600 transition-colors">
@@ -239,14 +319,18 @@ export function App() {
                       handleOtomatikDuzenle();
                     }}
                     disabled={dugumler.length === 0 || duzenleniyor}
-                    className="w-full px-3 py-2 text-left rounded-xl hover:bg-slate-50 disabled:opacity-40 transition-colors flex items-center gap-2.5 cursor-pointer group"
+                    className="w-full px-2.5 py-2 text-left rounded-xl hover:bg-slate-50 disabled:opacity-40 transition-colors flex items-center gap-2.5 cursor-pointer group"
                   >
-                    <span className="w-7 h-7 rounded-lg bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center text-sm shrink-0">
-                      <span className={duzenleniyor ? "animate-spin" : ""}>✨</span>
+                    <span className="w-7 h-7 rounded-lg bg-amber-50 border border-amber-100 text-amber-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      {duzenleniyor ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Wand2 className="w-3.5 h-3.5" />
+                      )}
                     </span>
                     <div className="flex-1 min-w-0">
                       <div className="text-xs font-bold text-slate-800 group-hover:text-amber-600 transition-colors flex items-center justify-between">
-                        <span>{duzenleniyor ? "Hizalanıyor..." : "Otomatik Düzenle"}</span>
+                        <span>Otomatik Düzenle</span>
                         <kbd className="px-1.5 py-0.5 text-[9px] font-mono font-bold text-slate-500 bg-slate-100 rounded border border-slate-200">
                           ⌘D
                         </kbd>
@@ -264,10 +348,10 @@ export function App() {
                       setSeceneklerMenusuAcik(false);
                       setDisaIceAktarModaliAcik(true);
                     }}
-                    className="w-full px-3 py-2 text-left rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2.5 cursor-pointer group"
+                    className="w-full px-2.5 py-2 text-left rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2.5 cursor-pointer group"
                   >
-                    <span className="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center text-sm shrink-0">
-                      📤
+                    <span className="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <Layers className="w-3.5 h-3.5" />
                     </span>
                     <div className="flex-1 min-w-0">
                       <div className="text-xs font-bold text-slate-800 group-hover:text-emerald-600 transition-colors">
@@ -288,10 +372,10 @@ export function App() {
                       setSeceneklerMenusuAcik(false);
                       setKisayollarModaliAcik(true);
                     }}
-                    className="w-full px-3 py-2 text-left rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2.5 cursor-pointer group"
+                    className="w-full px-2.5 py-2 text-left rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2.5 cursor-pointer group"
                   >
-                    <span className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center text-sm shrink-0">
-                      ⌨️
+                    <span className="w-7 h-7 rounded-lg bg-slate-100 border border-slate-200 text-slate-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                      <Keyboard className="w-3.5 h-3.5" />
                     </span>
                     <div className="flex-1 min-w-0">
                       <div className="text-xs font-bold text-slate-800 group-hover:text-slate-900 transition-colors flex items-center justify-between">
@@ -311,12 +395,27 @@ export function App() {
           </div>
         </header>
 
+        {/* Otomatik Düzenleme Bilgi/Uyarı Balonu */}
+        {otomatikDuzenlemeUyarisi && (
+          <div className="absolute top-18 left-1/2 -translate-x-1/2 z-50 px-4 py-2 bg-slate-900/95 text-white rounded-full shadow-2xl backdrop-blur-md flex items-center gap-2 text-xs animate-in fade-in slide-in-from-top-2 border border-slate-700/60 font-medium select-none">
+            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+            <span>{otomatikDuzenlemeUyarisi}</span>
+          </div>
+        )}
+
         {/* Hata Bildirimi (Varsa) */}
         {hata && (
-          <div className="bg-red-50 border-b border-red-200 px-4 py-2 text-xs text-red-700 flex items-center justify-between">
-            <span>⚠️ {hata}</span>
-            <button onClick={hatayiTemizle} className="text-red-500 hover:text-red-800 font-bold">
-              ✕
+          <div className="mx-3 sm:mx-4 mb-2 px-3.5 py-2 rounded-xl bg-red-50/90 border border-red-200 text-xs text-red-700 flex items-center justify-between shadow-2xs backdrop-blur-sm z-20">
+            <div className="flex items-center gap-2 min-w-0">
+              <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+              <span className="truncate font-medium">{hata}</span>
+            </div>
+            <button
+              onClick={hatayiTemizle}
+              title="Bildirimi Kapat"
+              className="p-1 rounded-md text-red-400 hover:text-red-700 hover:bg-red-100/60 transition-colors cursor-pointer shrink-0 ml-2"
+            >
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
         )}
@@ -343,4 +442,3 @@ export function App() {
 }
 
 export default App;
-

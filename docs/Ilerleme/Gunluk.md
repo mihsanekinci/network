@@ -225,6 +225,7 @@
 - [x] **12. Avatarlar ve Klavye Kısayolları (Faz 18)**
 - [x] **13. Obsidian Brain Protokolü Entegrasyonu (Faz 18)**
 - [x] **14. Backend Hardening: Zod, AppError, ACID Transactions & 143 E2E Tests (Faz 20)**
+- [x] **15. Frontend UI/UX Craftsmanship: Design Tokens, Lucide Icons & Floating Glass Islands (Faz 21)**
 
 ---
 
@@ -250,5 +251,10 @@
 - **Gerekçe:** Runtime veri bütünlüğü Zod şemaları ile garantiye alındı, hata yönetimi OOP tabanlı AppError hiyerarşisi ile standartlaştırıldı, SQLite indeksleri ile sorgu performansı artırıldı ve içe aktarma gibi çok adımlı işlemler prisma.$transaction ile atomik hale getirildi.
 - **İlgili:** [[Backend Resilience and Validation Strategy]] | [[2026-10-16 - Backend Hardening and Modular Architecture]]
 
+### ADR-005: Frontend UI/UX Craftsmanship ve Tasarım Tokenları Dönüşümü
+- **Durum:** Kabul edildi.
+- **Gerekçe:** NetWork platformunun 'AI slop' arayüzünden arındırılarak Linear, Raycast ve Figma kalitesinde taktil bir grafik çalışma alanına dönüştürülmesi amacıyla merkezi `designTokens.ts`, yeknesak `lucide-react` ikonografi motoru, yüzen cam adacıklar (floating glass islands) ve taktil kart mimarisi benimsendi.
+- **İlgili:** [[Frontend UI UX Overhaul and Design Tokens]] | [[2026-10-18 - Frontend UI UX Overhaul and Tactile Craft]]
+
 ---
-*İlgili Notlar:* [[00 - Ana Harita]] | [[Katmanli Mimari]] | [[Prisma ve SQLite]] | [[Rotalar ve Controllers]] | [[Zustand ve Servisler]] | [[React Flow Canvas]] | [[Backend Resilience and Validation Strategy]]
+*İlgili Notlar:* [[00 - Ana Harita]] | [[Katmanli Mimari]] | [[Prisma ve SQLite]] | [[Rotalar ve Controllers]] | [[Zustand ve Servisler]] | [[React Flow Canvas]] | [[Backend Resilience and Validation Strategy]] | [[Frontend UI UX Overhaul and Design Tokens]]

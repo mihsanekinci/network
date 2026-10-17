@@ -1,24 +1,117 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'LilitaOne';
+  src: url('/fonts/LilitaOne-Turkish.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: 'LilitaOne', system-ui, -apple-system, sans-serif;
+  --font-display: 'LilitaOne', cursive, sans-serif;
+}
 
 html,
 body,
 #root {
   width: 100%;
   height: 100%;
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: 'LilitaOne', system-ui, -apple-system, sans-serif;
 }
 
-/* React Flow Controls Modern Button Polish */
+/* Dokunsal / Taktil Buzlu Cam Sınıfları */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+.glass-floating {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
+}
+
+/* Düğüm Kartları için Yumuşak İç Kenarlık ve Taktil Gölge */
+.tactile-card {
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tactile-card:hover {
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  transform: translateY(-1.5px);
+}
+
+/* Taktil Buton Mikro-Etkileşimi */
+.btn-tactile {
+  transition: all 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-tactile:active {
+  transform: scale(0.96);
+}
+
+/* İnce ve Şık Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(203, 213, 225, 0.8);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.9);
+}
+
+/* React Flow Kontrol Elemanları İyileştirmesi */
+.react-flow__controls {
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+}
+
 .react-flow__controls-button {
   border-bottom: 1px solid #f1f5f9 !important;
   transition: all 0.15s ease !important;
+  background: transparent !important;
 }
 
 .react-flow__controls-button:hover {
   background-color: #f8fafc !important;
-  color: #4f46e5 !important;
+  color: #0284c7 !important;
 }
 
 .react-flow__controls-button:hover svg {
-  fill: #4f46e5 !important;
+  fill: #0284c7 !important;
+}
+
+/* React Flow MiniMap */
+.react-flow__minimap {
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(16px) !important;
 }

@@ -1,4 +1,14 @@
 import React, { useState, useRef } from "react";
+import {
+  Share2,
+  Image as ImageIcon,
+  FileJson,
+  FolderUp,
+  CheckCircle2,
+  AlertCircle,
+  X,
+  Loader2,
+} from "lucide-react";
 import { useHaritaStore } from "../../store/haritaStore";
 import { haritayiJsonIndir, haritayiPngIndir, haritaDosyasiniOku } from "../../utils/exportUtils";
 import type { HaritaPaketiDTO } from "../../types";
@@ -65,25 +75,26 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden flex flex-col">
+      <div className="glass-floating rounded-2xl w-full max-w-lg overflow-hidden flex flex-col border border-slate-200/90 shadow-2xl">
         {/* Header */}
         <div className="px-6 py-4.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
           <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 text-base">
-              📤
+            <span className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100/80 flex items-center justify-center text-indigo-600 shadow-2xs">
+              <Share2 className="w-4 h-4" />
             </span>
             <div>
-              <h3 className="text-base font-bold text-slate-800">Dışa & İçe Aktarma</h3>
-              <p className="text-xs text-slate-500">
+              <h3 className="text-sm sm:text-base font-bold text-slate-800">Dışa & İçe Aktarma</h3>
+              <p className="text-xs text-slate-500 font-medium">
                 Görsel dışa aktarımı veya JSON yedekleme / geri yükleme
               </p>
             </div>
           </div>
           <button
+            type="button"
             onClick={kapat}
             className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-all cursor-pointer"
           >
-            ✕
+            <X className="w-4 h-4" />
           </button>
         </div>
 
@@ -96,11 +107,16 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
             </h4>
             <div className="grid grid-cols-2 gap-3">
               <button
+                type="button"
                 onClick={handlePngExport}
                 disabled={!aktifHarita || pngIndiriliyor}
-                className="p-3.5 bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 hover:border-indigo-300 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group"
+                className="p-3.5 bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 hover:border-indigo-300 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group btn-tactile"
               >
-                <span className="text-2xl group-hover:scale-110 transition-transform">🖼️</span>
+                {pngIndiriliyor ? (
+                  <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
+                ) : (
+                  <ImageIcon className="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform" />
+                )}
                 <span className="text-xs font-bold text-slate-800">
                   {pngIndiriliyor ? "Oluşturuluyor..." : "PNG Görsel İndir"}
                 </span>
@@ -108,11 +124,12 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
               </button>
 
               <button
+                type="button"
                 onClick={handleJsonExport}
                 disabled={!aktifHarita}
-                className="p-3.5 bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 hover:border-indigo-300 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group"
+                className="p-3.5 bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 hover:border-indigo-300 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group btn-tactile"
               >
-                <span className="text-2xl group-hover:scale-110 transition-transform">💾</span>
+                <FileJson className="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform" />
                 <span className="text-xs font-bold text-slate-800">JSON Yedeği İndir</span>
                 <span className="text-[10px] text-slate-500">Tam harita paketi</span>
               </button>
@@ -139,9 +156,9 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
               <button
                 type="button"
                 onClick={() => dosyaGirdisiRef.current?.click()}
-                className="p-5 border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/20 rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer text-slate-500 hover:text-indigo-600"
+                className="p-5 border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/20 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer text-slate-500 hover:text-indigo-600 btn-tactile"
               >
-                <span className="text-2xl">📁</span>
+                <FolderUp className="w-7 h-7 text-indigo-500" />
                 <span className="text-xs font-bold">Bir JSON Yedek Dosyası Seçin</span>
                 <span className="text-[10px] text-slate-400">Önceden indirilmiş .json dosyaları</span>
               </button>
@@ -149,12 +166,13 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
               <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
-                    <span>✓</span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span>{yuklenenPaket.harita.baslik}</span>
                   </span>
                   <button
+                    type="button"
                     onClick={() => setYuklenenPaket(null)}
-                    className="text-xs text-slate-400 hover:text-red-600"
+                    className="text-xs text-slate-400 hover:text-red-600 cursor-pointer"
                   >
                     Vazgeç
                   </button>
@@ -165,18 +183,21 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
                   <span>{yuklenenPaket.kenarlar.length} Bağlantı</span>
                 </div>
                 <button
+                  type="button"
                   onClick={handleIceAktarOnayla}
                   disabled={yukleniyor}
-                  className="mt-2 w-full h-9 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-2xs transition-all cursor-pointer flex items-center justify-center gap-1.5"
+                  className="mt-2 w-full h-9 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg shadow-2xs transition-all cursor-pointer flex items-center justify-center gap-1.5 btn-tactile disabled:opacity-50"
                 >
+                  {yukleniyor && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>{yukleniyor ? "Yükleniyor..." : "Haritayı Sisteme İçe Aktar"}</span>
                 </button>
               </div>
             )}
 
             {hata && (
-              <div className="text-xs text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200">
-                ⚠️ {hata}
+              <div className="text-xs text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
+                <span>{hata}</span>
               </div>
             )}
           </div>
@@ -185,8 +206,9 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
         {/* Footer */}
         <div className="px-6 py-3.5 border-t border-slate-100 bg-slate-50/50 flex justify-end">
           <button
+            type="button"
             onClick={kapat}
-            className="h-8.5 px-4 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-all cursor-pointer"
+            className="h-8.5 px-4 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-all cursor-pointer btn-tactile"
           >
             Kapat
           </button>
