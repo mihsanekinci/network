@@ -121,7 +121,7 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
               value={etiket}
               onChange={(e) => setEtiket(e.target.value)}
               placeholder="Örn: Mentörlük Etti, Referans Oldu, Eski Çalışanı..."
-              className="h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-2xs"
+              className="h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-2xs"
             />
           </div>
 
@@ -155,7 +155,7 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
                   <button
                     type="button"
                     onClick={() => setSilOnayGoster(false)}
-                    className="h-9 px-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer btn-tactile"
+                    className="h-9 px-2.5 text-xs font-semibold text-slate-600 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer btn-tactile"
                   >
                     Vazgeç
                   </button>
@@ -164,7 +164,7 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
                 <button
                   type="button"
                   onClick={() => setSilOnayGoster(true)}
-                  className="h-9 px-3 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-700 dark:hover:text-red-300 rounded-xl border border-red-200 dark:border-red-900/60 transition-colors cursor-pointer flex items-center gap-1.5 btn-tactile"
+                  className="h-9 px-3 text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50/40 dark:bg-red-950/30 hover:bg-red-50 dark:hover:bg-red-950/60 hover:text-red-700 dark:hover:text-red-300 rounded-xl border border-red-200/90 dark:border-red-900/80 shadow-2xs transition-colors cursor-pointer flex items-center gap-1.5 btn-tactile"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Bağlantıyı Sil</span>
@@ -177,7 +177,7 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
               <button
                 type="button"
                 onClick={() => secilenKenariAyarla(null)}
-                className="h-9 px-4 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer btn-tactile"
+                className="h-9 px-4 text-xs font-semibold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer btn-tactile"
               >
                 Vazgeç
               </button>

@@ -40,7 +40,7 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
                 value={(ozellikler.unvan as string) ?? ""}
                 onChange={(e) => onOzellikDegistir("unvan", e.target.value)}
                 placeholder="Örn: Kıdemli Mühendis"
-                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               />
             </div>
 
@@ -51,7 +51,7 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
                 value={(ozellikler.sirket as string) ?? ""}
                 onChange={(e) => onOzellikDegistir("sirket", e.target.value)}
                 placeholder="Örn: NetWork Inc."
-                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               />
             </div>
           </div>
@@ -59,7 +59,7 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                <Mail className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+                <Mail className="w-3 h-3 text-slate-400 dark:text-slate-400" />
                 <span>E-posta</span>
               </label>
               <input
@@ -67,13 +67,13 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
                 value={(ozellikler.eposta as string) ?? ""}
                 onChange={(e) => onOzellikDegistir("eposta", e.target.value)}
                 placeholder="ornek@sirket.com"
-                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                <Phone className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+                <Phone className="w-3 h-3 text-slate-400 dark:text-slate-400" />
                 <span>Telefon</span>
               </label>
               <input
@@ -81,14 +81,14 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
                 value={(ozellikler.telefon as string) ?? ""}
                 onChange={(e) => onOzellikDegistir("telefon", e.target.value)}
                 placeholder="+90 555 123 4567"
-                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-              <ExternalLink className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+              <ExternalLink className="w-3 h-3 text-slate-400 dark:text-slate-400" />
               <span>LinkedIn URL</span>
             </label>
             <input
@@ -96,7 +96,7 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
               value={(ozellikler.linkedin as string) ?? ""}
               onChange={(e) => onOzellikDegistir("linkedin", e.target.value)}
               placeholder="https://linkedin.com/in/kullanici"
-              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
             />
           </div>
         </div>
@@ -118,13 +118,13 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
                 value={(ozellikler.sektor as string) ?? ""}
                 onChange={(e) => onOzellikDegistir("sektor", e.target.value)}
                 placeholder="Örn: Finans & Teknoloji"
-                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                <Globe className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+                <Globe className="w-3 h-3 text-slate-400 dark:text-slate-400" />
                 <span>Web Sitesi</span>
               </label>
               <input
@@ -132,14 +132,14 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
                 value={(ozellikler.webSitesi as string) ?? ""}
                 onChange={(e) => onOzellikDegistir("webSitesi", e.target.value)}
                 placeholder="https://sirket.com"
-                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-              <MapPin className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+              <MapPin className="w-3 h-3 text-slate-400 dark:text-slate-400" />
               <span>Lokasyon (Şehir / Ülke)</span>
             </label>
             <input
@@ -147,7 +147,7 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
               value={(ozellikler.lokasyon as string) ?? ""}
               onChange={(e) => onOzellikDegistir("lokasyon", e.target.value)}
               placeholder="Örn: İstanbul, Türkiye"
-              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
             />
           </div>
         </div>
@@ -170,7 +170,7 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
               value={(ozellikler.aciklama as string) ?? ""}
               onChange={(e) => onOzellikDegistir("aciklama", e.target.value)}
               placeholder="Bu kavram veya varlığın haritadaki anlamı ve önemi..."
-              className="w-full p-3 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 min-h-[90px] leading-relaxed shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-y"
+              className="w-full p-3 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 min-h-[90px] leading-relaxed shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-y"
             />
           </div>
         </div>
@@ -200,7 +200,7 @@ export const DrawerAttributesEditor: React.FC<DrawerAttributesEditorProps> = ({
                 ? "Şirket kültürü, iş birliği fırsatları, önemli detaylar..."
                 : "Referans kaynaklar, bağlantılı fikirler..."
             }
-            className="w-full p-3 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 min-h-[90px] leading-relaxed shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-y"
+            className="w-full p-3 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 min-h-[90px] leading-relaxed shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-y"
           />
         </div>
       </div>

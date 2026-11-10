@@ -118,7 +118,7 @@ export const NetworkMetricsTab: React.FC<NetworkMetricsTabProps> = ({
               return (
                 <div
                   key={item.dugum.id}
-                  className="px-4 py-2.5 bg-white dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-750 border border-slate-200/80 dark:border-slate-700 rounded-xl flex items-center justify-between transition-colors shadow-2xs tactile-card"
+                  className="px-4 py-2.5 bg-white dark:bg-slate-800/90 hover:bg-slate-50 dark:hover:bg-slate-700/60 border border-slate-200/80 dark:border-slate-700 rounded-xl flex items-center justify-between transition-colors shadow-2xs tactile-card"
                 >
                   <div className="flex items-center gap-3">
                     <span className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold text-xs flex items-center justify-center">

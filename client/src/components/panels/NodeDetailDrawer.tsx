@@ -146,6 +146,7 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
           etiket={etiket.trim() || dugum.etiket}
           dugumId={dugum.id}
           aktifToken={aktifToken}
+          fotografUrl={((ozellikler.fotograf || ozellikler.avatarUrl) as string) ?? ""}
           onKapat={() => secilenDugumuAyarla(null)}
         />
 

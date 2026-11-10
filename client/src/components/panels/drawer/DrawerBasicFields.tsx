@@ -106,13 +106,25 @@ export const DrawerBasicFields: React.FC<DrawerBasicFieldsProps> = ({
         <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
           Fotoğraf / Logo URL <span className="text-slate-400 dark:text-slate-400 font-normal">(İsteğe Bağlı)</span>
         </label>
-        <input
-          type="url"
-          value={fotografUrl}
-          onChange={(e) => onFotografDegistir(e.target.value)}
-          placeholder="https://example.com/avatar.jpg"
-          className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
-        />
+        <div className="flex items-center gap-2">
+          {fotografUrl && fotografUrl.trim().startsWith("http") && (
+            <img
+              src={fotografUrl.trim()}
+              alt="Önizleme"
+              className="w-10 h-10 rounded-xl object-cover border border-slate-200 dark:border-slate-700 shrink-0 shadow-2xs"
+              onError={(e) => {
+                (e.currentTarget as HTMLElement).style.display = "none";
+              }}
+            />
+          )}
+          <input
+            type="url"
+            value={fotografUrl}
+            onChange={(e) => onFotografDegistir(e.target.value)}
+            placeholder="https://example.com/avatar.jpg"
+            className="flex-1 h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          />
+        </div>
       </div>
 
       {/* Düğüm Türü Seçimi: 2 Sütunlu Kartlar (Lucide İkonlu) */}
@@ -142,7 +154,7 @@ export const DrawerBasicFields: React.FC<DrawerBasicFieldsProps> = ({
                       className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
                         secili
                           ? "bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-700 shadow-2xs"
-                          : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                          : "bg-slate-100 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60 text-slate-600 dark:text-slate-300"
                       }`}
                     >
                       <Simge className="w-3.5 h-3.5" style={{ color: token.renkKodu }} />
@@ -158,7 +170,9 @@ export const DrawerBasicFields: React.FC<DrawerBasicFieldsProps> = ({
                     </span>
                   </span>
                   {secili && (
-                    <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 stroke-[2.5]" />
+                    <span className="w-4 h-4 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white flex items-center justify-center shrink-0 shadow-2xs">
+                      <Check className="w-2.5 h-2.5 stroke-[3]" />
+                    </span>
                   )}
                 </div>
                 <span

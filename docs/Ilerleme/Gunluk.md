@@ -255,6 +255,21 @@
      - Ağ analiz modaline küme dağılımı (cluster distribution) kartı eklendi.
 - **Doğrulama:** 4 doğrulama kapısı (`arch_audit` 0 ihlal / 55 dosya, `tsc -b && vite build` 0 hata, `eslint .` 0 hata, `vitest run` 143/143 test) %100 geçti.
 
+### Kapsamlı UI/UX Craftsmanship & Görsel Hata İyileştirmesi (10 Kasım 2026)
+- **Geçersiz Tailwind Sınıflarının Kökten Temizlenmesi:**
+  - `DrawerConnectionSummary.tsx`: `dark:bg-slate-850` geçersiz sınıfı nedeniyle bağlantı kutularının koyu modda `bg-white` render edilerek beyaz üzerine beyaz kamaşması yaratması sorunu giderildi; `dark:bg-slate-800` standardına çekildi.
+  - `NetworkMetricsTab.tsx`, `NodeModal.tsx`, `EdgeDirectionSelector.tsx`: Geçersiz `dark:hover:bg-slate-750` sınıfları `dark:hover:bg-slate-700/60` ile düzeltildi.
+- **Drawer Başlığı ve Fotoğraf Önizleme Zarafeti:**
+  - `DrawerHeader.tsx`: Varlık profil fotoğrafı (`fotografUrl`) drawer başlığına bağlandı; fotoğrafı olan düğümler için jenerik ikon yerine gerçek profil avatarı hata kontrolüyle (fallback) render ediliyor.
+  - `DrawerBasicFields.tsx` & `NodeModal.tsx`: Fotoğraf / Logo URL input'u yanına canlı küçük resim (thumbnail preview) kutusu eklendi; kullanıcı URL girdiğinde anında görsel teyit alıyor.
+- **Düğüm Türü Seçim Kartları & Taktil Göstergeler:**
+  - `DrawerBasicFields.tsx`: Seçili kart üzerindeki silik onay işareti yerine yüksek kontrastlı, dolgulu taktil rozet (`w-4 h-4 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white`) yerleştirildi.
+- **Tüm Modal ve Form Alanları Kontrast/Bileşen Standartlaştırması:**
+  - `DrawerFooter.tsx`: "Vazgeç" butonu çıplak metinden zarif bir yüzey butonuna (`bg-white dark:bg-slate-800 border`) dönüştürüldü.
+  - `MapModal.tsx`, `EdgeModal.tsx`, `ImportExportModal.tsx`, `ShortcutsModal.tsx`, `NetworkInsightsModal.tsx`, `NetworkPathfinderTab.tsx`: Koyu mod input sınırları, buton kontrastları ve hata/başarı kutuları WCAG AAA standardına uyarlandı.
+  - `AppOptionsMenu.tsx`: İçe/Dışa aktarma ikonu semantik olarak `Share2` ile ayrıştırılarak `Layers` simgesi kümelere (clusters) tahsis edildi.
+- **Doğrulama:** 4 doğrulama kapısı (`arch_audit` 0 ihlal / 55 dosya, `tsc -b && vite build` 0 hata, `eslint .` 0 hata, `vitest run` 143/143 test) %100 geçti.
+
 ---
 
 ## 🎯 Tamamlanan Yol Haritası (Roadmap)

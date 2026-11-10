@@ -163,21 +163,21 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
                 <span className="text-[10px] text-slate-400 dark:text-slate-500">Önceden indirilmiş .json dosyaları</span>
               </button>
             ) : (
-              <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl flex flex-col gap-2">
+              <div className="p-4 bg-emerald-50/70 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 rounded-xl flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span className="text-xs font-bold text-emerald-900 dark:text-emerald-200 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span>{yuklenenPaket.harita.baslik}</span>
                   </span>
                   <button
                     type="button"
                     onClick={() => setYuklenenPaket(null)}
-                    className="text-xs text-slate-400 hover:text-red-600 cursor-pointer"
+                    className="text-xs text-slate-400 hover:text-red-600 dark:hover:text-red-400 cursor-pointer"
                   >
                     Vazgeç
                   </button>
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-emerald-800 font-medium">
+                <div className="flex items-center gap-3 text-[11px] text-emerald-800 dark:text-emerald-300 font-medium">
                   <span>{yuklenenPaket.dugumler.length} Düğüm</span>
                   <span>•</span>
                   <span>{yuklenenPaket.kenarlar.length} Bağlantı</span>
@@ -195,7 +195,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
             )}
 
             {hata && (
-              <div className="text-xs text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200 flex items-center gap-2">
+              <div className="text-xs text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-950/40 p-2.5 rounded-lg border border-red-200 dark:border-red-900/60 flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0 text-red-500" />
                 <span>{hata}</span>
               </div>
@@ -208,7 +208,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
           <button
             type="button"
             onClick={kapat}
-            className="h-8.5 px-4 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all cursor-pointer btn-tactile"
+            className="h-8.5 px-4 text-xs font-semibold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all cursor-pointer btn-tactile"
           >
             Kapat
           </button>

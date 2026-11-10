@@ -6,6 +6,7 @@ interface DrawerHeaderProps {
   etiket: string;
   dugumId: string;
   aktifToken: TurTasarimOzellikleri;
+  fotografUrl?: string;
   onKapat: () => void;
 }
 
@@ -13,9 +14,11 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
   etiket,
   dugumId,
   aktifToken,
+  fotografUrl,
   onKapat,
 }) => {
   const [idKopyalandi, setIdKopyalandi] = useState(false);
+  const [resimHatasi, setResimHatasi] = useState(false);
   const AktifSimge = aktifToken.simge;
 
   const handleIdKopyala = (e: React.MouseEvent) => {
@@ -26,14 +29,25 @@ export const DrawerHeader: React.FC<DrawerHeaderProps> = ({
     setTimeout(() => setIdKopyalandi(false), 2000);
   };
 
+  const gecerliFotograf = Boolean(fotografUrl && fotografUrl.trim().startsWith("http") && !resimHatasi);
+
   return (
     <div className="p-5 border-b border-slate-200/90 dark:border-slate-800 flex items-center justify-between bg-white/95 dark:bg-slate-900/95 backdrop-blur shrink-0">
       <div className="flex items-center gap-3 min-w-0">
-        <div
-          className={`w-10 h-10 rounded-xl bg-gradient-to-br ${aktifToken.avatar.gradyan} text-white shadow-xs flex items-center justify-center shrink-0`}
-        >
-          <AktifSimge className="w-5 h-5 stroke-[2]" />
-        </div>
+        {gecerliFotograf ? (
+          <img
+            src={fotografUrl}
+            alt={etiket}
+            onError={() => setResimHatasi(true)}
+            className="w-10 h-10 rounded-xl object-cover border border-slate-200/80 dark:border-slate-700 shadow-xs ring-1 ring-slate-100 dark:ring-slate-800 shrink-0"
+          />
+        ) : (
+          <div
+            className={`w-10 h-10 rounded-xl bg-gradient-to-br ${aktifToken.avatar.gradyan} text-white shadow-xs flex items-center justify-center shrink-0`}
+          >
+            <AktifSimge className="w-5 h-5 stroke-[2]" />
+          </div>
+        )}
         <div className="min-w-0">
           <div className="flex items-center gap-2">
             <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm leading-tight truncate">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Activity, Wand2, Layers, Keyboard, Loader2, Moon, Sun } from "lucide-react";
+import { Activity, Wand2, Share2, Keyboard, Loader2, Moon, Sun } from "lucide-react";
 
 interface AppOptionsMenuProps {
   acik: boolean;
@@ -96,7 +96,7 @@ export const AppOptionsMenu: React.FC<AppOptionsMenuProps> = ({
         className="w-full px-2.5 py-2 text-left rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors flex items-center gap-2.5 cursor-pointer group"
       >
         <span className="w-7 h-7 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-100 dark:border-emerald-800/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-          <Layers className="w-3.5 h-3.5" />
+          <Share2 className="w-3.5 h-3.5" />
         </span>
         <div className="flex-1 min-w-0">
           <div className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">

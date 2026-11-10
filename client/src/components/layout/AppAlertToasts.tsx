@@ -24,7 +24,7 @@ export const AppAlertToasts: React.FC<AppAlertToastsProps> = ({
 
       {/* Hata Bildirimi (Varsa) */}
       {hata && (
-        <div className="mx-3 sm:mx-4 mb-2 px-3.5 py-2 rounded-xl bg-red-50/90 border border-red-200 text-xs text-red-700 flex items-center justify-between shadow-2xs backdrop-blur-sm z-20">
+        <div className="mx-3 sm:mx-4 mb-2 px-3.5 py-2 rounded-xl bg-red-50/90 dark:bg-red-950/70 border border-red-200 dark:border-red-900/60 text-xs text-red-700 dark:text-red-300 flex items-center justify-between shadow-2xs backdrop-blur-sm z-20">
           <div className="flex items-center gap-2 min-w-0">
             <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
             <span className="truncate font-medium">{hata}</span>
@@ -32,7 +32,7 @@ export const AppAlertToasts: React.FC<AppAlertToastsProps> = ({
           <button
             onClick={onHatayiTemizle}
             title="Bildirimi Kapat"
-            className="p-1 rounded-md text-red-400 hover:text-red-700 hover:bg-red-100/60 transition-colors cursor-pointer shrink-0 ml-2"
+            className="p-1 rounded-md text-red-400 dark:text-red-400 hover:text-red-700 dark:hover:text-red-200 hover:bg-red-100/60 dark:hover:bg-red-900/40 transition-colors cursor-pointer shrink-0 ml-2"
           >
             <X className="w-3.5 h-3.5" />
           </button>

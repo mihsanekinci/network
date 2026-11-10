@@ -136,7 +136,7 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
                     className={`h-11 px-3 rounded-xl border text-xs font-semibold flex items-center justify-between transition-all cursor-pointer btn-tactile ${
                       secili
                         ? `${token.rozet.arkaPlan} ${token.kart.seciliHalka}`
-                        : "bg-white/90 dark:bg-slate-800/90 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600 shadow-2xs"
+                        : "bg-white/90 dark:bg-slate-800/90 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600 shadow-2xs"
                     }`}
                   >
                     <span className="flex items-center gap-2">
@@ -212,13 +212,25 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
               <span>Fotoğraf / Logo URL</span>
               <span className="text-slate-400 dark:text-slate-500 font-normal text-[11px]">(İsteğe Bağlı)</span>
             </label>
-            <input
-              type="url"
-              value={fotograf}
-              onChange={(e) => setFotograf(e.target.value)}
-              placeholder="https://example.com/profil.jpg"
-              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
-            />
+            <div className="flex items-center gap-2">
+              {fotograf && fotograf.trim().startsWith("http") && (
+                <img
+                  src={fotograf.trim()}
+                  alt="Önizleme"
+                  className="w-10 h-10 rounded-xl object-cover border border-slate-200 dark:border-slate-700 shrink-0 shadow-2xs"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLElement).style.display = "none";
+                  }}
+                />
+              )}
+              <input
+                type="url"
+                value={fotograf}
+                onChange={(e) => setFotograf(e.target.value)}
+                placeholder="https://example.com/profil.jpg"
+                className="flex-1 h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+              />
+            </div>
           </div>
 
           {/* Footer Eylemleri */}

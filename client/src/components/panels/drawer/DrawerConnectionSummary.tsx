@@ -47,7 +47,7 @@ export const DrawerConnectionSummary: React.FC<DrawerConnectionSummaryProps> = (
               {gelenBaglantilar.map((b) => (
                 <div
                   key={b.id}
-                  className="p-1.5 bg-white dark:bg-slate-850 border border-slate-200/70 dark:border-slate-700/80 rounded-lg flex items-center justify-between gap-1 text-[11px]"
+                  className="p-1.5 bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700/80 rounded-lg flex items-center justify-between gap-1 text-[11px]"
                 >
                   <span className="font-medium text-slate-800 dark:text-slate-200 truncate" title={b.bagliDugumAdi}>
                     {b.bagliDugumAdi}
@@ -81,7 +81,7 @@ export const DrawerConnectionSummary: React.FC<DrawerConnectionSummaryProps> = (
               {gidenBaglantilar.map((b) => (
                 <div
                   key={b.id}
-                  className="p-1.5 bg-white dark:bg-slate-850 border border-slate-200/70 dark:border-slate-700/80 rounded-lg flex items-center justify-between gap-1 text-[11px]"
+                  className="p-1.5 bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700/80 rounded-lg flex items-center justify-between gap-1 text-[11px]"
                 >
                   <span className="font-medium text-slate-800 dark:text-slate-200 truncate" title={b.bagliDugumAdi}>
                     {b.bagliDugumAdi}

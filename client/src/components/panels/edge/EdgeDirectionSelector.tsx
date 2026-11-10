@@ -52,7 +52,7 @@ export const EdgeDirectionSelector: React.FC<EdgeDirectionSelectorProps> = ({
               className={`p-2.5 rounded-xl border text-left cursor-pointer transition-all flex flex-col gap-1 btn-tactile ${
                 secili
                   ? "border-indigo-600 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-900 dark:text-indigo-200 ring-2 ring-indigo-500/20 shadow-xs"
-                  : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600 shadow-2xs"
+                  : "border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600 shadow-2xs"
               }`}
             >
               <div className="flex items-center gap-1.5">

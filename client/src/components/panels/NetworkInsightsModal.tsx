@@ -135,7 +135,7 @@ export const NetworkInsightsModal: React.FC<NetworkInsightsModalProps> = ({ acik
           <button
             type="button"
             onClick={kapat}
-            className="h-8.5 px-4 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer btn-tactile"
+            className="h-8.5 px-4 text-xs font-semibold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer btn-tactile"
           >
             Kapat
           </button>

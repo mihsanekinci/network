@@ -43,7 +43,7 @@ export const NetworkPathfinderTab: React.FC<NetworkPathfinderTabProps> = ({
           <select
             value={kaynakId}
             onChange={(e) => onKaynakDegistir(e.target.value)}
-            className="h-10 px-3 text-xs bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 text-slate-800 dark:text-slate-100 shadow-2xs"
+            className="h-10 px-3 text-xs bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-400 text-slate-800 dark:text-slate-100 shadow-2xs"
           >
             <option value="">Başlangıç düğümü seçin...</option>
             {dugumler.map((d) => (
@@ -59,7 +59,7 @@ export const NetworkPathfinderTab: React.FC<NetworkPathfinderTabProps> = ({
           <select
             value={hedefId}
             onChange={(e) => onHedefDegistir(e.target.value)}
-            className="h-10 px-3 text-xs bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 text-slate-800 dark:text-slate-100 shadow-2xs"
+            className="h-10 px-3 text-xs bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600/80 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 dark:focus:border-indigo-400 text-slate-800 dark:text-slate-100 shadow-2xs"
           >
             <option value="">Hedef düğüm seçin...</option>
             {dugumler
