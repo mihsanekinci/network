@@ -30,6 +30,7 @@ Bu kasa, **NetWork** projesinin tüm geliştirme oturumlarını, mimari ve strat
 - [[2026-10-18 - Frontend UI UX Overhaul and Tactile Craft]] - "AI slop"tan Linear/Figma kalitesine geçiş; Lucide ikonları, yüzen ada toolbar, taktil düğüm kartları ve tasarım tokenları.
 - [[2026-11-10 - Frontend SRP Hygiene and Slice Refactoring]] - Frontend monolitik bileşenlerinin SRP standartlarına bölünmesi, Zustand slice mimarisi ve arch_audit 0 ihlal doğrulaması.
 - [[2026-11-10 - Dark Mode and Layout Flicker Prevention]] - Kalıcı Karanlık Mod (Dark Mode) desteği, Dagre otomatik düzenleme dirty-check ve layout shift (CLS) titreme önleyici.
+- [[2026-11-10 - Clusters MiniMap and NetWork MCP Vision]] - Düğüm Gruplama & Kümeler (Faz 24), MiniMap etkileşimli navigasyon, sıfır CLS ve NetWork MCP vizyonu.
 
 ### 20. Kararlar ve Tercihler (Decisions & Strategy - ADR)
 - [[Frontend Modular Component and Store Slice Architecture]] - Frontend modüler bileşen ve Zustand dilim (slice) mimarisi (ADR 0006).
