@@ -270,6 +270,16 @@
   - `AppOptionsMenu.tsx`: İçe/Dışa aktarma ikonu semantik olarak `Share2` ile ayrıştırılarak `Layers` simgesi kümelere (clusters) tahsis edildi.
 - **Doğrulama:** 4 doğrulama kapısı (`arch_audit` 0 ihlal / 55 dosya, `tsc -b && vite build` 0 hata, `eslint .` 0 hata, `vitest run` 143/143 test) %100 geçti.
 
+### MiniMap Etkileşimli Navigasyon, Koyu Mod Kontrastı ve Düzenle Butonu Titreme Sıfırlaması (10 Kasım 2026)
+- **MiniMap Etkileşimli Gezinme & Koyu Mod Kontrastı (`GraphCanvas.tsx` & `index.css`):**
+  - **Etkileşim:** MiniMap varsayılan statik salt-görüntüleme modundan çıkarılarak `pannable={true}` ve `zoomable={true}` özellikleri aktif edildi. Kullanıcı artık mini harita üzerinden kamerayı sürükleyerek tuvali gezdirebilir ve fare tekerleğiyle yakınlaştırma yapabilir. `cursor-grab` ve `active:cursor-grabbing` imleç stilleri eklendi.
+  - **Kamera Çerçevesi (Viewport Stroke):** Koyu modda tuval ile aynı tonda kalan ve sınırları ayırt edilemeyen kamera vizörü, `maskStrokeColor={isDark ? "#818cf8" : "#6366f1"}` ve `maskStrokeWidth={2.5}` ile belirginleştirildi; dış alan `maskColor="rgba(2, 6, 23, 0.78)"` ile karartılarak kullanıcının baktığı alan kristal netliğinde ayrıştırıldı.
+  - **Mini Harita Düğüm Görünürlüğü:** `getMiniMapNodeColor` ve `getMiniMapNodeStroke` yardımcı fonksiyonları tanımlandı. Koyu modda düğümler canlı pastel renklerle (`#38bdf8`, `#34d399`, `#fbbf24`, `#c084fc`) ve yarı saydam beyaz konturla (`rgba(255, 255, 255, 0.4)`) belirginleştirildi.
+- **Düzenle Butonu Kayma (Layout Shift / CLS) Kökten Çözümü (`AppHeader.tsx`):**
+  - **Kök Neden:** Düzenleme butonunda `duzenleniyor ? "Düzenle..." : "Düzenle"` metin değişimi bulunuyordu; 3 nokta eklenmesi buton genişliğini anlık olarak 14px artırarak sağdaki karanlık mod ve seçenekler butonlarını sağa doğru itip zıplatıyordu (Cumulative Layout Shift).
+  - **Çözüm:** Metin sabit `<span className="hidden md:inline">Düzenle</span>` olarak kilitlendi. Yüklenme durumu butonun içindeki sabit boyutlu `w-3.5 h-3.5` alanda dönen `<Loader2 className="animate-spin text-amber-500" />` ikonuyla iletildi. Buton geçiş sınıfı `transition-colors duration-150` olarak sınırlandırılarak geometri değişimleri 0 pikselde sabitlendi.
+- **Doğrulama:** 4 doğrulama kapısı (`arch_audit` 0 ihlal / 55 dosya, `tsc -b && vite build` 0 hata, `eslint .` 0 hata, `vitest run` 143/143 test) %100 geçti.
+
 ---
 
 ## 🎯 Tamamlanan Yol Haritası (Roadmap)

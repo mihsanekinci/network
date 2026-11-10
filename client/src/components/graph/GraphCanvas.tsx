@@ -31,6 +31,20 @@ const DUGUM_TURLERI = {
   kumeDugum: ClusterNode,
 };
 
+const getMiniMapNodeColor = (node: Node, isDark: boolean): string => {
+  if (node.type === "kumeDugum") return isDark ? "rgba(99, 102, 241, 0.45)" : "#e0e7ff";
+  const tur = (node.data as { tur?: string })?.tur;
+  if (tur === "kisi") return isDark ? "#38bdf8" : "#0284c7";
+  if (tur === "kurum") return isDark ? "#34d399" : "#059669";
+  if (tur === "kavram") return isDark ? "#fbbf24" : "#d97706";
+  return isDark ? "#c084fc" : "#7c3aed";
+};
+
+const getMiniMapNodeStroke = (node: Node, isDark: boolean): string => {
+  if (node.type === "kumeDugum") return isDark ? "#818cf8" : "#6366f1";
+  return isDark ? "rgba(255, 255, 255, 0.4)" : "#ffffff";
+};
+
 export const GraphCanvas: React.FC = () => {
   const {
     secilenHaritaId,
@@ -191,24 +205,19 @@ export const GraphCanvas: React.FC = () => {
           size={1.2}
           color={isDark ? "#334155" : "#cbd5e1"}
         />
-        <Controls className="!bg-white dark:!bg-slate-900 !rounded-2xl !shadow-md !border !border-slate-200 dark:!border-slate-800 !overflow-hidden !m-4" />
+        <Controls className="!bg-white/95 dark:!bg-slate-900/95 !rounded-2xl !shadow-xl !border !border-slate-200/90 dark:!border-slate-700/80 !overflow-hidden !m-4 backdrop-blur-md" />
         <MiniMap
-          nodeColor={(node) => {
-            if (node.type === "kumeDugum") return isDark ? "#312e81" : "#e0e7ff";
-            const tur = (node.data as { tur?: string })?.tur;
-            if (tur === "kisi") return "#3b82f6";
-            if (tur === "kurum") return "#10b981";
-            if (tur === "kavram") return "#f59e0b";
-            return "#8b5cf6";
-          }}
-          nodeStrokeColor={(node) => {
-            if (node.type === "kumeDugum") return isDark ? "#6366f1" : "#818cf8";
-            return isDark ? "#0f172a" : "#ffffff";
-          }}
-          nodeStrokeWidth={2}
-          nodeBorderRadius={8}
-          maskColor={isDark ? "rgba(15, 23, 42, 0.75)" : "rgba(241, 245, 249, 0.75)"}
-          className="!bg-white dark:!bg-slate-900 !rounded-2xl !shadow-md !border !border-slate-200 dark:!border-slate-800 !overflow-hidden !m-4"
+          nodeColor={(node) => getMiniMapNodeColor(node, isDark)}
+          nodeStrokeColor={(node) => getMiniMapNodeStroke(node, isDark)}
+          nodeStrokeWidth={1.5}
+          nodeBorderRadius={6}
+          maskColor={isDark ? "rgba(2, 6, 23, 0.78)" : "rgba(241, 245, 249, 0.75)"}
+          maskStrokeColor={isDark ? "#818cf8" : "#6366f1"}
+          maskStrokeWidth={2.5}
+          pannable={true}
+          zoomable={true}
+          ariaLabel="Ağ Haritası Gezgini"
+          className="!bg-white/95 dark:!bg-slate-900/95 !rounded-2xl !shadow-xl !border !border-slate-200/90 dark:!border-indigo-500/30 !overflow-hidden !m-4 backdrop-blur-md cursor-grab active:cursor-grabbing hover:border-indigo-400/50 transition-all"
         />
       </ReactFlow>
     </div>

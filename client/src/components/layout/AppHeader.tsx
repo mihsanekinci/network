@@ -148,20 +148,22 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
               ? "Otomatik düzenleme etkin (Tekrar düzenlemek için düğümleri sürükleyin)"
               : "Otomatik Hiyerarşik Hizala (⌘D)"
           }
-          className={`h-8.5 px-2.5 sm:px-3 rounded-xl shadow-2xs transition-all duration-200 flex items-center gap-1.5 text-xs font-semibold shrink-0 cursor-pointer btn-tactile ${
+          className={`h-8.5 px-2.5 sm:px-3 rounded-xl shadow-2xs transition-colors duration-150 flex items-center gap-1.5 text-xs font-semibold shrink-0 cursor-pointer btn-tactile ${
             otomatikDuzenlendi
               ? "bg-slate-100/90 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 opacity-60 hover:opacity-100 hover:bg-slate-100 dark:hover:bg-slate-800"
               : "bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 active:scale-95 border border-slate-200/90 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 disabled:opacity-40 disabled:cursor-not-allowed text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
-          {duzenleniyor ? (
-            <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin shrink-0" />
-          ) : (
-            <Wand2 className={`w-3.5 h-3.5 shrink-0 ${otomatikDuzenlendi ? "text-slate-400 dark:text-slate-500" : "text-amber-500"}`} />
-          )}
-          <span className="hidden md:inline min-w-11 text-center">
-            {duzenleniyor ? "Düzenle..." : "Düzenle"}
-          </span>
+          <div className="w-3.5 h-3.5 flex items-center justify-center shrink-0">
+            {duzenleniyor ? (
+              <Loader2 className="w-3.5 h-3.5 text-amber-500 animate-spin" />
+            ) : (
+              <Wand2
+                className={`w-3.5 h-3.5 ${otomatikDuzenlendi ? "text-slate-400 dark:text-slate-500" : "text-amber-500"}`}
+              />
+            )}
+          </div>
+          <span className="hidden md:inline">Düzenle</span>
         </button>
 
         {/* Karanlık Mod Hızlı Geçiş Butonu */}

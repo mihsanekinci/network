@@ -153,16 +153,29 @@ body,
 
 /* React Flow MiniMap */
 .react-flow__minimap {
-  border-radius: 14px !important;
+  border-radius: 16px !important;
   overflow: hidden !important;
   border: 1px solid rgba(226, 232, 240, 0.9) !important;
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08) !important;
-  background: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04) !important;
+  background: rgba(255, 255, 255, 0.94) !important;
   backdrop-filter: blur(16px) !important;
+  cursor: grab !important;
+}
+
+.react-flow__minimap:active {
+  cursor: grabbing !important;
 }
 
 .dark .react-flow__minimap {
-  background: rgba(15, 23, 42, 0.92) !important;
-  border: 1px solid rgba(51, 65, 85, 0.8) !important;
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5) !important;
+  background: rgba(15, 23, 42, 0.96) !important;
+  border: 1.5px solid rgba(99, 102, 241, 0.35) !important;
+  box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.7), 0 0 16px -2px rgba(99, 102, 241, 0.2) !important;
+}
+
+.react-flow__minimap-mask {
+  transition: fill 0.15s ease, stroke 0.15s ease;
+}
+
+.dark .react-flow__minimap-mask {
+  filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.35));
 }
