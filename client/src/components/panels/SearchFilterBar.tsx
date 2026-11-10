@@ -55,7 +55,20 @@ export const SearchFilterBar: React.FC = () => {
       if (!arama) return true;
 
       const o = d.ozellikler;
-      const metinler = [d.etiket, o?.unvan, o?.sirket, o?.notlar, o?.aciklama, o?.kume];
+      const etkilesimOzetleri = Array.isArray(o?.etkilesimler)
+        ? o.etkilesimler.map((item: { ozet?: string }) => item?.ozet).filter(Boolean)
+        : [];
+      const metinler = [
+        d.etiket,
+        o?.unvan,
+        o?.sirket,
+        o?.notlar,
+        o?.aciklama,
+        o?.kume,
+        o?.uslupNotu,
+        o?.iletisimUslubu,
+        ...etkilesimOzetleri,
+      ];
       return metinler.some((m) => typeof m === "string" && m.toLocaleLowerCase("tr").includes(arama));
     }).length;
   }, [dugumler, aramaMetni, secilenTurFiltresi]);

@@ -31,8 +31,10 @@ Bu kasa, **NetWork** projesinin tüm geliştirme oturumlarını, mimari ve strat
 - [[2026-11-10 - Frontend SRP Hygiene and Slice Refactoring]] - Frontend monolitik bileşenlerinin SRP standartlarına bölünmesi, Zustand slice mimarisi ve arch_audit 0 ihlal doğrulaması.
 - [[2026-11-10 - Dark Mode and Layout Flicker Prevention]] - Kalıcı Karanlık Mod (Dark Mode) desteği, Dagre otomatik düzenleme dirty-check ve layout shift (CLS) titreme önleyici.
 - [[2026-11-10 - Clusters MiniMap and NetWork MCP Vision]] - Düğüm Gruplama & Kümeler (Faz 24), MiniMap etkileşimli navigasyon, sıfır CLS ve NetWork MCP vizyonu.
+- [[2026-11-10 - Personal CRM Freshness and Interaction Timeline]] - Kişisel CRM, İlişki Tazeliği, İletişim Üslubu ve Etkileşim Zaman Çizelgesi (Faz 25 - NetWork MCP Temelleri).
 
 ### 20. Kararlar ve Tercihler (Decisions & Strategy - ADR)
+- [[Personal CRM Freshness and MCP Foundations]] - Kişisel CRM veri sözleşmesi, ilişki tazeliği ve NetWork MCP temelleri (ADR 0008).
 - [[Frontend Modular Component and Store Slice Architecture]] - Frontend modüler bileşen ve Zustand dilim (slice) mimarisi (ADR 0006).
 - [[Frontend UI UX Overhaul and Design Tokens]] - Tasarım tokenları (Design Tokens), tek doğruluk kaynağı, taktil cam arayüz ve yeknesak ikonografi mimarisi (ADR 0005).
 - [[Backend Resilience and Validation Strategy]] - Zod şema doğrulaması, AppError hiyerarşisi ve Prisma ACID transaction mimarisi (ADR 0004).

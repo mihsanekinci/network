@@ -280,6 +280,23 @@
   - **Çözüm:** Metin sabit `<span className="hidden md:inline">Düzenle</span>` olarak kilitlendi. Yüklenme durumu butonun içindeki sabit boyutlu `w-3.5 h-3.5` alanda dönen `<Loader2 className="animate-spin text-amber-500" />` ikonuyla iletildi. Buton geçiş sınıfı `transition-colors duration-150` olarak sınırlandırılarak geometri değişimleri 0 pikselde sabitlendi.
 - **Doğrulama:** 4 doğrulama kapısı (`arch_audit` 0 ihlal / 55 dosya, `tsc -b && vite build` 0 hata, `eslint .` 0 hata, `vitest run` 143/143 test) %100 geçti.
 
+### Faz 25: Kişisel CRM & NetWork MCP Temelleri — İlişki Tazeliği, İletişim Üslubu ve Etkileşim Zaman Çizelgesi (10 Kasım 2026)
+- **Model & Veri Sözleşmesi (`shared/types/index.ts`, `server/src/types/index.ts`, `client/src/types/index.ts`):**
+  - `IletisimUslubu` ("resmi", "yari_resmi", "samimi", "akademik", "diger"), `EtkilesimTuru` ("kahve_yemek", "toplanti", "eposta", "mesaj", "arama", "etkinlik", "diger"), `EtkilesimKaydi` ve `TazelikBilgisi` tipleri tanımlandı.
+- **İlişki Tazeliği Hesaplama Motoru (`relationshipFreshness.ts`):**
+  - `hesaplaTazelik` ve `enGuncelTemasTarihi` fonksiyonları geliştirildi. Hedef temas sıklığı (15, 30, 60, 90, 180, 365 gün) ve son temas tarihine göre dinamik durum (`taze`, `ilgi_bekliyor`, `uykuda`, `belirsiz`) ve Türkçe etiketler üretildi.
+  - Vitest altında 9 kapsamlı birim test (`relationshipFreshness.test.ts`) yazılarak test süiti 152/152'ye yükseltildi.
+- **Drawer CRM Bileşenleri (`DrawerFreshnessTracker.tsx`, `DrawerCommunicationTone.tsx`, `DrawerInteractionTimeline.tsx`):**
+  - SRP sınırlarına tam uyumlu modüler alt bileşenler oluşturularak `NodeDetailDrawer.tsx` içine yerleştirildi.
+  - Hızlı temas ekleme, otomatik en güncel tarih senkronizasyonu ve kronolojik touchpoint günlüğü sağlandı.
+  - AI asistanlarının (NetWork MCP) e-posta ve iletişim yazarken referans alacağı üslup seçimi ve özel ajan talimatı notları eklendi.
+- **Tuval Üzerinde Canlı Görselleştirme (`CustomNode.tsx`):**
+  - Kişi ve kurum düğümlerinde avatarın sağ alt köşesine canlı ilişki tazelik rozeti (yeşil, sarı, kırmızı durum noktası) entegre edildi.
+- **Ağ Analizi & Arama Entegrasyonu (`networkAnalysis.ts`, `NetworkMetricsTab.tsx`, `SearchFilterBar.tsx`):**
+  - Harita genelindeki ilişki tazeliği sağlık dağılımı (Taze, İlgi Bekliyor, Uykuda, Belirsiz) Ağ Analiz Modalı'na eklendi.
+  - Arama çubuğu etkileşim özetlerinde, iletişim üslubunda ve özel ajan notlarında da anlık arama yapacak şekilde genişletildi.
+- **Doğrulama:** `arch_audit` client (57 dosya) ve server (49 dosya) için 0 ihlal (PASS), `vite build` 0 hata, `vitest run` 152/152 test %100 geçti.
+
 ---
 
 ## 🎯 Tamamlanan Yol Haritası (Roadmap)
@@ -302,6 +319,7 @@
 - [x] **16. Frontend SRP Hijyeni, Zustand Slice Mimarisi ve Arch Audit 0 İhlal (Faz 22)**
 - [x] **17. Karanlık Mod (Dark Mode) ve Akıllı Otomatik Düzenleme Titreme Önleyici (Faz 23)**
 - [x] **18. Düğüm Gruplama & Kümeler - Clusters (Faz 24)**
+- [x] **19. Kişisel CRM & NetWork MCP Temelleri: İlişki Tazeliği, İletişim Üslubu ve Etkileşim Zaman Çizelgesi (Faz 25)**
 
 ---
 
@@ -341,6 +359,11 @@
 - **Durum:** Kabul edildi.
 - **Gerekçe:** NetWork haritasındaki varlıkları mantıksal gruplara ayırmak için veritabanında yıkıcı bir migrasyon ve koordinat karmaşası (relative parent-child coordinate mutations) yaratmak yerine; `ozellikler.kume` JSON alanı ve tuval üzerinde dinamik hesaplanan uzamsal çerçeve (`ClusterNode`, `clusterEngine.ts`) mimarisi benimsendi. Böylece Dagre otomatik düzenleme ve BFS algoritmaları bozulmadan korundu.
 - **İlgili:** [[Dugum Gruplama ve Kumeler]] | [[2026-11-10 - Node Grouping and Clusters]]
+
+### ADR-008: Kişisel CRM Veri Sözleşmesi, İlişki Tazeliği ve NetWork MCP Temelleri
+- **Durum:** Kabul edildi.
+- **Gerekçe:** NetWork'ün yapay zeka ajanlarına bağlamsal sosyal ağ zekası sunması (NetWork MCP) ve kişisel CRM özelliklerini kazanması için ayrı bir veritabanı tablosu (`Etkilesim`) açmak yerine; mevcut JSON tabanlı `ozellikler` sözleşmesi (`etkilesimler`, `iletisimUslubu`, `uslupNotu`, `sonTemasTarihi`, `hedefTemasAraligiGun`) genişletildi. Bu tercih YAGNI prensibine tam uyum sağladı, geriye dönük veri uyumluluğunu ve harita import/export bütünlüğünü korudu ve istemci/sunucu arasındaki yükü asgari düzeyde tuttu.
+- **İlgili:** [[NetWork MCP ve Kisisel CRM Mimarisi]] | [[2026-11-10 - Personal CRM Freshness and Interaction Timeline]]
 
 ---
 *İlgili Notlar:* [[00 - Ana Harita]] | [[Katmanli Mimari]] | [[Prisma ve SQLite]] | [[Rotalar ve Controllers]] | [[Zustand ve Servisler]] | [[React Flow Canvas]] | [[Backend Resilience and Validation Strategy]] | [[Frontend UI UX Overhaul and Design Tokens]] | [[Frontend Modular Component and Store Slice Architecture]]

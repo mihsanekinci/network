@@ -1,10 +1,19 @@
 import type { DugumDTO, KenarDTO, DugumTuru } from "../types";
+import { hesaplaTazelik } from "./relationshipFreshness";
+
+export interface TazelikDagilimiMetrikleri {
+  taze: number;
+  ilgiBekliyor: number;
+  uykuda: number;
+  belirsiz: number;
+}
 
 export interface AgMetrikleri {
   toplamDugum: number;
   toplamKenar: number;
   turDagilimi: Record<DugumTuru, number>;
   kumeDagilimi: Record<string, number>;
+  tazelikDagilimi: TazelikDagilimiMetrikleri;
   yogunluk: number;
   ortalamaDerece: number;
   enKilitDugumler: Array<{
@@ -22,6 +31,29 @@ export interface YolSonucu {
   mesafe: number;
 }
 
+export function hesaplaTazelikDagilimi(
+  dugumler: DugumDTO[]
+): TazelikDagilimiMetrikleri {
+  const dagilim: TazelikDagilimiMetrikleri = {
+    taze: 0,
+    ilgiBekliyor: 0,
+    uykuda: 0,
+    belirsiz: 0,
+  };
+
+  dugumler.forEach((d) => {
+    if (d.tur === "kisi" || d.tur === "kurum") {
+      const t = hesaplaTazelik(d.ozellikler);
+      if (t.durum === "taze") dagilim.taze += 1;
+      else if (t.durum === "ilgi_bekliyor") dagilim.ilgiBekliyor += 1;
+      else if (t.durum === "uykuda") dagilim.uykuda += 1;
+      else dagilim.belirsiz += 1;
+    }
+  });
+
+  return dagilim;
+}
+
 /**
  * Haritadaki ağın genel metriklerini ve en etkili aktörlerini hesaplar.
  */
@@ -31,6 +63,7 @@ export function hesaplaAgMetrikleri(
 ): AgMetrikleri {
   const n = dugumler.length;
   const m = kenarlar.length;
+  const tazelikDagilimi = hesaplaTazelikDagilimi(dugumler);
 
   const turDagilimi: Record<DugumTuru, number> = {
     kisi: 0,
@@ -92,6 +125,7 @@ export function hesaplaAgMetrikleri(
     toplamKenar: m,
     turDagilimi,
     kumeDagilimi,
+    tazelikDagilimi,
     yogunluk,
     ortalamaDerece,
     enKilitDugumler: dugumDereceleri.slice(0, 5),

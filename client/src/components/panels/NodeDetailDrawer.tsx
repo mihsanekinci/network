@@ -10,6 +10,9 @@ import {
 } from "./drawer/DrawerConnectionSummary";
 import { DrawerBasicFields } from "./drawer/DrawerBasicFields";
 import { DrawerAttributesEditor } from "./drawer/DrawerAttributesEditor";
+import { DrawerFreshnessTracker } from "./drawer/DrawerFreshnessTracker";
+import { DrawerCommunicationTone } from "./drawer/DrawerCommunicationTone";
+import { DrawerInteractionTimeline } from "./drawer/DrawerInteractionTimeline";
 import { DrawerFooter } from "./drawer/DrawerFooter";
 
 interface NodeDetailDrawerContentProps {
@@ -192,6 +195,24 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
             ozellikler={ozellikler}
             onOzellikDegistir={handleOzellikDegistir}
           />
+
+          {/* Kişisel CRM & NetWork MCP Panelleri (Kişi ve Kurum) */}
+          {(tur === "kisi" || tur === "kurum") && (
+            <>
+              <DrawerFreshnessTracker
+                ozellikler={ozellikler}
+                onOzellikDegistir={handleOzellikDegistir}
+              />
+              <DrawerCommunicationTone
+                ozellikler={ozellikler}
+                onOzellikDegistir={handleOzellikDegistir}
+              />
+              <DrawerInteractionTimeline
+                ozellikler={ozellikler}
+                onOzellikDegistir={handleOzellikDegistir}
+              />
+            </>
+          )}
         </form>
 
         {/* 3. Alt Butonlar Barı (Drawer Footer) */}

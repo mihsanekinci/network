@@ -15,4 +15,9 @@ export type {
   DugumKonumGuncellemeDTO,
   HaritaPaketiDTO,
   ApiYaniti,
+  IletisimUslubu,
+  EtkilesimTuru,
+  EtkilesimKaydi,
+  TazelikDurumu,
+  TazelikBilgisi,
 } from "../../../shared/types";

@@ -1,5 +1,5 @@
 import React from "react";
-import { Layers } from "lucide-react";
+import { Layers, Clock, CheckCircle2, AlertTriangle, Moon, HelpCircle } from "lucide-react";
 import { TUR_TASARIM_TOKENLARI } from "../../../constants/designTokens";
 import type { AgMetrikleri } from "../../../utils/networkAnalysis";
 
@@ -101,6 +101,52 @@ export const NetworkMetricsTab: React.FC<NetworkMetricsTabProps> = ({
           </div>
         </div>
       )}
+
+      {/* İlişki Tazeliği Dağılımı (CRM Health) */}
+      <div className="flex flex-col gap-2">
+        <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+          <Clock className="w-3.5 h-3.5 text-indigo-500" />
+          <span>Kişisel CRM & İlişki Tazeliği Sağlığı</span>
+        </h4>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="px-3 py-2 bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl flex items-center justify-between text-xs shadow-2xs">
+            <span className="flex items-center gap-1.5 font-medium text-emerald-800 dark:text-emerald-300">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span>Taze</span>
+            </span>
+            <span className="font-bold text-emerald-700 dark:text-emerald-300">
+              {metrikler.tazelikDagilimi.taze}
+            </span>
+          </div>
+          <div className="px-3 py-2 bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 rounded-xl flex items-center justify-between text-xs shadow-2xs">
+            <span className="flex items-center gap-1.5 font-medium text-amber-800 dark:text-amber-300">
+              <AlertTriangle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+              <span>İlgi Bekliyor</span>
+            </span>
+            <span className="font-bold text-amber-700 dark:text-amber-300">
+              {metrikler.tazelikDagilimi.ilgiBekliyor}
+            </span>
+          </div>
+          <div className="px-3 py-2 bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl flex items-center justify-between text-xs shadow-2xs">
+            <span className="flex items-center gap-1.5 font-medium text-rose-800 dark:text-rose-300">
+              <Moon className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+              <span>Uykuda</span>
+            </span>
+            <span className="font-bold text-rose-700 dark:text-rose-300">
+              {metrikler.tazelikDagilimi.uykuda}
+            </span>
+          </div>
+          <div className="px-3 py-2 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-between text-xs shadow-2xs">
+            <span className="flex items-center gap-1.5 font-medium text-slate-600 dark:text-slate-400">
+              <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
+              <span>Belirsiz</span>
+            </span>
+            <span className="font-bold text-slate-700 dark:text-slate-300">
+              {metrikler.tazelikDagilimi.belirsiz}
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* En Kilit Düğümler (Top Hubs) */}
       <div className="flex flex-col gap-2.5">

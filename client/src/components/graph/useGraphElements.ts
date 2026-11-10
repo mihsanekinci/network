@@ -39,7 +39,20 @@ export const useCanvasNodes = ({
       let metinUyuyor = true;
       if (arama) {
         const o = d.ozellikler;
-        const metinler = [d.etiket, o?.unvan, o?.sirket, o?.notlar, o?.aciklama, o?.kume];
+        const etkilesimOzetleri = Array.isArray(o?.etkilesimler)
+          ? o.etkilesimler.map((item: { ozet?: string }) => item?.ozet).filter(Boolean)
+          : [];
+        const metinler = [
+          d.etiket,
+          o?.unvan,
+          o?.sirket,
+          o?.notlar,
+          o?.aciklama,
+          o?.kume,
+          o?.uslupNotu,
+          o?.iletisimUslubu,
+          ...etkilesimOzetleri,
+        ];
         metinUyuyor = metinler.some(
           (m) => typeof m === "string" && m.toLocaleLowerCase("tr").includes(arama)
         );

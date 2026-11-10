@@ -111,3 +111,35 @@ export interface ApiYaniti<T> {
   hata?: string;
 }
 
+// Kişisel CRM & NetWork MCP Alanları
+
+export type IletisimUslubu = "resmi" | "yari_resmi" | "samimi" | "akademik" | "diger";
+
+export type EtkilesimTuru =
+  | "kahve_yemek"
+  | "toplanti"
+  | "eposta"
+  | "mesaj"
+  | "arama"
+  | "etkinlik"
+  | "diger";
+
+export interface EtkilesimKaydi {
+  id: string;
+  tarih: string; // YYYY-MM-DD
+  tur: EtkilesimTuru;
+  ozet: string;
+  notlar?: string;
+}
+
+export type TazelikDurumu = "taze" | "ilgi_bekliyor" | "uykuda" | "belirsiz";
+
+export interface TazelikBilgisi {
+  durum: TazelikDurumu;
+  gecenGun: number | null;
+  hedefAralikGun: number;
+  kalanGun: number | null;
+  etiket: string;
+}
+
+

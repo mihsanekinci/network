@@ -3,6 +3,7 @@ import { Handle, Position, type NodeProps } from "reactflow";
 import { Trash2, Briefcase, Building2, AlignLeft, Layers, type LucideIcon } from "lucide-react";
 import type { DugumTuru } from "../../types";
 import { TUR_TASARIM_TOKENLARI } from "../../constants/designTokens";
+import { hesaplaTazelik } from "../../utils/relationshipFreshness";
 
 interface OzelDugumVerisi {
   id: string;
@@ -57,6 +58,20 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
     const val = data.ozellikler?.kume;
     return typeof val === "string" && val.trim() ? val.trim() : null;
   }, [data.ozellikler]);
+
+  const tazelikRozeti = useMemo(() => {
+    if (data.tur !== "kisi" && data.tur !== "kurum") return null;
+    const t = hesaplaTazelik(data.ozellikler);
+    if (t.durum === "belirsiz") return null;
+
+    if (t.durum === "taze") {
+      return { renk: "bg-emerald-500", ipucu: `Taze Bağlantı (${t.etiket})` };
+    }
+    if (t.durum === "ilgi_bekliyor") {
+      return { renk: "bg-amber-500 animate-pulse", ipucu: `İlgi Bekliyor (${t.etiket})` };
+    }
+    return { renk: "bg-rose-500", ipucu: `Uykuda (${t.etiket})` };
+  }, [data.tur, data.ozellikler]);
 
   const altBilgiDetayi = useMemo<{ metin: string; Simge: LucideIcon } | null>(() => {
     if (data.tur === "kisi") {
@@ -183,24 +198,32 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
           )}
         </div>
 
-        {/* Profil Fotoğrafı veya 2 Harfli Monogram Avatar */}
-        {fotografUrl ? (
-          <img
-            src={fotografUrl}
-            alt={data.etiket}
-            className="w-7 h-7 rounded-full object-cover border border-slate-200/80 dark:border-slate-700 shadow-2xs shrink-0 ring-1 ring-slate-100 dark:ring-slate-800"
-            onError={(etkinlik) => {
-              (etkinlik.currentTarget as HTMLElement).style.display = "none";
-            }}
-          />
-        ) : (
-          <div
-            className={`w-7 h-7 rounded-full bg-gradient-to-tr ${turBilgisi.avatar.gradyan} ${turBilgisi.avatar.metin} font-semibold text-[10px] tracking-tight flex items-center justify-center shrink-0 shadow-2xs ring-1 ring-white/20 select-none`}
-            title={data.etiket}
-          >
-            {basHarfler}
-          </div>
-        )}
+        {/* Profil Fotoğrafı veya 2 Harfli Monogram Avatar (Tazelik Noktasıyla) */}
+        <div className="relative shrink-0">
+          {fotografUrl ? (
+            <img
+              src={fotografUrl}
+              alt={data.etiket}
+              className="w-7 h-7 rounded-full object-cover border border-slate-200/80 dark:border-slate-700 shadow-2xs shrink-0 ring-1 ring-slate-100 dark:ring-slate-800"
+              onError={(etkinlik) => {
+                (etkinlik.currentTarget as HTMLElement).style.display = "none";
+              }}
+            />
+          ) : (
+            <div
+              className={`w-7 h-7 rounded-full bg-gradient-to-tr ${turBilgisi.avatar.gradyan} ${turBilgisi.avatar.metin} font-semibold text-[10px] tracking-tight flex items-center justify-center shrink-0 shadow-2xs ring-1 ring-white/20 select-none`}
+              title={data.etiket}
+            >
+              {basHarfler}
+            </div>
+          )}
+          {tazelikRozeti && (
+            <span
+              className={`absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 ${tazelikRozeti.renk} shadow-2xs`}
+              title={tazelikRozeti.ipucu}
+            />
+          )}
+        </div>
       </div>
 
       {/* Gövde: Düğüm Adı (Etiket) */}
