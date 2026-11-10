@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Plus, Trash2, PanelLeftClose, Folder, Map, Check, X } from "lucide-react";
 import { useHaritaStore } from "../../store/haritaStore";
 
@@ -57,6 +57,32 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
 
   const [silinecekHaritaId, setSilinecekHaritaId] = useState<string | null>(null);
   const [siliniyor, setSiliniyor] = useState(false);
+  const silinecekHaritaRef = useRef<HTMLDivElement>(null);
+
+  // Ekranda herhangi bir yere tıklandığında veya ESC basıldığında harita silme onayını kapat
+  useEffect(() => {
+    if (!silinecekHaritaId) return;
+
+    const disariTiklandi = (e: MouseEvent) => {
+      if (silinecekHaritaRef.current && !silinecekHaritaRef.current.contains(e.target as Node)) {
+        setSilinecekHaritaId(null);
+      }
+    };
+
+    const tusDinle = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSilinecekHaritaId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", disariTiklandi, true);
+    window.addEventListener("keydown", tusDinle);
+
+    return () => {
+      document.removeEventListener("mousedown", disariTiklandi, true);
+      window.removeEventListener("keydown", tusDinle);
+    };
+  }, [silinecekHaritaId]);
 
   return (
     <aside
@@ -171,6 +197,7 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
 
                 {silinecekHaritaId === harita.id ? (
                   <div
+                    ref={silinecekHaritaRef}
                     onClick={(e) => e.stopPropagation()}
                     className="flex items-center gap-1 shrink-0 animate-in fade-in duration-150 z-10"
                   >

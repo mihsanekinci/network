@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
-import { Trash2, Briefcase, Building2, AlignLeft, Layers, Check, X, type LucideIcon } from "lucide-react";
+import { Briefcase, Building2, AlignLeft, Layers, type LucideIcon } from "lucide-react";
 import type { DugumTuru } from "../../types";
 import { TUR_TASARIM_TOKENLARI } from "../../constants/designTokens";
 import { hesaplaTazelik } from "../../utils/relationshipFreshness";
+import { NodeDeleteControl } from "./NodeDeleteControl";
 
 interface OzelDugumVerisi {
   id: string;
@@ -31,7 +32,6 @@ const YON_TANIMLARI = [
  * NetWork Taktil Özel Düğüm Kartı (Linear / Raycast / Figma Craftmanship)
  */
 export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, selected }) => {
-  const [silOnayAcik, setSilOnayAcik] = useState(false);
   const turBilgisi = TUR_TASARIM_TOKENLARI[data.tur] ?? TUR_TASARIM_TOKENLARI.diger;
   const TurSimgesi = turBilgisi.simge;
   const secili = Boolean(selected || data.secili);
@@ -159,54 +159,8 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
         })
       )}
 
-      {/* Silme Butonu (Taktil Hata Önleme - İki Aşamalı Onay) */}
-      {data.onSil && (
-        silOnayAcik ? (
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="nodrag nopan absolute -top-3.5 right-0 z-40 bg-white dark:bg-slate-900 border border-rose-300 dark:border-rose-800 shadow-md rounded-full px-2 py-0.5 flex items-center gap-1.5 animate-in zoom-in-95 duration-150"
-          >
-            <span className="text-[10px] font-bold text-rose-600 dark:text-rose-400 select-none">
-              Sil?
-            </span>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                data.onSil?.(id);
-                setSilOnayAcik(false);
-              }}
-              className="w-4.5 h-4.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white flex items-center justify-center text-[10px] shadow-xs cursor-pointer transition-colors"
-              title="Evet, Sil"
-            >
-              <Check className="w-2.5 h-2.5 stroke-[2.5]" />
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setSilOnayAcik(false);
-              }}
-              className="w-4.5 h-4.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-300 flex items-center justify-center text-[10px] cursor-pointer transition-colors"
-              title="Vazgeç"
-            >
-              <X className="w-2.5 h-2.5 stroke-[2]" />
-            </button>
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setSilOnayAcik(true);
-            }}
-            title="Düğümü Sil"
-            className="nodrag nopan absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 w-6 h-6 rounded-full bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-400 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center justify-center shadow-xs transition-all duration-150 cursor-pointer z-30 active:scale-90"
-          >
-            <Trash2 className="w-3 h-3" />
-          </button>
-        )
-      )}
+      {/* Silme Butonu (Taktil Hata Önleme - İki Aşamalı Onay ve Dışarı Tıklama ile Kapanma) */}
+      <NodeDeleteControl nodeId={id} onDelete={data.onSil} />
 
       {/* Üst Çubuk: Tür Rozeti, Küme Rozeti ve Avatar */}
       <div className="flex items-center justify-between gap-2">
