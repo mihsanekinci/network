@@ -69,22 +69,22 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
         width: acik ? `${genislik}px` : "0px",
         transition: surukleniyor ? "none" : "width 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
-      className={`h-full bg-white flex flex-col shrink-0 relative overflow-hidden z-20 ${
+      className={`h-full bg-white dark:bg-slate-900 flex flex-col shrink-0 relative overflow-hidden z-20 transition-colors ${
         acik
-          ? "border-r border-slate-200/90 opacity-100"
+          ? "border-r border-slate-200/90 dark:border-slate-800 opacity-100"
           : "border-r-0 opacity-0 pointer-events-none"
       }`}
     >
       <div style={{ width: `${genislik}px` }} className="h-full flex flex-col shrink-0">
         {/* Üst Başlık & Logo */}
-        <div className="p-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+        <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-700 text-white flex items-center justify-center font-bold text-sm shadow-xs tracking-tight">
               NW
             </div>
             <div>
-              <h1 className="font-bold text-slate-900 text-sm leading-tight tracking-tight">NetWork</h1>
-              <p className="text-[11px] text-slate-500 font-medium">Node-Edge Harita</p>
+              <h1 className="font-bold text-slate-900 dark:text-slate-100 text-sm leading-tight tracking-tight">NetWork</h1>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Node-Edge Harita</p>
             </div>
           </div>
 
@@ -93,7 +93,7 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
             type="button"
             onClick={kapat}
             title="Kenar Çubuğunu Gizle (⌘B)"
-            className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center transition-colors cursor-pointer btn-tactile"
+            className="w-8 h-8 rounded-lg text-slate-400 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-colors cursor-pointer btn-tactile"
           >
             <PanelLeftClose className="w-4 h-4 stroke-[1.8]" />
           </button>
@@ -113,16 +113,16 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
 
         {/* Harita Listesi */}
         <div className="flex-1 overflow-y-auto px-3 pb-3 space-y-1.5">
-          <div className="px-1.5 py-1 text-[11px] font-semibold text-slate-400 flex items-center justify-between">
+          <div className="px-1.5 py-1 text-[11px] font-semibold text-slate-400 dark:text-slate-500 flex items-center justify-between">
             <span>Kayıtlı Haritalar</span>
-            <span className="font-mono bg-slate-100 px-1.5 py-0.5 rounded text-[10px] text-slate-500">
+            <span className="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-[10px] text-slate-500 dark:text-slate-400">
               {haritalar.length}
             </span>
           </div>
 
           {haritalar.length === 0 && !yukleniyor && (
-            <div className="text-center py-8 px-4 text-xs text-slate-400 bg-slate-50/70 rounded-xl border border-dashed border-slate-200 flex flex-col items-center gap-2">
-              <span className="w-8 h-8 rounded-lg bg-white border border-slate-200 text-slate-400 flex items-center justify-center shadow-2xs">
+            <div className="text-center py-8 px-4 text-xs text-slate-400 dark:text-slate-500 bg-slate-50/70 dark:bg-slate-800/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center gap-2">
+              <span className="w-8 h-8 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 flex items-center justify-center shadow-2xs">
                 <Map className="w-4 h-4 text-slate-400" />
               </span>
               <span>Kayıtlı harita bulunmuyor. Yeni bir tane oluşturun.</span>
@@ -137,8 +137,8 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
                 onClick={() => haritaSec(harita.id)}
                 className={`group relative flex items-start justify-between p-3 rounded-xl border transition-all cursor-pointer tactile-card ${
                   aktif
-                    ? "bg-indigo-50/60 border-indigo-200 text-indigo-950 font-bold shadow-xs ring-1 ring-indigo-500/10"
-                    : "bg-white hover:bg-slate-50/90 border-slate-200/80 text-slate-700 shadow-2xs"
+                    ? "bg-indigo-50/60 dark:bg-indigo-950/40 border-indigo-200 dark:border-indigo-800 text-indigo-950 dark:text-indigo-200 font-bold shadow-xs ring-1 ring-indigo-500/10"
+                    : "bg-white dark:bg-slate-800/80 hover:bg-slate-50/90 dark:hover:bg-slate-800 border-slate-200/80 dark:border-slate-700/80 text-slate-700 dark:text-slate-300 shadow-2xs"
                 }`}
               >
                 {/* Aktif Harita Sol Renkli Belirteç Çubuğu */}
@@ -151,7 +151,7 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
                     className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
                       aktif
                         ? "bg-indigo-600 text-white shadow-2xs"
-                        : "bg-slate-100 text-slate-500 group-hover:bg-slate-200/70"
+                        : "bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 group-hover:bg-slate-200/70 dark:group-hover:bg-slate-600"
                     }`}
                   >
                     <Folder className="w-3.5 h-3.5" />
@@ -159,13 +159,15 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
                   <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                     <div
                       className={`text-xs leading-snug truncate ${
-                        aktif ? "font-bold text-indigo-950" : "font-semibold text-slate-800"
+                        aktif
+                          ? "font-bold text-indigo-950 dark:text-indigo-200"
+                          : "font-semibold text-slate-800 dark:text-slate-100"
                       }`}
                     >
                       {harita.baslik}
                     </div>
                     {harita.aciklama && (
-                      <div className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed font-normal">
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed font-normal">
                         {harita.aciklama}
                       </div>
                     )}
@@ -176,7 +178,7 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
                   type="button"
                   onClick={(e) => haritayiSilOnayli(e, harita.id, harita.baslik)}
                   title="Haritayı Sil"
-                  className="opacity-0 group-hover:opacity-100 w-6 h-6 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 flex items-center justify-center transition-all shrink-0 cursor-pointer btn-tactile"
+                  className="opacity-0 group-hover:opacity-100 w-6 h-6 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 flex items-center justify-center transition-all shrink-0 cursor-pointer btn-tactile"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
@@ -186,12 +188,12 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
         </div>
 
         {/* Alt Kısım (Footer) */}
-        <div className="p-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+        <div className="p-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
           <span className="flex items-center gap-2 font-medium">
             <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-2xs" />
             Backend Bağlı
           </span>
-          <span className="text-slate-400 font-mono">v1.0.0</span>
+          <span className="text-slate-400 dark:text-slate-500 font-mono">v1.0.0</span>
         </div>
       </div>
 

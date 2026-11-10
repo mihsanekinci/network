@@ -28,22 +28,22 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({ acik, kapat }) =
     >
       <div className="glass-floating rounded-2xl w-full max-w-lg overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white/70">
+        <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-white/70 dark:bg-slate-900/70">
           <div className="flex items-center gap-2.5">
-            <div className="w-8.5 h-8.5 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-2xs">
+            <div className="w-8.5 h-8.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-2xs">
               <Keyboard className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-800 leading-tight">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 leading-tight">
                 Klavye Kısayolları (Power-User)
               </h3>
-              <p className="text-[11px] text-slate-500 font-medium">Hızlı tuval kontrolü ve eylemler</p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Hızlı tuval kontrolü ve eylemler</p>
             </div>
           </div>
           <button
             type="button"
             onClick={kapat}
-            className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-all cursor-pointer btn-tactile"
+            className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-all cursor-pointer btn-tactile"
             title="Kapat (ESC)"
           >
             <X className="w-4 h-4 stroke-[2]" />
@@ -55,14 +55,14 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({ acik, kapat }) =
           {kisayollar.map((k) => (
             <div
               key={k.aciklama}
-              className="px-3.5 py-2.5 bg-white/80 hover:bg-white border border-slate-200/80 rounded-xl flex items-center justify-between shadow-2xs transition-all"
+              className="px-3.5 py-2.5 bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 rounded-xl flex items-center justify-between shadow-2xs transition-all"
             >
               <div className="flex items-center gap-2">
-                <Command className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-xs font-semibold text-slate-700">{k.aciklama}</span>
+                <Command className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+                <span className="text-xs font-semibold text-slate-700 dark:text-slate-200">{k.aciklama}</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <kbd className="px-2.5 py-1 text-[11px] font-mono font-bold text-slate-700 bg-slate-50 border border-slate-200/90 rounded-lg shadow-2xs">
+                <kbd className="px-2.5 py-1 text-[11px] font-mono font-bold text-slate-700 dark:text-slate-200 bg-slate-50 dark:bg-slate-900 border border-slate-200/90 dark:border-slate-700 rounded-lg shadow-2xs">
                   {k.mac}
                 </kbd>
               </div>
@@ -71,11 +71,11 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({ acik, kapat }) =
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3 border-t border-slate-100 bg-white/70 flex justify-end">
+        <div className="px-6 py-3 border-t border-slate-100 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 flex justify-end">
           <button
             type="button"
             onClick={kapat}
-            className="h-8.5 px-4 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-all cursor-pointer btn-tactile"
+            className="h-8.5 px-4 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all cursor-pointer btn-tactile"
           >
             Tamam
           </button>

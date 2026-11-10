@@ -207,6 +207,24 @@
      - Dinamik port tahsis eden sıfır bağımlılıklı `testIstemcisi.ts` test altyapısı kuruldu.
      - Sağlık, Harita (13 test), Düğüm (11 test) ve Kenar (10 test) API test süitleri ile toplam 143 testin tamamı %100 başarıyla geçti.
 
+### Faz 23: Karanlık Mod (Dark Mode) & Akıllı Otomatik Düzenleme Titreme Önleyici (10 Kasım 2026)
+- **Geliştirme:** Sistem genelinde kalıcı karanlık tema desteği, `useDarkMode` kancası ve React Flow tuvali/panellerle kusursuz entegrasyon; otomatik düzenleme butonundaki Cumulative Layout Shift (CLS) ve mikro titremelerin dirty-check algoritmasıyla giderilmesi.
+- **Yapılanlar:**
+  1. **Tailwind v4 Karanlık Mod Altyapısı (`client/src/index.css` & `uiSlice.ts`):**
+     - `@custom-variant dark (&:where(.dark, .dark *));` bildirimi eklenerek Tailwind v4 class-based tema standardı sağlandı.
+     - `.glass-panel`, `.glass-floating`, `.tactile-card`, scrollbar'lar, React Flow kontrolleri ve MiniMap için koyu tema stilleri oluşturuldu.
+     - `uiSlice.ts` ve `types.ts` içine `karanlikMod: boolean` ve `karanlikModDegistir: () => void` yerleştirildi; `localStorage` (`network_tema`) ve `document.documentElement` (`.dark`) ile çift yönlü otomatik reaktif senkronizasyon sağlandı.
+  2. **Bileşen & Panel Koyu Tema Uyumu:**
+     - `AppHeader.tsx`, `AppOptionsMenu.tsx`, `SidebarPanel.tsx`, `SearchFilterBar.tsx`, `CustomNode.tsx`, `GraphCanvas.tsx` ve `GraphEmptyState.tsx` tam koyu tema sınıflarıyla donatıldı.
+     - Modallar (`NodeModal`, `EdgeModal`, `MapModal`, `NetworkInsightsModal`, `ImportExportModal`, `ShortcutsModal`) ve detay çekmecesi (`NodeDetailDrawer` alt bileşenleri) karanlık modda okunabilir ve taktil hale getirildi.
+     - `useCanvasEdges` içinde kenar etiket arka planı ve çerçevesi koyu modda `#1e293b` ve `#475569` paletine uyarlanarak parlama (glare) önlendi.
+  3. **Otomatik Düzenleme UI Titreme & CLS İyileştirmesi:**
+     - UI mühendisliğindeki *Cumulative Layout Shift (CLS)*, *Layout Shift / Micro-Flicker* ve *Dirty-State Tracking* eksikliği giderildi.
+     - `useAutoLayoutAction.ts`: Düğümlerin mevcut koordinatları ile Dagre çıktısı arasındaki delta farkını hesaplayan `konumlarFarkliMi()` kontrolü eklendi; fark 1px altındaysa sunucuya gereksiz istek atılması ve spinner yanıp sönmesi engellendi.
+     - `dugumSlice.ts`: Koordinatı değişmeyen düğümlerin nesne referansları korunarak React Flow memo thrashing'i ortadan kaldırıldı.
+     - `AppHeader.tsx`: Düzenleme butonuna `min-w-11` metin kutusu verilerek durum geçişlerindeki genişlik sıçraması (CLS) sıfırlandı.
+- **Doğrulama:** 4 doğrulama kapısı (`arch_audit` 0 ihlal, `tsc -b && vite build` 0 hata, `eslint .` 0 hata, `vitest run` 143/143 test) %100 geçti.
+
 ---
 
 ## 🎯 Tamamlanan Yol Haritası (Roadmap)
@@ -227,6 +245,7 @@
 - [x] **14. Backend Hardening: Zod, AppError, ACID Transactions & 143 E2E Tests (Faz 20)**
 - [x] **15. Frontend UI/UX Craftsmanship: Design Tokens, Lucide Icons & Floating Glass Islands (Faz 21)**
 - [x] **16. Frontend SRP Hijyeni, Zustand Slice Mimarisi ve Arch Audit 0 İhlal (Faz 22)**
+- [x] **17. Karanlık Mod (Dark Mode) ve Akıllı Otomatik Düzenleme Titreme Önleyici (Faz 23)**
 
 ---
 

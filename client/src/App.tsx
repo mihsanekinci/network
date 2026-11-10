@@ -9,6 +9,7 @@ import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 import { useSidebarState } from "./hooks/useSidebarState";
 import { useAppModalsState } from "./hooks/useAppModalsState";
 import { useAutoLayoutAction } from "./hooks/useAutoLayoutAction";
+import { useDarkMode } from "./hooks/useDarkMode";
 
 export const App: React.FC = () => {
   const {
@@ -27,6 +28,7 @@ export const App: React.FC = () => {
   const modals = useAppModalsState();
   const sidebar = useSidebarState();
   const layout = useAutoLayoutAction();
+  const { isDark, toggleDarkMode } = useDarkMode();
   const seceneklerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -71,7 +73,7 @@ export const App: React.FC = () => {
   const secilenHarita = haritalar.find((h) => h.id === secilenHaritaId);
 
   return (
-    <div className="w-screen h-screen flex overflow-hidden bg-slate-100 font-sans">
+    <div className="w-screen h-screen flex overflow-hidden bg-slate-100 dark:bg-slate-950 font-sans transition-colors">
       <SidebarPanel
         acik={sidebar.sidebarAcik}
         kapat={() => sidebar.sidebarDurumuDegistir(false)}
@@ -90,6 +92,8 @@ export const App: React.FC = () => {
           otomatikDuzenlendi={otomatikDuzenlendi}
           seceneklerMenusuAcik={modals.seceneklerMenusuAcik}
           seceneklerRef={seceneklerRef}
+          isDark={isDark}
+          onToggleDarkMode={toggleDarkMode}
           onSeceneklerToggle={() =>
             modals.setSeceneklerMenusuAcik(!modals.seceneklerMenusuAcik)
           }

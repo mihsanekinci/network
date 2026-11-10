@@ -73,13 +73,13 @@ export const EdgeRelationshipTemplates: React.FC<EdgeRelationshipTemplatesProps>
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-bold text-slate-700">
+        <label className="text-xs font-bold text-slate-700 dark:text-slate-300">
           Hızlı İlişki Şablonları
         </label>
         <button
           type="button"
           onClick={() => setYeniSablonGirisAcik((prev) => !prev)}
-          className="text-[11px] font-semibold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 cursor-pointer transition-colors btn-tactile"
+          className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 flex items-center gap-1 cursor-pointer transition-colors btn-tactile"
         >
           <Plus className="w-3 h-3 stroke-[2.2]" />
           <span>{yeniSablonGirisAcik ? "İptal" : "Yeni Şablon"}</span>
@@ -88,7 +88,7 @@ export const EdgeRelationshipTemplates: React.FC<EdgeRelationshipTemplatesProps>
 
       {/* Yeni Şablon Ekleme Girişi */}
       {yeniSablonGirisAcik && (
-        <div className="flex items-center gap-1.5 p-2 bg-indigo-50/70 border border-indigo-100 rounded-xl animate-in fade-in duration-150">
+        <div className="flex items-center gap-1.5 p-2 bg-indigo-50/70 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 rounded-xl animate-in fade-in duration-150">
           <input
             type="text"
             value={yeniSablonMetni}
@@ -100,7 +100,7 @@ export const EdgeRelationshipTemplates: React.FC<EdgeRelationshipTemplatesProps>
               }
             }}
             placeholder="Yeni şablon adı (örn: Danışman, Akraba)..."
-            className="h-8 px-3 text-xs rounded-lg border border-indigo-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-800 flex-1"
+            className="h-8 px-3 text-xs rounded-lg border border-indigo-200 dark:border-indigo-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-slate-800 dark:text-slate-100 flex-1"
             autoFocus
           />
           <button
@@ -117,7 +117,7 @@ export const EdgeRelationshipTemplates: React.FC<EdgeRelationshipTemplatesProps>
               setYeniSablonGirisAcik(false);
               setYeniSablonMetni("");
             }}
-            className="h-8 w-8 flex items-center justify-center text-slate-500 hover:bg-slate-200/60 rounded-lg transition-colors cursor-pointer shrink-0 btn-tactile"
+            className="h-8 w-8 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-200/60 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer shrink-0 btn-tactile"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -136,7 +136,7 @@ export const EdgeRelationshipTemplates: React.FC<EdgeRelationshipTemplatesProps>
               className={`px-2.5 py-1 text-xs rounded-lg font-medium transition-all cursor-pointer border btn-tactile ${
                 secili
                   ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
-                  : "bg-white hover:bg-slate-50 text-slate-700 border-slate-200/80 shadow-2xs"
+                  : "bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-200/80 dark:border-slate-700 shadow-2xs"
               }`}
             >
               {sablon}
@@ -153,7 +153,7 @@ export const EdgeRelationshipTemplates: React.FC<EdgeRelationshipTemplatesProps>
               className={`inline-flex items-center rounded-lg border text-xs font-medium transition-all cursor-pointer ${
                 secili
                   ? "bg-indigo-600 text-white border-indigo-600 shadow-2xs"
-                  : "bg-indigo-50/70 hover:bg-indigo-100/70 text-indigo-900 border-indigo-200/80"
+                  : "bg-indigo-50/70 dark:bg-indigo-950/50 hover:bg-indigo-100/70 dark:hover:bg-indigo-900/60 text-indigo-900 dark:text-indigo-200 border-indigo-200/80 dark:border-indigo-800"
               }`}
             >
               <button
@@ -169,7 +169,7 @@ export const EdgeRelationshipTemplates: React.FC<EdgeRelationshipTemplatesProps>
                 onClick={(e) => ozelSablonuSil(sablon, e)}
                 title="Şablonu Sil"
                 className={`pr-1.5 pl-0.5 py-1 hover:text-red-500 cursor-pointer ${
-                  secili ? "text-indigo-200" : "text-indigo-400"
+                  secili ? "text-indigo-200" : "text-indigo-400 dark:text-indigo-300"
                 }`}
               >
                 <X className="w-3 h-3" />

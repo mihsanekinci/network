@@ -40,18 +40,18 @@ export const MapModal: React.FC<HaritaModaliOzellikleri> = ({ acik, kapat }) => 
       <div className="glass-floating rounded-2xl w-full max-w-md p-6 flex flex-col gap-5 animate-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between pb-1">
           <div className="flex items-center gap-2.5">
-            <div className="w-8.5 h-8.5 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-2xs">
+            <div className="w-8.5 h-8.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-2xs">
               <Map className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-800 leading-tight">Yeni Harita Oluştur</h3>
-              <p className="text-[11px] text-slate-400 font-medium">Yeni bir ağ analiz tuvali başlatın</p>
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 leading-tight">Yeni Harita Oluştur</h3>
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">Yeni bir ağ analiz tuvali başlatın</p>
             </div>
           </div>
           <button
             type="button"
             onClick={kapat}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer btn-tactile"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer btn-tactile"
             title="Kapat (ESC)"
           >
             <X className="w-4 h-4 stroke-[2]" />
@@ -60,8 +60,8 @@ export const MapModal: React.FC<HaritaModaliOzellikleri> = ({ acik, kapat }) => 
 
         <form onSubmit={formuGonder} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <Map className="w-3.5 h-3.5 text-indigo-600" />
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <Map className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
               <span>
                 Harita Başlığı <span className="text-red-500">*</span>
               </span>
@@ -73,30 +73,30 @@ export const MapModal: React.FC<HaritaModaliOzellikleri> = ({ acik, kapat }) => 
               value={baslik}
               onChange={(e) => setBaslik(e.target.value)}
               placeholder="Örn: 2026 Staj & Ekip Network Ağı"
-              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 placeholder:text-slate-400"
+              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-slate-400" />
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
               <span>Açıklama</span>
-              <span className="text-slate-400 font-normal text-[11px]">(İsteğe bağlı)</span>
+              <span className="text-slate-400 dark:text-slate-500 font-normal text-[11px]">(İsteğe bağlı)</span>
             </label>
             <textarea
               rows={3}
               value={aciklama}
               onChange={(e) => setAciklama(e.target.value)}
               placeholder="Haritanın amacı, kapsamı veya genel notları..."
-              className="w-full p-3 text-xs rounded-xl border border-slate-300 bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 min-h-[90px] leading-relaxed shadow-2xs text-slate-800 placeholder:text-slate-400 resize-y"
+              className="w-full p-3 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 min-h-[90px] leading-relaxed shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-y"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={kapat}
-              className="h-9 px-4 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer btn-tactile"
+              className="h-9 px-4 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer btn-tactile"
             >
               Vazgeç
             </button>

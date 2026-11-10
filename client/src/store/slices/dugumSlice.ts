@@ -62,14 +62,17 @@ export const createDugumSlice: SliceCreator<DugumSlice> = (set, get) => ({
     set((s) => ({
       dugumler: s.dugumler.map((d) => {
         const yeniKonum = konumMap.get(d.id);
-        if (yeniKonum) {
-          return {
-            ...d,
-            pozisyonX: yeniKonum.pozisyonX,
-            pozisyonY: yeniKonum.pozisyonY,
-          };
+        if (
+          !yeniKonum ||
+          (d.pozisyonX === yeniKonum.pozisyonX && d.pozisyonY === yeniKonum.pozisyonY)
+        ) {
+          return d;
         }
-        return d;
+        return {
+          ...d,
+          pozisyonX: yeniKonum.pozisyonX,
+          pozisyonY: yeniKonum.pozisyonY,
+        };
       }),
     }));
 

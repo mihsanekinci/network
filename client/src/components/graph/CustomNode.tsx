@@ -109,7 +109,7 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
   }
 
   // Taktil iğne ucu bağlantı noktaları (Handles)
-  const baglantiNoktasiSinifi = `!w-2.5 !h-2.5 ${turBilgisi.baglantiNoktasi.renk} ${turBilgisi.baglantiNoktasi.border} !border-2 shadow-xs transition-transform duration-150 cursor-crosshair ${
+  const baglantiNoktasiSinifi = `!w-2.5 !h-2.5 ${turBilgisi.baglantiNoktasi.renk} ${turBilgisi.baglantiNoktasi.border} dark:!border-slate-900 !border-2 shadow-xs transition-transform duration-150 cursor-crosshair ${
     secili
       ? "!opacity-100 hover:!scale-125"
       : "opacity-0 group-hover:opacity-100 hover:!scale-125"
@@ -117,7 +117,7 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
 
   return (
     <div
-      className={`min-w-56 max-w-72 tactile-card rounded-2xl border bg-white p-3.5 select-none relative group flex flex-col gap-2 cursor-pointer transition-all duration-200 ${durumSinifi}`}
+      className={`min-w-56 max-w-72 tactile-card rounded-2xl border bg-white dark:bg-slate-900 p-3.5 select-none relative group flex flex-col gap-2 cursor-pointer transition-all duration-200 ${durumSinifi}`}
     >
       {/* 4 YÖNLÜ BAĞLANTI NOKTALARI (Her kenarda 5 slot: %15, %32, %50, %68, %85) */}
       {YON_TANIMLARI.map(({ yon, pozisyon, eksen }) =>
@@ -151,7 +151,7 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
           type="button"
           onClick={dugumuSil}
           title="Düğümü Sil"
-          className="nodrag nopan absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 w-6 h-6 rounded-full bg-white border border-slate-200/90 text-slate-400 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 flex items-center justify-center shadow-xs transition-all duration-150 cursor-pointer z-30 active:scale-90"
+          className="nodrag nopan absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 w-6 h-6 rounded-full bg-white dark:bg-slate-800 border border-slate-200/90 dark:border-slate-700 text-slate-400 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center justify-center shadow-xs transition-all duration-150 cursor-pointer z-30 active:scale-90"
         >
           <Trash2 className="w-3 h-3" />
         </button>
@@ -172,7 +172,7 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
           <img
             src={fotografUrl}
             alt={data.etiket}
-            className="w-7 h-7 rounded-full object-cover border border-slate-200/80 shadow-2xs shrink-0 ring-1 ring-slate-100"
+            className="w-7 h-7 rounded-full object-cover border border-slate-200/80 dark:border-slate-700 shadow-2xs shrink-0 ring-1 ring-slate-100 dark:ring-slate-800"
             onError={(etkinlik) => {
               (etkinlik.currentTarget as HTMLElement).style.display = "none";
             }}
@@ -189,7 +189,7 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
 
       {/* Gövde: Düğüm Adı (Etiket) */}
       <div
-        className="font-semibold text-slate-800 tracking-tight leading-snug line-clamp-2 text-[13px] select-text pt-0.5"
+        className="font-semibold text-slate-800 dark:text-slate-100 tracking-tight leading-snug line-clamp-2 text-[13px] select-text pt-0.5"
         title={data.etiket}
       >
         {data.etiket}
@@ -198,10 +198,10 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
       {/* Alt Bilgi: Unvan / Şirket / Sektör / Açıklama */}
       {altBilgiDetayi && (
         <div
-          className="text-[11px] text-slate-500 font-medium truncate flex items-center gap-1.5 pt-0.5"
+          className="text-[11px] text-slate-500 dark:text-slate-400 font-medium truncate flex items-center gap-1.5 pt-0.5"
           title={altBilgiDetayi.metin}
         >
-          <altBilgiDetayi.Simge className="w-3 h-3 text-slate-400 shrink-0" />
+          <altBilgiDetayi.Simge className="w-3 h-3 text-slate-400 dark:text-slate-500 shrink-0" />
           <span className="truncate">{altBilgiDetayi.metin}</span>
         </div>
       )}

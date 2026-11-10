@@ -61,14 +61,14 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
         {/* Başlık ve Kapatma Butonu */}
         <div className="flex items-center justify-between pb-1">
           <div className="flex items-center gap-2.5">
-            <div className="w-8.5 h-8.5 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shadow-2xs">
+            <div className="w-8.5 h-8.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-2xs">
               <Sparkles className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-800 leading-tight">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 leading-tight">
                 Yeni Düğüm Ekle
               </h3>
-              <p className="text-[11px] text-slate-400 font-medium">
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
                 Ağınıza yeni bir aktör veya kavram tanımlayın
               </p>
             </div>
@@ -76,7 +76,7 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
           <button
             type="button"
             onClick={kapat}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer btn-tactile"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer btn-tactile"
             title="Kapat (ESC)"
           >
             <X className="w-4 h-4 stroke-[2]" />
@@ -86,8 +86,8 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
         <form onSubmit={formuGonder} className="flex flex-col gap-4">
           {/* Düğüm Adı Input */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-indigo-600" />
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <FileText className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
               <span>
                 Düğüm Adı / Etiketi <span className="text-red-500">*</span>
               </span>
@@ -99,13 +99,13 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
               value={etiket}
               onChange={(e) => setEtiket(e.target.value)}
               placeholder="Örn: Ahmet Yılmaz veya Frontend Mimarisi"
-              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 placeholder:text-slate-400"
+              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
             />
           </div>
 
           {/* Düğüm Türü Seçici - Şık Hap Butonlar */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-700">Düğüm Türü</label>
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300">Düğüm Türü</label>
             <div className="grid grid-cols-2 gap-2">
               {TUR_LISTESI.map((turKodu) => {
                 const token = TUR_TASARIM_TOKENLARI[turKodu];
@@ -120,18 +120,18 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
                     className={`h-11 px-3 rounded-xl border text-xs font-semibold flex items-center justify-between transition-all cursor-pointer btn-tactile ${
                       secili
                         ? `${token.rozet.arkaPlan} ${token.kart.seciliHalka}`
-                        : "bg-white/90 border-slate-200 hover:bg-slate-50 text-slate-700 hover:border-slate-300 shadow-2xs"
+                        : "bg-white/90 dark:bg-slate-800/90 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600 shadow-2xs"
                     }`}
                   >
                     <span className="flex items-center gap-2">
                       <span
                         className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
-                          secili ? "bg-white/90 shadow-2xs" : "bg-slate-100"
+                          secili ? "bg-white/90 dark:bg-slate-800 shadow-2xs" : "bg-slate-100 dark:bg-slate-700"
                         }`}
                       >
                         <Simge className="w-3.5 h-3.5" style={{ color: token.renkKodu }} />
                       </span>
-                      <span className={secili ? token.rozet.metin : "text-slate-700"}>
+                      <span className={secili ? token.rozet.metin : "text-slate-700 dark:text-slate-200"}>
                         {token.etiket}
                       </span>
                     </span>
@@ -148,26 +148,26 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
 
           {/* Fotoğraf / Logo URL Input */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <ImageIcon className="w-3.5 h-3.5 text-slate-400" />
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+              <ImageIcon className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
               <span>Fotoğraf / Logo URL</span>
-              <span className="text-slate-400 font-normal text-[11px]">(İsteğe Bağlı)</span>
+              <span className="text-slate-400 dark:text-slate-500 font-normal text-[11px]">(İsteğe Bağlı)</span>
             </label>
             <input
               type="url"
               value={fotograf}
               onChange={(e) => setFotograf(e.target.value)}
               placeholder="https://example.com/profil.jpg"
-              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 placeholder:text-slate-400"
+              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
             />
           </div>
 
           {/* Footer Eylemleri */}
-          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={kapat}
-              className="h-9 px-4 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer btn-tactile"
+              className="h-9 px-4 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer btn-tactile"
             >
               Vazgeç
             </button>

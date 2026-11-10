@@ -92,6 +92,7 @@ interface UseCanvasEdgesParams {
   yolAktif: boolean;
   vurgulananKenarIdler: Set<string>;
   dugumKonumHaritasi: Map<string, DugumKonumu>;
+  isDark?: boolean;
 }
 
 export const useCanvasEdges = ({
@@ -100,6 +101,7 @@ export const useCanvasEdges = ({
   yolAktif,
   vurgulananKenarIdler,
   dugumKonumHaritasi,
+  isDark = false,
 }: UseCanvasEdgesParams): Edge[] => {
   return useMemo<Edge[]>(() => {
     const kenarYonleri = kenarlar.map((k) => {
@@ -215,14 +217,21 @@ export const useCanvasEdges = ({
           strokeWidth,
         },
         labelStyle: {
-          fill: yolAktif && yolKenari ? "#b45309" : "#1e293b",
+          fill: yolAktif && yolKenari ? "#b45309" : isDark ? "#e2e8f0" : "#1e293b",
           fontWeight: 700,
           fontSize: 11,
         },
         labelBgStyle: {
-          fill: "#ffffff",
+          fill: isDark ? "#1e293b" : "#ffffff",
           fillOpacity: 0.95,
-          stroke: yolAktif && yolKenari ? "#f59e0b" : secili ? "#4f46e5" : "#cbd5e1",
+          stroke:
+            yolAktif && yolKenari
+              ? "#f59e0b"
+              : secili
+              ? "#4f46e5"
+              : isDark
+              ? "#475569"
+              : "#cbd5e1",
           strokeWidth: yolAktif && yolKenari ? 2 : 1.5,
         },
         labelBgPadding: [8, 5] as [number, number],
@@ -235,5 +244,6 @@ export const useCanvasEdges = ({
     yolAktif,
     vurgulananKenarIdler,
     dugumKonumHaritasi,
+    isDark,
   ]);
 };

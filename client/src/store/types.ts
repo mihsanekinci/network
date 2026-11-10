@@ -24,7 +24,9 @@ export interface UiSlice {
   otomatikDuzenlendi: boolean;
   otomatikDuzenlemeTiklamaSayisi: number;
   otomatikDuzenlemeUyarisi: string | null;
+  karanlikMod: boolean;
   hatayiTemizle: () => void;
+  karanlikModDegistir: () => void;
   aramaMetniniAyarla: (metin: string) => void;
   turFiltresiniAyarla: (tur: DugumTuru | "hepsi") => void;
   yolVurgula: (dugumIdler: string[], kenarIdler: string[]) => void;

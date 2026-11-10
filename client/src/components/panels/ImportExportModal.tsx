@@ -77,14 +77,14 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="glass-floating rounded-2xl w-full max-w-lg overflow-hidden flex flex-col border border-slate-200/90 shadow-2xl">
         {/* Header */}
-        <div className="px-6 py-4.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+        <div className="px-6 py-4.5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/70 dark:bg-slate-900/70">
           <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100/80 flex items-center justify-center text-indigo-600 shadow-2xs">
+            <span className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100/80 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-2xs">
               <Share2 className="w-4 h-4" />
             </span>
             <div>
-              <h3 className="text-sm sm:text-base font-bold text-slate-800">Dışa & İçe Aktarma</h3>
-              <p className="text-xs text-slate-500 font-medium">
+              <h3 className="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-100">Dışa & İçe Aktarma</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                 Görsel dışa aktarımı veya JSON yedekleme / geri yükleme
               </p>
             </div>
@@ -92,7 +92,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
           <button
             type="button"
             onClick={kapat}
-            className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 flex items-center justify-center transition-all cursor-pointer"
+            className="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-all cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -102,7 +102,7 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
         <div className="p-6 flex flex-col gap-6">
           {/* Dışa Aktarma Bölümü */}
           <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-bold text-slate-800 tracking-tight">
+            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-100 tracking-tight">
               Dışa Aktar (Aktif Harita: {aktifHarita?.baslik ?? "Seçilmedi"})
             </h4>
             <div className="grid grid-cols-2 gap-3">
@@ -110,37 +110,37 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
                 type="button"
                 onClick={handlePngExport}
                 disabled={!aktifHarita || pngIndiriliyor}
-                className="p-3.5 bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 hover:border-indigo-300 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group btn-tactile"
+                className="p-3.5 bg-slate-50 dark:bg-slate-800/80 hover:bg-indigo-50/60 dark:hover:bg-indigo-950/40 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group btn-tactile"
               >
                 {pngIndiriliyor ? (
                   <Loader2 className="w-6 h-6 text-indigo-600 animate-spin" />
                 ) : (
-                  <ImageIcon className="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform" />
+                  <ImageIcon className="w-6 h-6 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform" />
                 )}
-                <span className="text-xs font-bold text-slate-800">
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
                   {pngIndiriliyor ? "Oluşturuluyor..." : "PNG Görsel İndir"}
                 </span>
-                <span className="text-[10px] text-slate-500">Yüksek çözünürlük</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400">Yüksek çözünürlük</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleJsonExport}
                 disabled={!aktifHarita}
-                className="p-3.5 bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 hover:border-indigo-300 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group btn-tactile"
+                className="p-3.5 bg-slate-50 dark:bg-slate-800/80 hover:bg-indigo-50/60 dark:hover:bg-indigo-950/40 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group btn-tactile"
               >
-                <FileJson className="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform" />
-                <span className="text-xs font-bold text-slate-800">JSON Yedeği İndir</span>
-                <span className="text-[10px] text-slate-500">Tam harita paketi</span>
+                <FileJson className="w-6 h-6 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform" />
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-100">JSON Yedeği İndir</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400">Tam harita paketi</span>
               </button>
             </div>
           </div>
 
-          <div className="border-t border-slate-100" />
+          <div className="border-t border-slate-100 dark:border-slate-800" />
 
           {/* İçe Aktarma Bölümü */}
           <div className="flex flex-col gap-3">
-            <h4 className="text-xs font-bold text-slate-800 tracking-tight">
+            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-100 tracking-tight">
               İçe Aktar (JSON Dosyası Yükle)
             </h4>
 
@@ -156,11 +156,11 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
               <button
                 type="button"
                 onClick={() => dosyaGirdisiRef.current?.click()}
-                className="p-5 border-2 border-dashed border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/20 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer text-slate-500 hover:text-indigo-600 btn-tactile"
+                className="p-5 border-2 border-dashed border-slate-200 dark:border-slate-700 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50/20 dark:hover:bg-indigo-950/20 rounded-xl flex flex-col items-center justify-center gap-2 transition-all cursor-pointer text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 btn-tactile"
               >
-                <FolderUp className="w-7 h-7 text-indigo-500" />
+                <FolderUp className="w-7 h-7 text-indigo-500 dark:text-indigo-400" />
                 <span className="text-xs font-bold">Bir JSON Yedek Dosyası Seçin</span>
-                <span className="text-[10px] text-slate-400">Önceden indirilmiş .json dosyaları</span>
+                <span className="text-[10px] text-slate-400 dark:text-slate-500">Önceden indirilmiş .json dosyaları</span>
               </button>
             ) : (
               <div className="p-4 bg-emerald-50/70 border border-emerald-200 rounded-xl flex flex-col gap-2">
@@ -204,11 +204,11 @@ export const ImportExportModal: React.FC<ImportExportModalProps> = ({ acik, kapa
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-3.5 border-t border-slate-100 bg-slate-50/50 flex justify-end">
+        <div className="px-6 py-3.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex justify-end">
           <button
             type="button"
             onClick={kapat}
-            className="h-8.5 px-4 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg transition-all cursor-pointer btn-tactile"
+            className="h-8.5 px-4 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all cursor-pointer btn-tactile"
           >
             Kapat
           </button>

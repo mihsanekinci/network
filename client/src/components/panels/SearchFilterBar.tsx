@@ -106,19 +106,19 @@ export const SearchFilterBar: React.FC = () => {
           onChange={(e) => aramaMetniniAyarla(e.target.value)}
           onKeyDown={handleInputKeyDown}
           placeholder="Düğümlerde ara..."
-          className="w-36 sm:w-48 focus:w-56 md:focus:w-64 h-8 pl-8 pr-8 text-xs font-medium rounded-xl bg-slate-100/80 hover:bg-slate-100 focus:bg-white border border-slate-200/80 focus:border-indigo-500/80 focus:outline-none focus:ring-2 focus:ring-indigo-500/15 transition-all placeholder:text-slate-400 text-slate-800 shadow-2xs"
+          className="w-36 sm:w-48 focus:w-56 md:focus:w-64 h-8 pl-8 pr-8 text-xs font-medium rounded-xl bg-slate-100/80 hover:bg-slate-100 focus:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-800 dark:focus:bg-slate-900 border border-slate-200/80 dark:border-slate-700/80 focus:border-indigo-500/80 dark:focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/15 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-800 dark:text-slate-100 shadow-2xs"
         />
         {aramaMetni ? (
           <button
             type="button"
             onClick={handleAramaTemizle}
             title="Aramayı Temizle (Esc)"
-            className="absolute right-2 p-0.5 rounded-md text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 transition-colors cursor-pointer"
+            className="absolute right-2 p-0.5 rounded-md text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors cursor-pointer"
           >
             <X className="w-3.5 h-3.5" />
           </button>
         ) : (
-          <kbd className="absolute right-2 hidden sm:inline-flex items-center px-1.5 py-0.5 text-[9px] font-mono font-medium text-slate-400 bg-white/70 rounded border border-slate-200/70 pointer-events-none select-none">
+          <kbd className="absolute right-2 hidden sm:inline-flex items-center px-1.5 py-0.5 text-[9px] font-mono font-medium text-slate-400 dark:text-slate-500 bg-white/70 dark:bg-slate-800/70 rounded border border-slate-200/70 dark:border-slate-700/70 pointer-events-none select-none">
             ⌘F
           </kbd>
         )}
@@ -131,8 +131,8 @@ export const SearchFilterBar: React.FC = () => {
           onClick={() => setFiltreMenusuAcik((prev) => !prev)}
           className={`h-8 px-2.5 text-xs font-semibold rounded-xl border transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs btn-tactile ${
             secilenTurFiltresi !== "hepsi"
-              ? "bg-indigo-50/90 text-indigo-700 border-indigo-200 ring-2 ring-indigo-500/15"
-              : "bg-white/90 hover:bg-white text-slate-700 border-slate-200/90 hover:border-slate-300"
+              ? "bg-indigo-50/90 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800 ring-2 ring-indigo-500/15"
+              : "bg-white/90 dark:bg-slate-800/90 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200/90 dark:border-slate-700/90 hover:border-slate-300 dark:hover:border-slate-600"
           }`}
           title="Türe göre filtrele"
         >
@@ -151,7 +151,7 @@ export const SearchFilterBar: React.FC = () => {
                 turFiltresiniAyarla("hepsi");
               }}
               title="Tür Filtresini Sıfırla"
-              className="text-indigo-400 hover:text-indigo-700 p-0.5 rounded-full hover:bg-indigo-100 transition-colors ml-0.5"
+              className="text-indigo-400 hover:text-indigo-700 dark:text-indigo-300 dark:hover:text-indigo-100 p-0.5 rounded-full hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors ml-0.5"
             >
               <X className="w-3 h-3" />
             </span>
@@ -165,9 +165,9 @@ export const SearchFilterBar: React.FC = () => {
         </button>
 
         {filtreMenusuAcik && (
-          <div className="absolute left-0 sm:right-0 sm:left-auto top-full mt-2 w-52 bg-white/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/80 p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-0.5">
-            <div className="px-2.5 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-100/90 mb-0.5">
-              <Filter className="w-3 h-3 text-slate-400" />
+          <div className="absolute left-0 sm:right-0 sm:left-auto top-full mt-2 w-52 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl rounded-2xl shadow-xl border border-slate-200/80 dark:border-slate-800 p-1.5 z-50 animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-0.5">
+            <div className="px-2.5 py-1.5 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-100/90 dark:border-slate-800 mb-0.5">
+              <Filter className="w-3 h-3 text-slate-400 dark:text-slate-500" />
               <span>Düğüm Türü</span>
             </div>
             {FILTRE_TUR_SECENEKLERI.map((secenek) => {
@@ -184,8 +184,8 @@ export const SearchFilterBar: React.FC = () => {
                   }}
                   className={`w-full px-2.5 py-1.5 text-xs rounded-xl font-medium transition-all flex items-center justify-between cursor-pointer group ${
                     aktif
-                      ? "bg-indigo-50/90 text-indigo-700 font-semibold"
-                      : "text-slate-700 hover:bg-slate-100/70"
+                      ? "bg-indigo-50/90 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold"
+                      : "text-slate-700 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-slate-800/70"
                   }`}
                 >
                   <span className="flex items-center gap-2 min-w-0">
@@ -195,7 +195,7 @@ export const SearchFilterBar: React.FC = () => {
                     />
                     <TurIcon
                       className={`w-3.5 h-3.5 shrink-0 ${
-                        aktif ? "text-indigo-600" : "text-slate-500 group-hover:text-slate-700"
+                        aktif ? "text-indigo-600 dark:text-indigo-400" : "text-slate-500 dark:text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200"
                       }`}
                     />
                     <span className="truncate">{secenek.etiket}</span>
@@ -204,13 +204,13 @@ export const SearchFilterBar: React.FC = () => {
                     <span
                       className={`text-[10px] px-1.5 py-0.5 rounded-md font-semibold transition-colors ${
                         aktif
-                          ? "bg-indigo-200/60 text-indigo-800"
-                          : "bg-slate-100 text-slate-500 group-hover:bg-slate-200/70"
+                          ? "bg-indigo-200/60 dark:bg-indigo-900/60 text-indigo-800 dark:text-indigo-200"
+                          : "bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover:bg-slate-200/70 dark:group-hover:bg-slate-700/70"
                       }`}
                     >
                       {sayi} düğüm
                     </span>
-                    {aktif && <Check className="w-3.5 h-3.5 text-indigo-600 shrink-0" />}
+                    {aktif && <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />}
                   </div>
                 </button>
               );
@@ -223,13 +223,13 @@ export const SearchFilterBar: React.FC = () => {
       <div
         className={`h-8 px-2.5 rounded-xl text-xs font-semibold border transition-all flex items-center gap-1 whitespace-nowrap shadow-2xs ${
           filtreAktif
-            ? "bg-indigo-50/90 text-indigo-700 border-indigo-200 ring-2 ring-indigo-500/15"
-            : "bg-white/90 text-slate-600 border-slate-200/90"
+            ? "bg-indigo-50/90 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800 ring-2 ring-indigo-500/15"
+            : "bg-white/90 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 border-slate-200/90 dark:border-slate-700/90"
         }`}
         title={`${dugumler.length} düğüm arasından ${eslesenDugumSayisi} tanesi eşleşti`}
       >
         <span className="font-bold">{eslesenDugumSayisi}</span>
-        <span className="text-slate-400 font-normal text-[10px]">/{dugumler.length}</span>
+        <span className="text-slate-400 dark:text-slate-500 font-normal text-[10px]">/{dugumler.length}</span>
       </div>
     </div>
   );

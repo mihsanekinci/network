@@ -24,10 +24,10 @@ export const EdgeEndpointPreview: React.FC<EdgeEndpointPreviewProps> = ({
   const HedefSimge = hedefToken.simge;
 
   return (
-    <div className="bg-slate-50/90 border border-slate-200/80 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-inner">
+    <div className="bg-slate-50/90 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-3.5 flex items-center justify-between gap-3 shadow-inner">
       {/* Kaynak Düğüm */}
-      <div className="flex-1 bg-white p-3 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col gap-1 min-w-0">
-        <span className="text-[10px] font-bold tracking-wider uppercase text-slate-400">
+      <div className="flex-1 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200/80 dark:border-slate-700 shadow-2xs flex flex-col gap-1 min-w-0">
+        <span className="text-[10px] font-bold tracking-wider uppercase text-slate-400 dark:text-slate-500">
           Kaynak
         </span>
         <div className="flex items-center gap-1.5 truncate">
@@ -38,7 +38,7 @@ export const EdgeEndpointPreview: React.FC<EdgeEndpointPreviewProps> = ({
             <KaynakSimge className="w-3.5 h-3.5" />
           </span>
           <span
-            className="text-xs font-bold text-slate-800 truncate"
+            className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate"
             title={kaynakDugum?.etiket ?? "Bilinmeyen Düğüm"}
           >
             {kaynakDugum?.etiket ?? "Bilinmeyen Düğüm"}
@@ -54,10 +54,10 @@ export const EdgeEndpointPreview: React.FC<EdgeEndpointPreviewProps> = ({
 
       {/* İlişki ve Yön Önizleme */}
       <div className="flex flex-col items-center justify-center px-1 shrink-0">
-        <div className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2.5 py-0.5 rounded-full max-w-[120px] truncate mb-1 shadow-2xs">
+        <div className="text-[11px] font-semibold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800 px-2.5 py-0.5 rounded-full max-w-[120px] truncate mb-1 shadow-2xs">
           {etiket.trim() || "İlişkili"}
         </div>
-        <div className="text-indigo-600 flex items-center justify-center">
+        <div className="text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
           {yon === "tek_yonlu" && <ArrowRight className="w-5 h-5 stroke-[2.2]" />}
           {yon === "cift_yonlu" && <ArrowLeftRight className="w-5 h-5 stroke-[2.2]" />}
           {yon === "yonsuz" && <Minus className="w-5 h-5 stroke-[3]" />}
@@ -65,8 +65,8 @@ export const EdgeEndpointPreview: React.FC<EdgeEndpointPreviewProps> = ({
       </div>
 
       {/* Hedef Düğüm */}
-      <div className="flex-1 bg-white p-3 rounded-xl border border-slate-200/80 shadow-2xs flex flex-col gap-1 min-w-0">
-        <span className="text-[10px] font-bold tracking-wider uppercase text-slate-400">
+      <div className="flex-1 bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200/80 dark:border-slate-700 shadow-2xs flex flex-col gap-1 min-w-0">
+        <span className="text-[10px] font-bold tracking-wider uppercase text-slate-400 dark:text-slate-500">
           Hedef
         </span>
         <div className="flex items-center gap-1.5 truncate">
@@ -77,7 +77,7 @@ export const EdgeEndpointPreview: React.FC<EdgeEndpointPreviewProps> = ({
             <HedefSimge className="w-3.5 h-3.5" />
           </span>
           <span
-            className="text-xs font-bold text-slate-800 truncate"
+            className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate"
             title={hedefDugum?.etiket ?? "Bilinmeyen Düğüm"}
           >
             {hedefDugum?.etiket ?? "Bilinmeyen Düğüm"}

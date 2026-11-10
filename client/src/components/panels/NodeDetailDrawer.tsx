@@ -125,11 +125,11 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") secilenDugumuAyarla(null);
         }}
-        className="fixed inset-0 bg-slate-900/30 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
+        className="fixed inset-0 bg-slate-900/30 dark:bg-slate-950/60 backdrop-blur-xs transition-opacity animate-in fade-in duration-200"
       />
 
       {/* Sağdan Kayarak Açılan Drawer Paneli */}
-      <div className="relative z-50 w-full max-w-lg bg-slate-50/80 shadow-2xl h-full flex flex-col border-l border-slate-200/90 animate-in slide-in-from-right duration-250 backdrop-blur-xl">
+      <div className="relative z-50 w-full max-w-lg bg-slate-50/90 dark:bg-slate-900/95 shadow-2xl h-full flex flex-col border-l border-slate-200/90 dark:border-slate-800 animate-in slide-in-from-right duration-250 backdrop-blur-xl">
         {/* 1. Üst Başlık & Kapatma Butonu */}
         <DrawerHeader
           etiket={etiket.trim() || dugum.etiket}

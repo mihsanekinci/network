@@ -74,16 +74,16 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
     >
       <div className="glass-floating rounded-2xl w-full max-w-lg p-6 flex flex-col gap-4.5 animate-in zoom-in-95 duration-200">
         {/* Başlık Barı */}
-        <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-8.5 h-8.5 rounded-xl bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center shadow-2xs">
+            <div className="w-8.5 h-8.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-100 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shadow-2xs">
               <Link2 className="w-4 h-4 stroke-[2]" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-800 leading-tight">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 leading-tight">
                 Bağlantı Detayı & İlişki Düzenleme
               </h3>
-              <p className="text-[11px] text-slate-500 font-medium">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                 Düğümler arası ilişki tipini ve yönünü güncelleyin
               </p>
             </div>
@@ -91,7 +91,7 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
           <button
             type="button"
             onClick={() => secilenKenariAyarla(null)}
-            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer btn-tactile"
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer btn-tactile"
             title="Kapat (ESC)"
           >
             <X className="w-4 h-4 stroke-[2]" />
@@ -115,13 +115,13 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
 
           {/* İlişki Etiketi Input */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-slate-700">İlişki Etiketi</label>
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300">İlişki Etiketi</label>
             <input
               type="text"
               value={etiket}
               onChange={(e) => setEtiket(e.target.value)}
               placeholder="Örn: Mentörlük Etti, Referans Oldu, Eski Çalışanı..."
-              className="h-10 px-3.5 text-xs rounded-xl border border-slate-300 bg-white focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-800 placeholder:text-slate-400 shadow-2xs"
+              className="h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-2xs"
             />
           </div>
 
@@ -129,12 +129,12 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
           <EdgeDirectionSelector yon={yon} onChange={setYon} />
 
           {/* Footer Bar */}
-          <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+          <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
             {/* Sol: Bağlantıyı Sil Butonu */}
             <div>
               {silOnayGoster ? (
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs text-red-600 font-semibold hidden sm:inline">
+                  <span className="text-xs text-red-600 dark:text-red-400 font-semibold hidden sm:inline">
                     Emin misiniz?
                   </span>
                   <button
@@ -155,7 +155,7 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
                   <button
                     type="button"
                     onClick={() => setSilOnayGoster(false)}
-                    className="h-9 px-2.5 text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer btn-tactile"
+                    className="h-9 px-2.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer btn-tactile"
                   >
                     Vazgeç
                   </button>
@@ -164,7 +164,7 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
                 <button
                   type="button"
                   onClick={() => setSilOnayGoster(true)}
-                  className="h-9 px-3 text-xs font-semibold text-red-600 hover:bg-red-50 hover:text-red-700 rounded-xl border border-red-200 transition-colors cursor-pointer flex items-center gap-1.5 btn-tactile"
+                  className="h-9 px-3 text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 hover:text-red-700 dark:hover:text-red-300 rounded-xl border border-red-200 dark:border-red-900/60 transition-colors cursor-pointer flex items-center gap-1.5 btn-tactile"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                   <span>Bağlantıyı Sil</span>
@@ -177,7 +177,7 @@ const EdgeModalIcerik: React.FC<EdgeModalIcerikProps> = ({ kenar }) => {
               <button
                 type="button"
                 onClick={() => secilenKenariAyarla(null)}
-                className="h-9 px-4 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer btn-tactile"
+                className="h-9 px-4 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer btn-tactile"
               >
                 Vazgeç
               </button>

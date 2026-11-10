@@ -29,6 +29,7 @@ Bu kasa, **NetWork** projesinin tüm geliştirme oturumlarını, mimari ve strat
 - [[2026-10-16 - Backend Hardening and Modular Architecture]] - Zod çalışma zamanı doğrulaması, merkezi hata yönetimi, Prisma indeksleri, ACID transaction ve 143 API entegrasyon testi.
 - [[2026-10-18 - Frontend UI UX Overhaul and Tactile Craft]] - "AI slop"tan Linear/Figma kalitesine geçiş; Lucide ikonları, yüzen ada toolbar, taktil düğüm kartları ve tasarım tokenları.
 - [[2026-11-10 - Frontend SRP Hygiene and Slice Refactoring]] - Frontend monolitik bileşenlerinin SRP standartlarına bölünmesi, Zustand slice mimarisi ve arch_audit 0 ihlal doğrulaması.
+- [[2026-11-10 - Dark Mode and Layout Flicker Prevention]] - Kalıcı Karanlık Mod (Dark Mode) desteği, Dagre otomatik düzenleme dirty-check ve layout shift (CLS) titreme önleyici.
 
 ### 20. Kararlar ve Tercihler (Decisions & Strategy - ADR)
 - [[Frontend Modular Component and Store Slice Architecture]] - Frontend modüler bileşen ve Zustand dilim (slice) mimarisi (ADR 0006).

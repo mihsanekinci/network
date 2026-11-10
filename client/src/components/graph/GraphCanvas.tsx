@@ -14,6 +14,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { Loader2 } from "lucide-react";
 import { useHaritaStore } from "../../store/haritaStore";
+import { useDarkMode } from "../../hooks/useDarkMode";
 import CustomNode from "./CustomNode";
 import type { DugumKonumu } from "./edgeRouting";
 import { useCanvasNodes, useCanvasEdges } from "./useGraphElements";
@@ -49,6 +50,7 @@ export const GraphCanvas: React.FC = () => {
   } = useHaritaStore();
 
   const [yerelDugumler, setYerelDugumler] = useState<Node[]>([]);
+  const { isDark } = useDarkMode();
 
   const filtreAktif = aramaMetni.trim() !== "" || secilenTurFiltresi !== "hepsi";
   const yolAktif = vurgulananDugumIdler.size > 0;
@@ -83,6 +85,7 @@ export const GraphCanvas: React.FC = () => {
     yolAktif,
     vurgulananKenarIdler,
     dugumKonumHaritasi,
+    isDark,
   });
 
   const dugumlerDegisti = useCallback((degisiklikler: NodeChange[]) => {
@@ -141,9 +144,9 @@ export const GraphCanvas: React.FC = () => {
   }
 
   return (
-    <div className="flex-1 h-full relative bg-slate-50">
+    <div className="flex-1 h-full relative bg-slate-50 dark:bg-slate-950 transition-colors">
       {yukleniyor && (
-        <div className="absolute top-4 right-4 z-10 glass-panel px-3 py-1.5 rounded-xl shadow-xs text-xs text-indigo-600 font-medium flex items-center gap-2">
+        <div className="absolute top-4 right-4 z-10 glass-panel px-3 py-1.5 rounded-xl shadow-xs text-xs text-indigo-600 dark:text-indigo-400 font-medium flex items-center gap-2">
           <Loader2 className="w-3.5 h-3.5 animate-spin" />
           <span>Senkronize ediliyor...</span>
         </div>
@@ -171,8 +174,13 @@ export const GraphCanvas: React.FC = () => {
         onPaneClick={paneTiklandi}
         fitView
       >
-        <Background variant={BackgroundVariant.Dots} gap={20} size={1.2} color="#cbd5e1" />
-        <Controls className="!bg-white !rounded-2xl !shadow-md !border !border-slate-200 !overflow-hidden !m-4" />
+        <Background
+          variant={BackgroundVariant.Dots}
+          gap={20}
+          size={1.2}
+          color={isDark ? "#334155" : "#cbd5e1"}
+        />
+        <Controls className="!bg-white dark:!bg-slate-900 !rounded-2xl !shadow-md !border !border-slate-200 dark:!border-slate-800 !overflow-hidden !m-4" />
         <MiniMap
           nodeColor={(node) => {
             const tur = (node.data as { tur?: string })?.tur;
@@ -181,11 +189,11 @@ export const GraphCanvas: React.FC = () => {
             if (tur === "kavram") return "#f59e0b";
             return "#8b5cf6";
           }}
-          nodeStrokeColor="#ffffff"
+          nodeStrokeColor={isDark ? "#0f172a" : "#ffffff"}
           nodeStrokeWidth={2}
           nodeBorderRadius={8}
-          maskColor="rgba(241, 245, 249, 0.75)"
-          className="!bg-white !rounded-2xl !shadow-md !border !border-slate-200 !overflow-hidden !m-4"
+          maskColor={isDark ? "rgba(15, 23, 42, 0.75)" : "rgba(241, 245, 249, 0.75)"}
+          className="!bg-white dark:!bg-slate-900 !rounded-2xl !shadow-md !border !border-slate-200 dark:!border-slate-800 !overflow-hidden !m-4"
         />
       </ReactFlow>
     </div>
