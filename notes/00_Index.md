@@ -28,8 +28,10 @@ Bu kasa, **NetWork** projesinin tüm geliştirme oturumlarını, mimari ve strat
 - [[2026-10-16 - UI and Connection Refinements]] - Özel ilişki şablonları, 4 yönlü multi-slot bağlantılar, açılır-kapanır sidebar ve kompakt navbar seçenekler menüsü.
 - [[2026-10-16 - Backend Hardening and Modular Architecture]] - Zod çalışma zamanı doğrulaması, merkezi hata yönetimi, Prisma indeksleri, ACID transaction ve 143 API entegrasyon testi.
 - [[2026-10-18 - Frontend UI UX Overhaul and Tactile Craft]] - "AI slop"tan Linear/Figma kalitesine geçiş; Lucide ikonları, yüzen ada toolbar, taktil düğüm kartları ve tasarım tokenları.
+- [[2026-11-10 - Frontend SRP Hygiene and Slice Refactoring]] - Frontend monolitik bileşenlerinin SRP standartlarına bölünmesi, Zustand slice mimarisi ve arch_audit 0 ihlal doğrulaması.
 
 ### 20. Kararlar ve Tercihler (Decisions & Strategy - ADR)
+- [[Frontend Modular Component and Store Slice Architecture]] - Frontend modüler bileşen ve Zustand dilim (slice) mimarisi (ADR 0006).
 - [[Frontend UI UX Overhaul and Design Tokens]] - Tasarım tokenları (Design Tokens), tek doğruluk kaynağı, taktil cam arayüz ve yeknesak ikonografi mimarisi (ADR 0005).
 - [[Backend Resilience and Validation Strategy]] - Zod şema doğrulaması, AppError hiyerarşisi ve Prisma ACID transaction mimarisi (ADR 0004).
 - [[Export Import and Backup Strategy]] - PNG görsel ve JSON tam paket yedekleme/içe aktarma mimarisi.

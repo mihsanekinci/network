@@ -1,0 +1,139 @@
+import React from "react";
+import { TUR_TASARIM_TOKENLARI } from "../../../constants/designTokens";
+import type { AgMetrikleri } from "../../../utils/networkAnalysis";
+
+interface NetworkMetricsTabProps {
+  metrikler: AgMetrikleri;
+  onDugumDetay: (dugumId: string) => void;
+}
+
+export const NetworkMetricsTab: React.FC<NetworkMetricsTabProps> = ({
+  metrikler,
+  onDugumDetay,
+}) => {
+  return (
+    <>
+      {/* İstatistik Kartları */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-3.5 bg-white border border-slate-200/80 rounded-xl flex flex-col shadow-2xs">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            Toplam Düğüm
+          </span>
+          <span className="text-2xl font-bold text-slate-800 mt-1">
+            {metrikler.toplamDugum}
+          </span>
+        </div>
+        <div className="p-3.5 bg-white border border-slate-200/80 rounded-xl flex flex-col shadow-2xs">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            Bağlantı Sayısı
+          </span>
+          <span className="text-2xl font-bold text-indigo-600 mt-1">
+            {metrikler.toplamKenar}
+          </span>
+        </div>
+        <div className="p-3.5 bg-white border border-slate-200/80 rounded-xl flex flex-col shadow-2xs">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            Ağ Yoğunluğu
+          </span>
+          <span className="text-2xl font-bold text-emerald-600 mt-1">
+            %{Math.round(metrikler.yogunluk * 100)}
+          </span>
+        </div>
+        <div className="p-3.5 bg-white border border-slate-200/80 rounded-xl flex flex-col shadow-2xs">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+            Ort. Bağlantı
+          </span>
+          <span className="text-2xl font-bold text-purple-600 mt-1">
+            {metrikler.ortalamaDerece}
+          </span>
+        </div>
+      </div>
+
+      {/* Tür Dağılımı */}
+      <div className="flex flex-col gap-2">
+        <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+          Düğüm Türleri Dağılımı
+        </h4>
+        <div className="grid grid-cols-4 gap-2">
+          {(["kisi", "kurum", "kavram", "diger"] as const).map((turKodu) => {
+            const token = TUR_TASARIM_TOKENLARI[turKodu];
+            const Simge = token.simge;
+            const sayi = metrikler.turDagilimi[turKodu];
+
+            return (
+              <div
+                key={turKodu}
+                className={`px-3 py-2 border rounded-xl flex items-center justify-between text-xs shadow-2xs ${token.rozet.arkaPlan} ${token.rozet.kenarlik}`}
+              >
+                <span className={`flex items-center gap-1.5 font-medium ${token.rozet.metin}`}>
+                  <Simge className="w-3.5 h-3.5" style={{ color: token.renkKodu }} />
+                  <span>{token.etiket}</span>
+                </span>
+                <span className="font-bold text-slate-800">{sayi}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* En Kilit Düğümler (Top Hubs) */}
+      <div className="flex flex-col gap-2.5">
+        <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+          Ağın En Kilit Aktörleri (En Çok Bağlantılı 5 Düğüm)
+        </h4>
+        {metrikler.enKilitDugumler.length === 0 ? (
+          <p className="text-xs text-slate-400 italic">Henüz yeterli bağlantı bulunmuyor.</p>
+        ) : (
+          <div className="flex flex-col gap-1.5">
+            {metrikler.enKilitDugumler.map((item, index) => {
+              const token = TUR_TASARIM_TOKENLARI[item.dugum.tur] ?? TUR_TASARIM_TOKENLARI.diger;
+              const Simge = token.simge;
+
+              return (
+                <div
+                  key={item.dugum.id}
+                  className="px-4 py-2.5 bg-white hover:bg-slate-50 border border-slate-200/80 rounded-xl flex items-center justify-between transition-colors shadow-2xs tactile-card"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-600 font-bold text-xs flex items-center justify-center">
+                      {index + 1}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="w-5 h-5 rounded-md flex items-center justify-center shrink-0"
+                        style={{ color: token.renkKodu }}
+                      >
+                        <Simge className="w-3.5 h-3.5" />
+                      </span>
+                      <span className="text-xs font-bold text-slate-800">
+                        {item.dugum.etiket}
+                      </span>
+                    </div>
+                    <span
+                      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${token.rozet.arkaPlan} ${token.rozet.metin} ${token.rozet.kenarlik}`}
+                    >
+                      <span className={`w-1 h-1 rounded-full ${token.rozet.nokta}`} />
+                      {token.etiket}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-md">
+                      {item.derece} Bağlantı
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => onDugumDetay(item.dugum.id)}
+                      className="text-xs font-medium text-slate-500 hover:text-indigo-600 hover:underline cursor-pointer btn-tactile"
+                    >
+                      Detay
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </>
+  );
+};

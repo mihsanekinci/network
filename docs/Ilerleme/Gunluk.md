@@ -226,6 +226,7 @@
 - [x] **13. Obsidian Brain Protokolü Entegrasyonu (Faz 18)**
 - [x] **14. Backend Hardening: Zod, AppError, ACID Transactions & 143 E2E Tests (Faz 20)**
 - [x] **15. Frontend UI/UX Craftsmanship: Design Tokens, Lucide Icons & Floating Glass Islands (Faz 21)**
+- [x] **16. Frontend SRP Hijyeni, Zustand Slice Mimarisi ve Arch Audit 0 İhlal (Faz 22)**
 
 ---
 
@@ -256,5 +257,10 @@
 - **Gerekçe:** NetWork platformunun 'AI slop' arayüzünden arındırılarak Linear, Raycast ve Figma kalitesinde taktil bir grafik çalışma alanına dönüştürülmesi amacıyla merkezi `designTokens.ts`, yeknesak `lucide-react` ikonografi motoru, yüzen cam adacıklar (floating glass islands) ve taktil kart mimarisi benimsendi.
 - **İlgili:** [[Frontend UI UX Overhaul and Design Tokens]] | [[2026-10-18 - Frontend UI UX Overhaul and Tactile Craft]]
 
+### ADR-006: Frontend Modüler Bileşen ve Zustand Slice Mimarisi
+- **Durum:** Kabul edildi.
+- **Gerekçe:** Frontend monolitik bileşenlerinin (NodeDetailDrawer, EdgeModal, GraphCanvas, App) SRP sınırlarını aşması ve Zustand store'unun şişmesi üzerine store dilimlere (slices) bölündü, alt bileşenler atomik hale getirildi ve arch_audit.py ihlalleri 0'a indirildi.
+- **İlgili:** [[Frontend Modular Component and Store Slice Architecture]] | [[2026-11-10 - Frontend SRP Hygiene and Slice Refactoring]]
+
 ---
-*İlgili Notlar:* [[00 - Ana Harita]] | [[Katmanli Mimari]] | [[Prisma ve SQLite]] | [[Rotalar ve Controllers]] | [[Zustand ve Servisler]] | [[React Flow Canvas]] | [[Backend Resilience and Validation Strategy]] | [[Frontend UI UX Overhaul and Design Tokens]]
+*İlgili Notlar:* [[00 - Ana Harita]] | [[Katmanli Mimari]] | [[Prisma ve SQLite]] | [[Rotalar ve Controllers]] | [[Zustand ve Servisler]] | [[React Flow Canvas]] | [[Backend Resilience and Validation Strategy]] | [[Frontend UI UX Overhaul and Design Tokens]] | [[Frontend Modular Component and Store Slice Architecture]]
