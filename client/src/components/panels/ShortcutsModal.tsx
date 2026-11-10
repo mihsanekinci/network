@@ -15,7 +15,7 @@ export const ShortcutsModal: React.FC<ShortcutsModalProps> = ({ acik, kapat }) =
     { tuslar: ["⌘", "N"], mac: "⌘N", win: "Ctrl+N", aciklama: "Yeni Düğüm Ekle Modalı" },
     { tuslar: ["⌘", "F"], mac: "⌘F", win: "Ctrl+F", aciklama: "Arama Çubuğuna Odaklan" },
     { tuslar: ["⌘", "D"], mac: "⌘D", win: "Ctrl+D", aciklama: "Otomatik Hizala (Dagre Layout)" },
-    { tuslar: ["Delete"], mac: "⌫ / Delete", win: "Delete", aciklama: "Seçili Düğümü veya Kenarı Sil" },
+    { tuslar: ["Delete"], mac: "⌫ / Delete", win: "Delete", aciklama: "Seçili Düğümü veya Kenarı Sil (Onay İster)" },
     { tuslar: ["Esc"], mac: "Escape", win: "Escape", aciklama: "Modalları, Paneli veya Vurguyu Kapat" },
   ];
 

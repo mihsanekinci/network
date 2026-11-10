@@ -8,6 +8,7 @@ interface KeyboardShortcutsProps {
   onFocusSearch: () => void;
   onCloseModals: () => void;
   onToggleSidebar?: () => void;
+  onRequestDelete?: () => void;
 }
 
 export function useKeyboardShortcuts({
@@ -17,13 +18,12 @@ export function useKeyboardShortcuts({
   onFocusSearch,
   onCloseModals,
   onToggleSidebar,
+  onRequestDelete,
 }: KeyboardShortcutsProps): void {
   const {
     secilenHaritaId,
     secilenDugumId,
     secilenKenarId,
-    dugumSil,
-    kenarSil,
     secilenDugumuAyarla,
     secilenKenariAyarla,
     yolVurgusunuTemizle,
@@ -84,14 +84,11 @@ export function useKeyboardShortcuts({
         return;
       }
 
-      // Delete veya Backspace (Input içinde değilken seçili düğüm/kenar sil)
+      // Delete veya Backspace (Hata Önleme: Doğrudan silmek yerine onay modali tetikle)
       if (!isInput && (e.key === "Delete" || e.key === "Backspace")) {
-        if (secilenDugumId) {
+        if (secilenDugumId || secilenKenarId) {
           e.preventDefault();
-          dugumSil(secilenDugumId);
-        } else if (secilenKenarId) {
-          e.preventDefault();
-          kenarSil(secilenKenarId);
+          onRequestDelete?.();
         }
       }
     };
@@ -102,8 +99,6 @@ export function useKeyboardShortcuts({
     secilenHaritaId,
     secilenDugumId,
     secilenKenarId,
-    dugumSil,
-    kenarSil,
     secilenDugumuAyarla,
     secilenKenariAyarla,
     yolVurgusunuTemizle,
@@ -113,5 +108,6 @@ export function useKeyboardShortcuts({
     onFocusSearch,
     onCloseModals,
     onToggleSidebar,
+    onRequestDelete,
   ]);
 }

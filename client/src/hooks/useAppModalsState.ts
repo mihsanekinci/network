@@ -1,5 +1,10 @@
 import { useState, useCallback } from "react";
 
+export type SilmeHedefi =
+  | { tur: "dugum"; id: string; baslik: string }
+  | { tur: "kenar"; id: string; baslik: string }
+  | null;
+
 export const useAppModalsState = () => {
   const [haritaModaliAcik, setHaritaModaliAcik] = useState(false);
   const [dugumModaliAcik, setDugumModaliAcik] = useState(false);
@@ -7,6 +12,7 @@ export const useAppModalsState = () => {
   const [disaIceAktarModaliAcik, setDisaIceAktarModaliAcik] = useState(false);
   const [kisayollarModaliAcik, setKisayollarModaliAcik] = useState(false);
   const [seceneklerMenusuAcik, setSeceneklerMenusuAcik] = useState(false);
+  const [silmeHedefi, setSilmeHedefi] = useState<SilmeHedefi>(null);
 
   const modallariKapat = useCallback(() => {
     setHaritaModaliAcik(false);
@@ -15,6 +21,7 @@ export const useAppModalsState = () => {
     setDisaIceAktarModaliAcik(false);
     setKisayollarModaliAcik(false);
     setSeceneklerMenusuAcik(false);
+    setSilmeHedefi(null);
   }, []);
 
   return {
@@ -30,6 +37,8 @@ export const useAppModalsState = () => {
     setKisayollarModaliAcik,
     seceneklerMenusuAcik,
     setSeceneklerMenusuAcik,
+    silmeHedefi,
+    setSilmeHedefi,
     modallariKapat,
   };
 };

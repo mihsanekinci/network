@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useHaritaStore } from "./store/haritaStore";
 import SidebarPanel from "./components/panels/SidebarPanel";
 import GraphCanvas from "./components/graph/GraphCanvas";
@@ -16,8 +16,12 @@ export const App: React.FC = () => {
     haritalariYukle,
     haritalar,
     secilenHaritaId,
+    secilenDugumId,
+    secilenKenarId,
     dugumler,
     kenarlar,
+    dugumSil,
+    kenarSil,
     hata,
     hatayiTemizle,
     otomatikDuzenlendi,
@@ -30,6 +34,7 @@ export const App: React.FC = () => {
   const layout = useAutoLayoutAction();
   const { isDark, toggleDarkMode } = useDarkMode();
   const seceneklerRef = useRef<HTMLDivElement>(null);
+  const [siliniyor, setSiliniyor] = useState(false);
 
   useEffect(() => {
     haritalariYukle();
@@ -55,6 +60,40 @@ export const App: React.FC = () => {
     return () => document.removeEventListener("mousedown", disariTiklandi);
   }, [modals]);
 
+  // Klavye Delete/Backspace ile güvenli silme teyidi tetikleme
+  const handleSilmeIstegi = useCallback(() => {
+    if (secilenDugumId) {
+      const dugum = dugumler.find((d) => d.id === secilenDugumId);
+      modals.setSilmeHedefi({
+        tur: "dugum",
+        id: secilenDugumId,
+        baslik: dugum?.etiket || "Seçili Düğüm",
+      });
+    } else if (secilenKenarId) {
+      const kenar = kenarlar.find((k) => k.id === secilenKenarId);
+      modals.setSilmeHedefi({
+        tur: "kenar",
+        id: secilenKenarId,
+        baslik: kenar?.etiket || "Seçili Bağlantı",
+      });
+    }
+  }, [secilenDugumId, secilenKenarId, dugumler, kenarlar, modals]);
+
+  const handleSilmeOnayla = useCallback(async () => {
+    if (!modals.silmeHedefi || siliniyor) return;
+    setSiliniyor(true);
+    try {
+      if (modals.silmeHedefi.tur === "dugum") {
+        await dugumSil(modals.silmeHedefi.id);
+      } else {
+        await kenarSil(modals.silmeHedefi.id);
+      }
+      modals.setSilmeHedefi(null);
+    } finally {
+      setSiliniyor(false);
+    }
+  }, [modals, siliniyor, dugumSil, kenarSil]);
+
   useKeyboardShortcuts({
     onOpenNewNode: () => modals.setDugumModaliAcik(true),
     onToggleShortcuts: () => modals.setKisayollarModaliAcik(!modals.kisayollarModaliAcik),
@@ -68,6 +107,7 @@ export const App: React.FC = () => {
     },
     onCloseModals: modals.modallariKapat,
     onToggleSidebar: sidebar.toggleSidebar,
+    onRequestDelete: handleSilmeIstegi,
   });
 
   const secilenHarita = haritalar.find((h) => h.id === secilenHaritaId);
@@ -122,11 +162,15 @@ export const App: React.FC = () => {
         analizModaliAcik={modals.analizModaliAcik}
         disaIceAktarModaliAcik={modals.disaIceAktarModaliAcik}
         kisayollarModaliAcik={modals.kisayollarModaliAcik}
+        silmeHedefi={modals.silmeHedefi}
+        siliniyor={siliniyor}
         setHaritaModaliAcik={modals.setHaritaModaliAcik}
         setDugumModaliAcik={modals.setDugumModaliAcik}
         setAnalizModaliAcik={modals.setAnalizModaliAcik}
         setDisaIceAktarModaliAcik={modals.setDisaIceAktarModaliAcik}
         setKisayollarModaliAcik={modals.setKisayollarModaliAcik}
+        onSilmeKapat={() => modals.setSilmeHedefi(null)}
+        onSilmeOnayla={handleSilmeOnayla}
       />
     </div>
   );

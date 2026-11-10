@@ -191,6 +191,7 @@ export const GraphCanvas: React.FC = () => {
         edges={donusturulmusKenarlar}
         nodeTypes={DUGUM_TURLERI}
         connectionMode={ConnectionMode.Loose}
+        deleteKeyCode={null}
         onNodesChange={dugumlerDegisti}
         onNodeDragStop={suruklemeBitti}
         onConnect={baglantiKuruldu}
