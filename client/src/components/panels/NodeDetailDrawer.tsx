@@ -35,6 +35,7 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
     dugum.ozellikler ? { ...dugum.ozellikler } : {}
   );
   const [kaydediliyor, setKaydediliyor] = useState(false);
+  const [siliniyor, setSiliniyor] = useState(false);
   const [bildirim, setBildirim] = useState<string | null>(null);
 
   // ESC tuşuyla paneli kapatma
@@ -118,11 +119,12 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
   };
 
   const handleSil = async () => {
-    const onay = window.confirm(
-      `"${dugum.etiket}" düğümünü ve bağlı ${toplamBaglantiSayisi} bağlantıyı silmek istediğinizden emin misiniz?`
-    );
-    if (onay) {
+    if (siliniyor) return;
+    setSiliniyor(true);
+    try {
       await dugumSil(dugum.id);
+    } finally {
+      setSiliniyor(false);
     }
   };
 
@@ -220,6 +222,7 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
           yukleniyor={yukleniyor}
           kaydediliyor={kaydediliyor}
           kaydetDevreDisi={yukleniyor || kaydediliyor || !etiket.trim()}
+          siliniyor={siliniyor}
           onSil={handleSil}
           onVazgec={() => secilenDugumuAyarla(null)}
         />

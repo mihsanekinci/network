@@ -295,6 +295,8 @@
 - **Ağ Analizi & Arama Entegrasyonu (`networkAnalysis.ts`, `NetworkMetricsTab.tsx`, `SearchFilterBar.tsx`):**
   - Harita genelindeki ilişki tazeliği sağlık dağılımı (Taze, İlgi Bekliyor, Uykuda, Belirsiz) Ağ Analiz Modalı'na eklendi.
   - Arama çubuğu etkileşim özetlerinde, iletişim üslubunda ve özel ajan notlarında da anlık arama yapacak şekilde genişletildi.
+- **Native `window.confirm` Temizliği & Taktil Onay (`NodeDetailDrawer.tsx`, `DrawerFooter.tsx`, `SidebarPanel.tsx`):**
+  - Tarayıcıyı donduran ilkel işletim sistemi popup'ları tamamen temizlendi; yerine `EdgeModal` standardında iki aşamalı, güvenli ve taktil inline onay butonları (`[Emin misiniz?] [Evet, Sil] [Vazgeç]`) entegre edildi.
 - **Doğrulama:** `arch_audit` client (57 dosya) ve server (49 dosya) için 0 ihlal (PASS), `vite build` 0 hata, `vitest run` 152/152 test %100 geçti.
 
 ---

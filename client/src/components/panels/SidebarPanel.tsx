@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Trash2, PanelLeftClose, Folder, Map } from "lucide-react";
+import { Plus, Trash2, PanelLeftClose, Folder, Map, Check, X } from "lucide-react";
 import { useHaritaStore } from "../../store/haritaStore";
 
 interface YanPanelOzellikleri {
@@ -55,13 +55,8 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
     };
   }, [surukleniyor]);
 
-  const haritayiSilOnayli = (e: React.MouseEvent, id: string, baslik: string) => {
-    e.stopPropagation();
-    const onay = window.confirm(`"${baslik}" haritasını ve tüm bağlantılarını silmek istediğinize emin misiniz?`);
-    if (onay) {
-      haritaSil(id);
-    }
-  };
+  const [silinecekHaritaId, setSilinecekHaritaId] = useState<string | null>(null);
+  const [siliniyor, setSiliniyor] = useState(false);
 
   return (
     <aside
@@ -174,14 +169,60 @@ export const SidebarPanel: React.FC<YanPanelOzellikleri> = ({
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={(e) => haritayiSilOnayli(e, harita.id, harita.baslik)}
-                  title="Haritayı Sil"
-                  className="opacity-0 group-hover:opacity-100 w-6 h-6 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 flex items-center justify-center transition-all shrink-0 cursor-pointer btn-tactile"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                </button>
+                {silinecekHaritaId === harita.id ? (
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex items-center gap-1 shrink-0 animate-in fade-in duration-150 z-10"
+                  >
+                    <button
+                      type="button"
+                      disabled={siliniyor}
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        setSiliniyor(true);
+                        try {
+                          await haritaSil(harita.id);
+                          setSilinecekHaritaId(null);
+                        } finally {
+                          setSiliniyor(false);
+                        }
+                      }}
+                      className="px-2 py-1 text-[11px] font-bold bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-2xs flex items-center gap-1 transition-colors cursor-pointer btn-tactile disabled:opacity-50"
+                    >
+                      {siliniyor ? (
+                        <span className="w-3 h-3 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                      ) : (
+                        <>
+                          <Check className="w-3 h-3 stroke-[2.2]" />
+                          <span>Sil</span>
+                        </>
+                      )}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSilinecekHaritaId(null);
+                      }}
+                      className="p-1 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors cursor-pointer"
+                      title="Vazgeç"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSilinecekHaritaId(harita.id);
+                    }}
+                    title="Haritayı Sil"
+                    className="opacity-0 group-hover:opacity-100 w-6 h-6 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 flex items-center justify-center transition-all shrink-0 cursor-pointer btn-tactile"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
             );
           })}
