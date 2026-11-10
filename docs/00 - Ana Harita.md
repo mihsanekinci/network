@@ -17,6 +17,9 @@ Aşağıdaki bağlantılar üzerinden projenin tüm teknik detaylarına ulaşabi
 
 - 🏛️ **[[Katmanli Mimari|Mimariler: Katmanlı Mimari]]**:
   Uygulamanın omurgasını oluşturan *Pragmatik Katmanlı Mimari* ve SOLID prensipleri uygulama standartları.
+
+- 🎨 **[[UI_UX_Kullanilabilirlik_ve_Tasarim_Ilkeleri|Mimariler: UI/UX ve Kullanılabilirlik Standartları]]**:
+  Don Norman, Jakob Nielsen, Miller Yasası ve Peter Morville kuralları doğrultusunda hata önleme, görsel hiyerarşi ve taktil zanaat rehberi.
   
 - 🗄️ **[[Prisma ve SQLite|Veritabanı: Prisma ve SQLite]]**:
   SQLite geliştirme veritabanı, Prisma ORM şeması, CUID anahtar yapısı ve veri modelleri (`Harita`, `Dugum`, `Kenar`).
