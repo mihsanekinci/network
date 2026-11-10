@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
-import { Trash2, Briefcase, Building2, AlignLeft, type LucideIcon } from "lucide-react";
+import { Trash2, Briefcase, Building2, AlignLeft, Layers, type LucideIcon } from "lucide-react";
 import type { DugumTuru } from "../../types";
 import { TUR_TASARIM_TOKENLARI } from "../../constants/designTokens";
 
@@ -51,6 +51,11 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
   const fotografUrl = useMemo(() => {
     const hamVeri = data.ozellikler?.fotograf ?? data.ozellikler?.avatarUrl;
     return typeof hamVeri === "string" && hamVeri.trim().startsWith("http") ? hamVeri.trim() : null;
+  }, [data.ozellikler]);
+
+  const kume = useMemo(() => {
+    const val = data.ozellikler?.kume;
+    return typeof val === "string" && val.trim() ? val.trim() : null;
   }, [data.ozellikler]);
 
   const altBilgiDetayi = useMemo<{ metin: string; Simge: LucideIcon } | null>(() => {
@@ -157,15 +162,26 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
         </button>
       )}
 
-      {/* Üst Çubuk: Tür Rozeti ve Monogram/Fotoğraf Avatarı */}
+      {/* Üst Çubuk: Tür Rozeti, Küme Rozeti ve Avatar */}
       <div className="flex items-center justify-between gap-2">
-        <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border text-[11px] leading-tight font-semibold shadow-2xs backdrop-blur-xs transition-colors ${turBilgisi.rozet.arkaPlan} ${turBilgisi.rozet.metin} ${turBilgisi.rozet.kenarlik}`}
-        >
-          <span className={`w-1.5 h-1.5 rounded-full ${turBilgisi.rozet.nokta}`} />
-          <TurSimgesi className="w-3 h-3 shrink-0" />
-          <span>{turBilgisi.etiket}</span>
-        </span>
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span
+            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border text-[11px] leading-tight font-semibold shadow-2xs backdrop-blur-xs transition-colors shrink-0 ${turBilgisi.rozet.arkaPlan} ${turBilgisi.rozet.metin} ${turBilgisi.rozet.kenarlik}`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${turBilgisi.rozet.nokta}`} />
+            <TurSimgesi className="w-3 h-3 shrink-0" />
+            <span>{turBilgisi.etiket}</span>
+          </span>
+          {kume && (
+            <span
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-semibold bg-indigo-50/90 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border-indigo-200/80 dark:border-indigo-800/80 truncate max-w-[100px]"
+              title={`Küme: ${kume}`}
+            >
+              <Layers className="w-2.5 h-2.5 shrink-0 text-indigo-500" />
+              <span className="truncate">{kume}</span>
+            </span>
+          )}
+        </div>
 
         {/* Profil Fotoğrafı veya 2 Harfli Monogram Avatar */}
         {fotografUrl ? (

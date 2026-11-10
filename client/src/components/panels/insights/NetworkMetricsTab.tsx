@@ -1,4 +1,5 @@
 import React from "react";
+import { Layers } from "lucide-react";
 import { TUR_TASARIM_TOKENLARI } from "../../../constants/designTokens";
 import type { AgMetrikleri } from "../../../utils/networkAnalysis";
 
@@ -75,6 +76,31 @@ export const NetworkMetricsTab: React.FC<NetworkMetricsTabProps> = ({
           })}
         </div>
       </div>
+
+      {/* Küme Dağılımı (Clusters) */}
+      {Object.keys(metrikler.kumeDagilimi).length > 0 && (
+        <div className="flex flex-col gap-2">
+          <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5 text-indigo-500" />
+            <span>Kümeler Dağılımı</span>
+          </h4>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {Object.entries(metrikler.kumeDagilimi).map(([kumeAdi, sayi]) => (
+              <div
+                key={kumeAdi}
+                className="px-3 py-2 bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-100 dark:border-indigo-800 rounded-xl flex items-center justify-between text-xs shadow-2xs"
+              >
+                <span className="font-medium text-indigo-900 dark:text-indigo-200 truncate pr-2">
+                  {kumeAdi}
+                </span>
+                <span className="font-bold text-indigo-700 dark:text-indigo-300 shrink-0">
+                  {sayi} düğüm
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* En Kilit Düğümler (Top Hubs) */}
       <div className="flex flex-col gap-2.5">

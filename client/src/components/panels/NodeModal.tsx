@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Sparkles, X, Plus, Image as ImageIcon, FileText } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { Sparkles, X, Plus, Image as ImageIcon, FileText, Layers } from "lucide-react";
 import { useHaritaStore } from "../../store/haritaStore";
 import { TUR_TASARIM_TOKENLARI } from "../../constants/designTokens";
 import type { DugumTuru } from "../../types";
@@ -16,6 +16,18 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
   const [etiket, setEtiket] = useState("");
   const [tur, setTur] = useState<DugumTuru>("kisi");
   const [fotograf, setFotograf] = useState("");
+  const [kume, setKume] = useState("");
+
+  const mevcutKumeler = useMemo(() => {
+    const kumeSeti = new Set<string>();
+    for (const d of dugumler) {
+      const k = d.ozellikler?.kume;
+      if (typeof k === "string" && k.trim()) {
+        kumeSeti.add(k.trim());
+      }
+    }
+    return Array.from(kumeSeti).sort();
+  }, [dugumler]);
 
   if (!acik) return null;
 
@@ -32,6 +44,9 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
     if (fotograf.trim()) {
       ozellikler.fotograf = fotograf.trim();
     }
+    if (kume.trim()) {
+      ozellikler.kume = kume.trim();
+    }
 
     const sonuc = await dugumEkle({
       haritaId: secilenHaritaId,
@@ -46,6 +61,7 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
       setEtiket("");
       setTur("kisi");
       setFotograf("");
+      setKume("");
       kapat();
     }
   };
@@ -144,6 +160,49 @@ export const NodeModal: React.FC<DugumModaliOzellikleri> = ({ acik, kapat }) => 
                 );
               })}
             </div>
+          </div>
+
+          {/* Küme / Grup Input (İsteğe Bağlı) */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Layers className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                <span>Küme / Grup</span>
+              </span>
+              <span className="text-slate-400 dark:text-slate-500 font-normal text-[11px]">(İsteğe Bağlı)</span>
+            </label>
+            <input
+              type="text"
+              list="modal-kume-onerileri"
+              value={kume}
+              onChange={(e) => setKume(e.target.value)}
+              placeholder="Örn: mayaICT Ekibi, Stajyerler, Frontend..."
+              className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+            />
+            {mevcutKumeler.length > 0 && (
+              <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Öneriler:</span>
+                {mevcutKumeler.map((k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    onClick={() => setKume(kume === k ? "" : k)}
+                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+                      kume === k
+                        ? "bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700 shadow-2xs"
+                        : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
+                    }`}
+                  >
+                    {k}
+                  </button>
+                ))}
+              </div>
+            )}
+            <datalist id="modal-kume-onerileri">
+              {mevcutKumeler.map((k) => (
+                <option key={k} value={k} />
+              ))}
+            </datalist>
           </div>
 
           {/* Fotoğraf / Logo URL Input */}

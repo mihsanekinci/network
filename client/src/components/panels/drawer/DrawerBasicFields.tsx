@@ -1,5 +1,5 @@
 import React from "react";
-import { FileText, Check } from "lucide-react";
+import { FileText, Check, Layers } from "lucide-react";
 import { TUR_TASARIM_TOKENLARI } from "../../../constants/designTokens";
 import type { DugumTuru } from "../../../types";
 
@@ -17,18 +17,24 @@ interface DrawerBasicFieldsProps {
   etiket: string;
   tur: DugumTuru;
   fotografUrl: string;
+  kume?: string;
+  mevcutKumeler?: string[];
   onEtiketDegistir: (yeniEtiket: string) => void;
   onTurDegistir: (yeniTur: DugumTuru) => void;
   onFotografDegistir: (yeniUrl: string) => void;
+  onKumeDegistir?: (yeniKume: string) => void;
 }
 
 export const DrawerBasicFields: React.FC<DrawerBasicFieldsProps> = ({
   etiket,
   tur,
   fotografUrl,
+  kume,
+  mevcutKumeler,
   onEtiketDegistir,
   onTurDegistir,
   onFotografDegistir,
+  onKumeDegistir,
 }) => {
   return (
     <div className="p-4.5 bg-white dark:bg-slate-800/90 border border-slate-200/90 dark:border-slate-700 rounded-2xl flex flex-col gap-4 shadow-2xs">
@@ -50,6 +56,49 @@ export const DrawerBasicFields: React.FC<DrawerBasicFieldsProps> = ({
           placeholder="Örn: Ahmet Yılmaz"
           className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
         />
+      </div>
+
+      {/* Küme / Grup (Cluster) */}
+      <div className="flex flex-col gap-1.5">
+        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+          <span className="flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            <span>Küme / Grup</span>
+          </span>
+          <span className="text-slate-400 dark:text-slate-400 font-normal text-[11px]">(İsteğe Bağlı)</span>
+        </label>
+        <input
+          type="text"
+          list="drawer-kume-onerileri"
+          value={kume ?? ""}
+          onChange={(e) => onKumeDegistir?.(e.target.value)}
+          placeholder="Örn: mayaICT Ekibi, Stajyerler, Frontend..."
+          className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+        />
+        {mevcutKumeler && mevcutKumeler.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+            <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Öneriler:</span>
+            {mevcutKumeler.map((k) => (
+              <button
+                key={k}
+                type="button"
+                onClick={() => onKumeDegistir?.(kume === k ? "" : k)}
+                className={`text-[10px] font-semibold px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
+                  kume === k
+                    ? "bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border-indigo-300 dark:border-indigo-700 shadow-2xs"
+                    : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
+                }`}
+              >
+                {k}
+              </button>
+            ))}
+          </div>
+        )}
+        <datalist id="drawer-kume-onerileri">
+          {mevcutKumeler?.map((k) => (
+            <option key={k} value={k} />
+          ))}
+        </datalist>
       </div>
 
       {/* Fotoğraf / Logo URL */}

@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useRef, useEffect } from "react";
-import { Search, X, ChevronDown, Check, Filter } from "lucide-react";
+import { Search, X, ChevronDown, Check, Filter, Layers } from "lucide-react";
 import { useHaritaStore } from "../../store/haritaStore";
 import { FILTRE_TUR_SECENEKLERI } from "../../constants/designTokens";
 
@@ -54,23 +54,23 @@ export const SearchFilterBar: React.FC = () => {
       if (!turUyuyor) return false;
       if (!arama) return true;
 
-      const etiketVar = d.etiket.toLocaleLowerCase("tr").includes(arama);
-      const unvanVar =
-        typeof d.ozellikler?.unvan === "string" &&
-        d.ozellikler.unvan.toLocaleLowerCase("tr").includes(arama);
-      const sirketVar =
-        typeof d.ozellikler?.sirket === "string" &&
-        d.ozellikler.sirket.toLocaleLowerCase("tr").includes(arama);
-      const notlarVar =
-        typeof d.ozellikler?.notlar === "string" &&
-        d.ozellikler.notlar.toLocaleLowerCase("tr").includes(arama);
-      const aciklamaVar =
-        typeof d.ozellikler?.aciklama === "string" &&
-        d.ozellikler.aciklama.toLocaleLowerCase("tr").includes(arama);
-
-      return etiketVar || unvanVar || sirketVar || notlarVar || aciklamaVar;
+      const o = d.ozellikler;
+      const metinler = [d.etiket, o?.unvan, o?.sirket, o?.notlar, o?.aciklama, o?.kume];
+      return metinler.some((m) => typeof m === "string" && m.toLocaleLowerCase("tr").includes(arama));
     }).length;
   }, [dugumler, aramaMetni, secilenTurFiltresi]);
+
+  const kumeSayilari = useMemo(() => {
+    const sayac: Record<string, number> = {};
+    for (const d of dugumler) {
+      const k = d.ozellikler?.kume;
+      if (typeof k === "string" && k.trim()) {
+        const kumeAdi = k.trim();
+        sayac[kumeAdi] = (sayac[kumeAdi] ?? 0) + 1;
+      }
+    }
+    return sayac;
+  }, [dugumler]);
 
   const filtreAktif = aramaMetni.trim() !== "" || secilenTurFiltresi !== "hepsi";
   const seciliTurBilgisi =
@@ -225,6 +225,44 @@ export const SearchFilterBar: React.FC = () => {
                 </button>
               );
             })}
+
+            {Object.keys(kumeSayilari).length > 0 && (
+              <>
+                <div className="px-2.5 py-1.5 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5 border-t border-b border-slate-100/90 dark:border-slate-800 my-1">
+                  <Layers className="w-3 h-3 text-slate-400 dark:text-slate-500" />
+                  <span>Kümeler (Clusters)</span>
+                </div>
+                {Object.entries(kumeSayilari).map(([kumeAdi, sayi]) => {
+                  const secili = aramaMetni.trim() === kumeAdi;
+                  return (
+                    <button
+                      key={kumeAdi}
+                      type="button"
+                      onClick={() => {
+                        aramaMetniniAyarla(secili ? "" : kumeAdi);
+                        setFiltreMenusuAcik(false);
+                      }}
+                      className={`w-full px-2.5 py-1.5 text-xs rounded-xl font-medium transition-all flex items-center justify-between cursor-pointer group ${
+                        secili
+                          ? "bg-indigo-50/90 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-semibold"
+                          : "text-slate-700 dark:text-slate-300 hover:bg-slate-100/70 dark:hover:bg-slate-800/70"
+                      }`}
+                    >
+                      <span className="flex items-center gap-2 min-w-0">
+                        <Layers className="w-3.5 h-3.5 shrink-0 text-indigo-500" />
+                        <span className="truncate">{kumeAdi}</span>
+                      </span>
+                      <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                        <span className="text-[10px] px-1.5 py-0.5 rounded-md font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                          {sayi} düğüm
+                        </span>
+                        {secili && <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />}
+                      </div>
+                    </button>
+                  );
+                })}
+              </>
+            )}
           </div>
         )}
       </div>

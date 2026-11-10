@@ -4,6 +4,7 @@ export interface AgMetrikleri {
   toplamDugum: number;
   toplamKenar: number;
   turDagilimi: Record<DugumTuru, number>;
+  kumeDagilimi: Record<string, number>;
   yogunluk: number;
   ortalamaDerece: number;
   enKilitDugumler: Array<{
@@ -38,8 +39,15 @@ export function hesaplaAgMetrikleri(
     diger: 0,
   };
 
+  const kumeDagilimi: Record<string, number> = {};
+
   dugumler.forEach((d) => {
     turDagilimi[d.tur] = (turDagilimi[d.tur] || 0) + 1;
+    const k = d.ozellikler?.kume;
+    if (typeof k === "string" && k.trim()) {
+      const kumeAdi = k.trim();
+      kumeDagilimi[kumeAdi] = (kumeDagilimi[kumeAdi] || 0) + 1;
+    }
   });
 
   // Derece hesaplamaları
@@ -83,6 +91,7 @@ export function hesaplaAgMetrikleri(
     toplamDugum: n,
     toplamKenar: m,
     turDagilimi,
+    kumeDagilimi,
     yogunluk,
     ortalamaDerece,
     enKilitDugumler: dugumDereceleri.slice(0, 5),

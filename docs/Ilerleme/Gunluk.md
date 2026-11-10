@@ -236,6 +236,25 @@
   - `onMouseDown` üzerinde `e.preventDefault()` çağrılarak blur engellendi ve temizleme anında tetiklendi; ayrıca metin varken genişliğin dinamik olarak `w-56 md:w-64` kalması sağlanarak layout shift kalıcı olarak sıfırlandı.
 - **Doğrulama:** 4 doğrulama kapısı (`arch_audit` 0 ihlal, `tsc -b && vite build` 0 hata, `eslint .` 0 hata, `vitest run` 143/143 test) başarıyla geçti.
 
+### Faz 24: Düğüm Gruplama & Kümeler (Clusters) (10 Kasım 2026)
+- **Geliştirme:** Miro, FigJam ve Obsidian Canvas standardında dinamik uzamsal kümeleme (spatial convex bounding clusters) altyapısı geliştirildi.
+  1. **Kümeleme Hesaplama Motoru (`clusterEngine.ts`):**
+     - Düğümlerin JSON `ozellikler.kume` alanından otomatik küme tespiti.
+     - Düğüm koordinatları (`x, y`) üzerinden dinamik dış sınır (bounding box) ve dolgu hesaplama.
+     - Kümeler için deterministik hash tabanlı estetik renk paleti (İndigo, Zümrüt, Kehribar, Mor, Gül, Camgöbeği).
+  2. **Görsel Küme Çerçevesi (`ClusterNode.tsx`):**
+     - React Flow `type: 'kumeDugum'` bileşeni, `zIndex: -1` ile düğümlerin arkasında yarı saydam çerçeve ve başlık rozeti (`Layers` ikonu, küme adı, eleman sayısı) olarak render edilir.
+     - Düğümler sürüklendikçe küme kutusu eşzamanlı olarak genişler/daralır.
+  3. **Taktil Düğüm Kartı Küme Rozeti (`CustomNode.tsx`):**
+     - Düğüm kartının üst barında türe ek olarak ait olduğu küme rozeti (`Layers` + küme adı) gösterilir.
+  4. **Küme Atama & Hızlı Seçim (`DrawerBasicFields.tsx` & `NodeModal.tsx`):**
+     - Yeni düğüm eklerken veya mevcut düğümü düzenlerken mevcut kümelerin tek tıkla atanabileceği akıllı hap butonlar (suggestions) ve HTML5 `datalist` otomatik tamamlama eklendi.
+  5. **Kümelere Göre Arama & Filtreleme (`SearchFilterBar.tsx`):**
+     - Arama çubuğu filtre açılır menüsüne "Kümeler" listesi eklendi; tıklanan kümenin adı arama motoruna aktarılarak küme elemanları tuvalde anında filtrelenip vurgulanır.
+  6. **Ağ Analitiği Küme Dağılımı (`NetworkMetricsTab.tsx` & `networkAnalysis.ts`):**
+     - Ağ analiz modaline küme dağılımı (cluster distribution) kartı eklendi.
+- **Doğrulama:** 4 doğrulama kapısı (`arch_audit` 0 ihlal / 55 dosya, `tsc -b && vite build` 0 hata, `eslint .` 0 hata, `vitest run` 143/143 test) %100 geçti.
+
 ---
 
 ## 🎯 Tamamlanan Yol Haritası (Roadmap)
@@ -257,6 +276,7 @@
 - [x] **15. Frontend UI/UX Craftsmanship: Design Tokens, Lucide Icons & Floating Glass Islands (Faz 21)**
 - [x] **16. Frontend SRP Hijyeni, Zustand Slice Mimarisi ve Arch Audit 0 İhlal (Faz 22)**
 - [x] **17. Karanlık Mod (Dark Mode) ve Akıllı Otomatik Düzenleme Titreme Önleyici (Faz 23)**
+- [x] **18. Düğüm Gruplama & Kümeler - Clusters (Faz 24)**
 
 ---
 
@@ -291,6 +311,11 @@
 - **Durum:** Kabul edildi.
 - **Gerekçe:** Frontend monolitik bileşenlerinin (NodeDetailDrawer, EdgeModal, GraphCanvas, App) SRP sınırlarını aşması ve Zustand store'unun şişmesi üzerine store dilimlere (slices) bölündü, alt bileşenler atomik hale getirildi ve arch_audit.py ihlalleri 0'a indirildi.
 - **İlgili:** [[Frontend Modular Component and Store Slice Architecture]] | [[2026-11-10 - Frontend SRP Hygiene and Slice Refactoring]]
+
+### ADR-007: Düğüm Gruplama ve Kümeler (Spatial Convex Bounding Clusters)
+- **Durum:** Kabul edildi.
+- **Gerekçe:** NetWork haritasındaki varlıkları mantıksal gruplara ayırmak için veritabanında yıkıcı bir migrasyon ve koordinat karmaşası (relative parent-child coordinate mutations) yaratmak yerine; `ozellikler.kume` JSON alanı ve tuval üzerinde dinamik hesaplanan uzamsal çerçeve (`ClusterNode`, `clusterEngine.ts`) mimarisi benimsendi. Böylece Dagre otomatik düzenleme ve BFS algoritmaları bozulmadan korundu.
+- **İlgili:** [[Dugum Gruplama ve Kumeler]] | [[2026-11-10 - Node Grouping and Clusters]]
 
 ---
 *İlgili Notlar:* [[00 - Ana Harita]] | [[Katmanli Mimari]] | [[Prisma ve SQLite]] | [[Rotalar ve Controllers]] | [[Zustand ve Servisler]] | [[React Flow Canvas]] | [[Backend Resilience and Validation Strategy]] | [[Frontend UI UX Overhaul and Design Tokens]] | [[Frontend Modular Component and Store Slice Architecture]]

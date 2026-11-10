@@ -38,20 +38,11 @@ export const useCanvasNodes = ({
       const turUyuyor = secilenTurFiltresi === "hepsi" || d.tur === secilenTurFiltresi;
       let metinUyuyor = true;
       if (arama) {
-        const etiketVar = d.etiket.toLocaleLowerCase("tr").includes(arama);
-        const unvanVar =
-          typeof d.ozellikler?.unvan === "string" &&
-          d.ozellikler.unvan.toLocaleLowerCase("tr").includes(arama);
-        const sirketVar =
-          typeof d.ozellikler?.sirket === "string" &&
-          d.ozellikler.sirket.toLocaleLowerCase("tr").includes(arama);
-        const notlarVar =
-          typeof d.ozellikler?.notlar === "string" &&
-          d.ozellikler.notlar.toLocaleLowerCase("tr").includes(arama);
-        const aciklamaVar =
-          typeof d.ozellikler?.aciklama === "string" &&
-          d.ozellikler.aciklama.toLocaleLowerCase("tr").includes(arama);
-        metinUyuyor = Boolean(etiketVar || unvanVar || sirketVar || notlarVar || aciklamaVar);
+        const o = d.ozellikler;
+        const metinler = [d.etiket, o?.unvan, o?.sirket, o?.notlar, o?.aciklama, o?.kume];
+        metinUyuyor = metinler.some(
+          (m) => typeof m === "string" && m.toLocaleLowerCase("tr").includes(arama)
+        );
       }
       const eslesiyor = turUyuyor && metinUyuyor;
 

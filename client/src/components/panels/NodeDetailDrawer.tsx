@@ -76,6 +76,17 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
     };
   }, [dugum.id, kenarlar, dugumler]);
 
+  const mevcutKumeler = useMemo(() => {
+    const kumeSeti = new Set<string>();
+    for (const d of dugumler) {
+      const k = d.ozellikler?.kume;
+      if (typeof k === "string" && k.trim()) {
+        kumeSeti.add(k.trim());
+      }
+    }
+    return Array.from(kumeSeti).sort();
+  }, [dugumler]);
+
   const handleOzellikDegistir = (alan: string, deger: unknown) => {
     setOzellikler((onceki) => ({
       ...onceki,
@@ -164,9 +175,14 @@ const NodeDetailDrawerContent: React.FC<NodeDetailDrawerContentProps> = ({ dugum
             etiket={etiket}
             tur={tur}
             fotografUrl={((ozellikler.fotograf || ozellikler.avatarUrl) as string) ?? ""}
+            kume={(ozellikler.kume as string) ?? ""}
+            mevcutKumeler={mevcutKumeler}
             onEtiketDegistir={setEtiket}
             onTurDegistir={setTur}
             onFotografDegistir={(url) => handleOzellikDegistir("fotograf", url)}
+            onKumeDegistir={(yeniKume) =>
+              handleOzellikDegistir("kume", yeniKume.trim() ? yeniKume.trim() : undefined)
+            }
           />
 
           {/* Dinamik Nitelikler ve Notlar */}

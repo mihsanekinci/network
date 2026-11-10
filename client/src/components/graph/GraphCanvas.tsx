@@ -16,6 +16,8 @@ import { Loader2 } from "lucide-react";
 import { useHaritaStore } from "../../store/haritaStore";
 import { useDarkMode } from "../../hooks/useDarkMode";
 import CustomNode from "./CustomNode";
+import ClusterNode from "./ClusterNode";
+import { yerelDugumlerdenKumeDugumleriOlustur } from "./clusterEngine";
 import type { DugumKonumu } from "./edgeRouting";
 import { useCanvasNodes, useCanvasEdges } from "./useGraphElements";
 import {
@@ -26,6 +28,7 @@ import {
 
 const DUGUM_TURLERI = {
   ozelDugum: CustomNode,
+  kumeDugum: ClusterNode,
 };
 
 export const GraphCanvas: React.FC = () => {
@@ -87,6 +90,14 @@ export const GraphCanvas: React.FC = () => {
     dugumKonumHaritasi,
     isDark,
   });
+
+  const kumeDugumleri = useMemo(() => {
+    return yerelDugumlerdenKumeDugumleriOlustur(yerelDugumler);
+  }, [yerelDugumler]);
+
+  const tumCanvasDugumleri = useMemo(() => {
+    return [...kumeDugumleri, ...yerelDugumler];
+  }, [kumeDugumleri, yerelDugumler]);
 
   const dugumlerDegisti = useCallback((degisiklikler: NodeChange[]) => {
     setYerelDugumler((mevcut) => applyNodeChanges(degisiklikler, mevcut));
@@ -162,7 +173,7 @@ export const GraphCanvas: React.FC = () => {
       {yerelDugumler.length === 0 && !yukleniyor && <GraphNoNodesCreated />}
 
       <ReactFlow
-        nodes={yerelDugumler}
+        nodes={tumCanvasDugumleri}
         edges={donusturulmusKenarlar}
         nodeTypes={DUGUM_TURLERI}
         connectionMode={ConnectionMode.Loose}
@@ -183,13 +194,17 @@ export const GraphCanvas: React.FC = () => {
         <Controls className="!bg-white dark:!bg-slate-900 !rounded-2xl !shadow-md !border !border-slate-200 dark:!border-slate-800 !overflow-hidden !m-4" />
         <MiniMap
           nodeColor={(node) => {
+            if (node.type === "kumeDugum") return isDark ? "#312e81" : "#e0e7ff";
             const tur = (node.data as { tur?: string })?.tur;
             if (tur === "kisi") return "#3b82f6";
             if (tur === "kurum") return "#10b981";
             if (tur === "kavram") return "#f59e0b";
             return "#8b5cf6";
           }}
-          nodeStrokeColor={isDark ? "#0f172a" : "#ffffff"}
+          nodeStrokeColor={(node) => {
+            if (node.type === "kumeDugum") return isDark ? "#6366f1" : "#818cf8";
+            return isDark ? "#0f172a" : "#ffffff";
+          }}
           nodeStrokeWidth={2}
           nodeBorderRadius={8}
           maskColor={isDark ? "rgba(15, 23, 42, 0.75)" : "rgba(241, 245, 249, 0.75)"}
