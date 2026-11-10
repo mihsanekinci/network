@@ -225,6 +225,17 @@
      - `AppHeader.tsx`: Düzenleme butonuna `min-w-11` metin kutusu verilerek durum geçişlerindeki genişlik sıçraması (CLS) sıfırlandı.
 - **Doğrulama:** 4 doğrulama kapısı (`arch_audit` 0 ihlal, `tsc -b && vite build` 0 hata, `eslint .` 0 hata, `vitest run` 143/143 test) %100 geçti.
 
+### İyileştirme & Hata Düzeltme: Karanlık Mod Kontrastı ve Arama Temizleme Layout-Shift Çözümü (10 Kasım 2026)
+- **Karanlık Mod Kontrastı & WCAG AAA İyileştirmesi:**
+  - `designTokens.ts`: `TUR_TASARIM_TOKENLARI` içinde düğüm türleri için açık arka planlar yerine koyu modda derin safir/zümrüt/kehribar/mor tonları (`dark:bg-<tur>-950/80`, `dark:text-<tur>-200`, `dark:border-<tur>-800`) tanımlandı.
+  - `DrawerBasicFields.tsx` & `NodeModal.tsx`: Seçili düğüm türü kartındaki beyaz üstüne beyaz kamaşması giderildi; seçili ve seçili olmayan kartlar koyu modda kristal netliğinde kontrast kazandı.
+  - `DrawerConnectionSummary.tsx` & `DrawerFooter.tsx`: Bağlantı sayaçları, boş durum metinleri ve "Vazgeç" butonu metinleri (`dark:text-slate-200`) yüksek okunabilirlik seviyesine ulaştırıldı.
+  - `CustomNode.tsx`: Arama filtre halkasındaki beyaz offset koyu modda `dark:ring-offset-slate-900` ile uyumlu kılındı.
+- **Arama Çubuğu Temizleme ("X") Butonu Kökten Çözümü:**
+  - `SearchFilterBar.tsx`: Arama çubuğunda "X" ikonuna tıklandığında `mousedown` sırasında input'un anında blur olması ve `focus:w-56` genişliğini kaybederek 64px sola küçülmesi neticesinde mouseup'ın boşluğa düşüp `click` olayının tetiklenmemesi (kullanıcının iki kez tıklamak zorunda kalması) engellendi.
+  - `onMouseDown` üzerinde `e.preventDefault()` çağrılarak blur engellendi ve temizleme anında tetiklendi; ayrıca metin varken genişliğin dinamik olarak `w-56 md:w-64` kalması sağlanarak layout shift kalıcı olarak sıfırlandı.
+- **Doğrulama:** 4 doğrulama kapısı (`arch_audit` 0 ihlal, `tsc -b && vite build` 0 hata, `eslint .` 0 hata, `vitest run` 143/143 test) başarıyla geçti.
+
 ---
 
 ## 🎯 Tamamlanan Yol Haritası (Roadmap)

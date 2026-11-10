@@ -105,7 +105,7 @@ export const CustomNode: React.FC<NodeProps<OzelDugumVerisi>> = ({ data, id, sel
   } else if (secili) {
     durumSinifi = `${turBilgisi.kart.seciliHalka} z-20 ${turBilgisi.kart.vurguArkaPlan}`;
   } else if (filtreEslesiyor) {
-    durumSinifi = `${turBilgisi.kart.kenarlik} ring-3 ring-indigo-500/30 shadow-md scale-[1.01] ring-offset-2 ring-offset-white animate-pulse`;
+    durumSinifi = `${turBilgisi.kart.kenarlik} ring-3 ring-indigo-500/30 shadow-md scale-[1.01] ring-offset-2 ring-offset-white dark:ring-offset-slate-900 animate-pulse`;
   }
 
   // Taktil iğne ucu bağlantı noktaları (Handles)

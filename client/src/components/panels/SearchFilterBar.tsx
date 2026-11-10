@@ -78,7 +78,11 @@ export const SearchFilterBar: React.FC = () => {
     FILTRE_TUR_SECENEKLERI[0];
   const SeciliSimge = seciliTurBilgisi.simge;
 
-  const handleAramaTemizle = () => {
+  const handleAramaTemizle = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     aramaMetniniAyarla("");
     inputRef.current?.focus();
   };
@@ -106,11 +110,17 @@ export const SearchFilterBar: React.FC = () => {
           onChange={(e) => aramaMetniniAyarla(e.target.value)}
           onKeyDown={handleInputKeyDown}
           placeholder="Düğümlerde ara..."
-          className="w-36 sm:w-48 focus:w-56 md:focus:w-64 h-8 pl-8 pr-8 text-xs font-medium rounded-xl bg-slate-100/80 hover:bg-slate-100 focus:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-800 dark:focus:bg-slate-900 border border-slate-200/80 dark:border-slate-700/80 focus:border-indigo-500/80 dark:focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/15 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-800 dark:text-slate-100 shadow-2xs"
+          className={`h-8 pl-8 pr-8 text-xs font-medium rounded-xl bg-slate-100/80 hover:bg-slate-100 focus:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-800 dark:focus:bg-slate-900 border border-slate-200/80 dark:border-slate-700/80 focus:border-indigo-500/80 dark:focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/15 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-500 text-slate-800 dark:text-slate-100 shadow-2xs ${
+            aramaMetni ? "w-56 md:w-64" : "w-36 sm:w-48 focus:w-56 md:focus:w-64"
+          }`}
         />
         {aramaMetni ? (
           <button
             type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              handleAramaTemizle(e);
+            }}
             onClick={handleAramaTemizle}
             title="Aramayı Temizle (Esc)"
             className="absolute right-2 p-0.5 rounded-md text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 transition-colors cursor-pointer"

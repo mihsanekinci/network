@@ -22,7 +22,7 @@ export const DrawerFooter: React.FC<DrawerFooterProps> = ({
         type="button"
         onClick={onSil}
         disabled={yukleniyor || kaydediliyor}
-        className="text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 border border-red-200/80 dark:border-red-900/60 rounded-xl px-3.5 py-2.5 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5 btn-tactile"
+        className="text-xs font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 border border-red-200/80 dark:border-red-900/80 rounded-xl px-3.5 py-2.5 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1.5 btn-tactile"
       >
         <Trash2 className="w-3.5 h-3.5" />
         <span>Düğümü Sil</span>
@@ -32,7 +32,7 @@ export const DrawerFooter: React.FC<DrawerFooterProps> = ({
         <button
           type="button"
           onClick={onVazgec}
-          className="text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl px-4 py-2.5 cursor-pointer transition-all btn-tactile"
+          className="text-xs font-semibold text-slate-600 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl px-4 py-2.5 cursor-pointer transition-all btn-tactile"
         >
           Vazgeç
         </button>

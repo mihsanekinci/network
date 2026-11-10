@@ -48,21 +48,21 @@ export const DrawerBasicFields: React.FC<DrawerBasicFieldsProps> = ({
           value={etiket}
           onChange={(e) => onEtiketDegistir(e.target.value)}
           placeholder="Örn: Ahmet Yılmaz"
-          className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
         />
       </div>
 
       {/* Fotoğraf / Logo URL */}
       <div className="flex flex-col gap-1.5">
         <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-          Fotoğraf / Logo URL <span className="text-slate-400 dark:text-slate-500 font-normal">(İsteğe Bağlı)</span>
+          Fotoğraf / Logo URL <span className="text-slate-400 dark:text-slate-400 font-normal">(İsteğe Bağlı)</span>
         </label>
         <input
           type="url"
           value={fotografUrl}
           onChange={(e) => onFotografDegistir(e.target.value)}
           placeholder="https://example.com/avatar.jpg"
-          className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
+          className="w-full h-10 px-3.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600/80 bg-white dark:bg-slate-900/90 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all shadow-2xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
         />
       </div>
 
@@ -83,7 +83,7 @@ export const DrawerBasicFields: React.FC<DrawerBasicFieldsProps> = ({
                 onClick={() => onTurDegistir(secenek.deger)}
                 className={`p-3 rounded-xl border text-xs font-semibold transition-all text-left cursor-pointer flex flex-col justify-between gap-1 btn-tactile ${
                   secili
-                    ? `${token.rozet.arkaPlan} border-2 border-indigo-600 shadow-xs ring-2 ring-indigo-500/15`
+                    ? `${token.rozet.arkaPlan} border-2 border-indigo-600 dark:border-indigo-400 shadow-xs ring-2 ring-indigo-500/15`
                     : "bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-slate-700 dark:text-slate-200 hover:border-slate-300 dark:hover:border-slate-600"
                 }`}
               >
@@ -91,18 +91,34 @@ export const DrawerBasicFields: React.FC<DrawerBasicFieldsProps> = ({
                   <span className="flex items-center gap-2">
                     <span
                       className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
-                        secili ? "bg-white dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700 shadow-2xs" : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+                        secili
+                          ? "bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-700 shadow-2xs"
+                          : "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
                       }`}
                     >
                       <Simge className="w-3.5 h-3.5" style={{ color: token.renkKodu }} />
                     </span>
-                    <span className={secili ? "font-bold text-slate-900 dark:text-white" : "font-semibold text-slate-800 dark:text-slate-200"}>
+                    <span
+                      className={
+                        secili
+                          ? "font-bold text-slate-900 dark:text-white"
+                          : "font-semibold text-slate-800 dark:text-slate-200"
+                      }
+                    >
                       {token.etiket}
                     </span>
                   </span>
-                  {secili && <Check className="w-3.5 h-3.5 text-indigo-600 stroke-[2.5]" />}
+                  {secili && (
+                    <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 stroke-[2.5]" />
+                  )}
                 </div>
-                <span className={`text-[11px] block pl-8 ${secili ? "text-slate-600 dark:text-slate-300 font-medium" : "text-slate-400 dark:text-slate-500 font-normal"}`}>
+                <span
+                  className={`text-[11px] block pl-8 ${
+                    secili
+                      ? "text-slate-600 dark:text-slate-300 font-medium"
+                      : "text-slate-400 dark:text-slate-400 font-normal"
+                  }`}
+                >
                   {secenek.aciklama}
                 </span>
               </button>
